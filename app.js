@@ -11,7 +11,7 @@ require('dotenv').config();
 const app = express();
 const port = process.env.PORT || 5000;
 
-
+//use express session
 app.use(session({
 	secret: 'secret',
 	resave: true,
