@@ -44,7 +44,7 @@
                   <h5 class="mb-0">Profile Settings</h5>
                 </div>
                 <div class="card-body bg-light">
-                  <form action="profileEditInfo" method="POST" class="row g-3 needs-validation" novalidate="">
+                  <form action="profileEditInfo" id="ProfileSetting" method="POST" class="row g-3 needs-validation" novalidate="">
                     {{#if error}}
                       <div class="alert alert-danger border-2 d-flex align-items-center" role="alert">
                         <div class="bg-danger me-3 icon-item"><span class="fas fa-times-circle text-white fs-3"></span></div>
@@ -57,16 +57,21 @@
                     </div>
                     <div class="col-lg-6">
                       <label class="form-label" for="username">Username</label>
-                      <input class="form-control" id="username" name="username" type="text" value="{{user.username}}" required/>
-                      <div class="invalid-feedback">Please provide a valid Username.</div>
+                      <input class="form-control" id="username" name="username" type="text" value="{{user.username}}" maxlength="30" required/>
+                      <div class="invalid-feedback" for="username"></div>
+                      <div class="valid-feedback" for="username"></div>
                     </div>
                     <div class="col-lg-6">
                       <label class="form-label" for="fonction">Fonction</label>
-                      <input class="form-control" id="fonction" name="fonction" type="text" value="{{user.fonction}}" />
+                      <input class="form-control" id="fonction" name="fonction" type="text" value="{{user.fonction}}" maxlength="30"/>
+                      <div class="invalid-feedback" for="fonction"></div>
+                      <div class="valid-feedback" for="fonction"></div>
                     </div>
                     <div class="col-lg-12">
                       <label class="form-label" for="email">Email</label>
-                      <input class="form-control" id="email" name="email" type="text" value="{{user.email}}" required/>
+                      <input class="form-control" id="email" name="email" type="text" value="{{user.email}}" email="true" required/>
+                      <div class="invalid-feedback" for="email"></div>
+                      <div class="valid-feedback" for="email"></div>
                     </div>
                     <div class="col-12 d-flex justify-content-end">
                       <button class="btn btn-primary" type="submit">Update </button>
@@ -82,7 +87,7 @@
                     <h5 class="mb-0">Change Password</h5>
                   </div>
                   <div class="card-body bg-light">
-                    <form action="profileEditPassW" method="POST" class="row g-3 needs-validation" novalidate="">
+                    <form action="profileEditPassW" id="changePwForm" method="POST" class="row g-3 needs-validation" novalidate="">
                       {{#if errorPW}}
                       <div class="alert alert-danger border-2 d-flex align-items-center" role="alert">
                         <div class="bg-danger me-3 icon-item"><span class="fas fa-times-circle text-white fs-3"></span></div>
@@ -101,16 +106,20 @@
                         <input class="form-control" type="hidden" value="{{user.id}}" name="id" />
                     </div>
                       <div class="col-lg-12">
-                        <label class="form-label" for="old-password">Old Password</label>
-                        <input class="form-control" id="old-password" value="{{OldPW}}" name="oldpassword" type="password" required />
+                        <label class="form-label" for="oldpassword">Old Password</label>
+                        <input class="form-control" id="oldpassword" value="{{OldPW}}" name="oldpassword" type="password" maxlength="12" required minlength="5" />
+                        <div class="invalid-feedback" for="oldpassword"></div>
                       </div>
                       <div class="col-lg-6">
-                        <label class="form-label" for="new-password">New Password</label>
-                        <input class="form-control" id="new-password" name="newpassword" type="password" required>
+                        <label class="form-label" for="newpassword">New Password</label>
+                        <input class="form-control" id="newpassword" name="newpassword" type="password" maxlength="12" required minlength="5"/>
+                        <div class="invalid-feedback" for="newpassword"></div>
                       </div>
                       <div class="col-lg-6">
-                        <label class="form-label" for="confirm-password">Confirm Password</label>
-                        <input class="form-control" id="confirm-password" name="confirmpassword" type="password" required/>
+                        <label class="form-label" for="confirmpassword">Confirm Password</label>
+                        <input class="form-control" id="confirmpassword" name="confirmpassword" type="password" equalTo="#newpassword" maxlength="12" required minlength="5"/>
+                        <div class="invalid-feedback" for="confirmpassword"></div>
+                        <div class="valid-feedback" for="confirmpassword"></div>
                       </div>
                       <div class="col-12 d-flex justify-content-end">
                         <button class="btn btn-primary" type="submit">Update Password</button>
@@ -119,11 +128,18 @@
                   </div>
                 </div>
                
-     
+     <button id='button1'> Test </button>
               </div> 
             </div>
             </div>
 <script>
+  $('#button1').click(function(){
+    console.log('button clicked');
+    $.ajax({url: 'test1', success:function(res){
+        console.log('server response is', res);
+    }});
+});
+
   var x = document.getElementById("Btn");
   x.style.display = "none";
   var loadProfile = function(event) {
@@ -146,4 +162,54 @@
     URL.revokeObjectURL(output.src) // free memory
     }
   };
+
+
+	$().ready(function() {
+
+     $("#ProfileSetting").validate({
+      errorPlacement: function(error, element) {
+			// Append error within linked label
+			$( element )
+				.closest( "form" )
+					.find( "div[for='" + element.attr( "id" ) + "']" )
+						.append( error );
+		},
+		errorElement: "span",
+			messages: {
+				username: {
+					required: " (Please enter your username)"
+				},
+				fonction: {
+					required: " (Please provide a fonction)"
+				},
+				email: "Please enter a valid email address"
+			}
+		});
+
+		$("#changePwForm").validate({
+      errorPlacement: function(error, element) {
+			// Append error within linked label
+			$( element )
+				.closest( "form" )
+					.find( "div[for='" + element.attr( "id" ) + "']" )
+						.append( error );
+		},
+		errorElement: "span",
+			messages: {
+				oldpassword: {
+					required: " (Please enter your Old Password)",
+					minlength: " (old password must consist of at least 5 characters)"
+				},
+				newpassword: {
+					required: " (Please provide a password)",
+					minlength: " (Your password must be at least 5 characters long)"
+				},
+				confirmpassword: {
+					required: " (Please provide a password)",
+					minlength: " (Your password must be at least 5 characters long)",
+					equalTo: " (Please enter the same password)"
+				}
+			}
+		});
+});
 </script>

@@ -21,5 +21,13 @@ router.get('/profileEdit', homeController.EditProfile);
 router.post('/profileEdit', upload.fields([{name: "profile"}, {name: "uploadcover"}]), homeController.SaveEditProfile);
 router.post('/profileEditInfo', homeController.SaveEditProfileInfo);
 router.post('/profileEditPassW', homeController.SaveEditProfilePassW);
+
+
+function buttonAction1(res){
+    res.send('ok');
+}
+router.get("/test1", function (req, res) {
+    buttonAction1(res);
+});
   
 module.exports = router;

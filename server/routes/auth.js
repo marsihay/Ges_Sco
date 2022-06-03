@@ -11,4 +11,5 @@ router.get('/logout', authController.logout);
 router.get('/lock_screen', authController.lockScreen);
 router.post('/lock_screen', authController.lockScreenSub);
 
+
 module.exports = router;
