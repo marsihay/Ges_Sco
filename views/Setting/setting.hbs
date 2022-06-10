@@ -1,0 +1,247 @@
+<div class="card mb-3">
+    <div class="bg-holder d-none d-lg-block bg-card" style="background-image:url(http://localhost:3000/assets/img/icons/spot-illustrations/corner-4.png);">
+    </div>
+    <!--/.bg-holder-->
+
+    <div class="card-body position-relative">
+        <div class="row">
+            <div class="col-lg-8">
+            <h3>Paramètres</h3>
+                <p class="mb-0">On trouve ici l'année scolaire, droit d'inscription, niveau, montant et les mois pour l'écolage, les classes et les autres frais de scolarité.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-0">
+            <div class="col-lg-6 pe-lg-2">
+              <div class="card mb-3">
+                <div class="card-header">
+                  <h5 class="mb-0">Droit d'inscription</h5>
+                </div>
+                <div class="card-body bg-light">
+                  <div class="table-responsive scrollbar">
+                        <table class="table">
+                          <thead>
+                            <tr>
+                              <th scope="col">Désignation</th>
+                              <th scope="col">Montant</th>
+                              <th class="text-end" scope="col">Actions</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {{#each droit}}
+                            <tr>
+                              <td>{{Label_D}}</td></script>
+                              <td>MGA {{Decimal montant}}</td>
+                              <td class="text-end">
+                                <div>
+                                  <a href="/editdroit/{{this.ID_Droit}}" class="btn p-0" type="button" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit"><span class="text-500 fas fa-edit text-danger"></span></a>
+                                </div>
+                              </td>
+                            </tr>
+                            {{/each}}
+                          </tbody>
+                        </table>
+                      </div>
+                </div>
+              </div>
+              <div class="card mb-3">
+                
+<div class="modal fade" id="Mois-modal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 500px">
+    <div class="modal-content position-relative">
+      <div class="position-absolute top-0 end-0 mt-2 me-2 z-index-1">
+        <button class="btn-close btn btn-sm btn-circle d-flex flex-center transition-base" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form action="/editMois" method="POST">
+      <div class="modal-body p-0">
+        
+        <div class="rounded-top-lg py-3 ps-4 pe-6 bg-light">
+          <h4 class="mb-1" id="modalExampleDemoLabel">Modification</h4>
+        </div>
+        <div class="p-4 pb-0">          
+            <div class="mb-3">
+              <input class="form-control" id="ID_Eco" name="ID_Eco" type="text" hidden/>
+            </div>
+            <div class="mb-3">
+              <label class="col-form-label" for="Label_Eco">Désignation:</label>
+              <input class="form-control" id="Label_Eco" autocomplete="off" maxlength="9" name="Label_Eco" type="text" />
+            </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-falcon-default me-2 mb-1 " type="button" data-bs-dismiss="modal">
+            <span class="fas fa-times-circle" data-fa-transform="shrink-3"></span>
+            Annuler
+        </button>
+          <button class="btn btn-falcon-primary me-3 mb-1" type="submit">
+            <span class="fas fa-save" data-fa-transform="shrink-3"></span>
+            Update
+          </button>
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
+                <div class="card-header">
+                  <h5 class="mb-0">Les mois pour l'écolage</h5>
+                </div>
+                <div class="card-body bg-light">
+                  <div class="table-responsive scrollbar">
+                        <table class="table text-center">
+                          <thead>
+                            <tr class="">
+                              <th scope="col">ID</th>
+                              <th scope="col">Mois</th>
+                              <th scope="col">Actions</th>
+                            </tr>
+                          </thead>
+                          <tbody class="bg-light Eco">
+                            {{#each ecolage}}
+                            <tr>
+                              <td>{{ID_Eco}}</td></script>
+                              <td>{{Label_Eco}}</td>
+                              <td>
+                                <div>
+                                  <button class="btn p-0" type="button" data-bs-toggle="modal" data-bs-target="#Mois-modal" title="Edit"><span class="text-500 fas fa-edit"></span></button>
+                                </div>
+                              </td>
+                            </tr>
+                            {{/each}}
+                          </tbody>
+                          <script>
+                            $('tbody.Eco tr').click(
+                            function(){
+                              var id = $(this).find("td:nth-child(1)").html();
+                              var label = $(this).find("td:nth-child(2)").html();
+                            $('#ID_Eco').val(id);
+                            $('#Label_Eco').val(label);
+                            });
+                          </script>
+                        </table>
+                      </div>
+                </div>
+              </div>
+              <div class="card mb-3 mb-lg-0 ">
+                <div class="card-header">
+                  <h5 class="mb-0">Niveau</h5>
+                </div>
+                <div class="card-body bg-light"><a class="mb-4 d-block d-flex align-items-center newNIV" href="#education-form" data-bs-toggle="collapse" aria-expanded="false" aria-controls="education-form"><span class="circle-dashed"><span class="fas fa-plus"></span></span><span class="ms-3">Ajouter un nouveau Niveau</span></a>
+                  <div class="collapse" id="education-form">
+                    <form class="row">
+                      <div class="col-3 mb-3 text-lg-end">
+                        <label class="form-label" for="Label_Niv">Désignation</label>
+                      </div>
+                      <div class="col-9 col-sm-7 mb-3">
+                        <input class="form-control form-control-sm" id="ID_Niv" name="ID_Niv" type="text" hidden/>
+                        <input class="form-control form-control-sm" id="Label_Niv" name="Label_Niv" type="text" />
+                      </div>
+                      <div class="col-3 mb-3 text-lg-end">
+                        <label class="form-label" for="Frais_Sco">Frais de scolarité</label>
+                      </div>
+                      <div class="col-9 col-sm-7 mb-3">
+                        <input class="form-control form-control-sm" id="Frais_Sco" name="Frais_Sco" type="text" />
+                      </div>
+                      <div class="col-3 mb-3 text-lg-end">
+                        <label class="form-label" for="Nb_mois">Nombre du mois</label>
+                      </div>
+                      <div class="col-9 col-sm-7 mb-3">
+                        <input class="form-control form-control-sm" id="Nb_mois" name="Nb_mois" type="text" />
+                      </div>
+                      <div class="col-9 col-sm-7 offset-3">
+                        <button class="btn btn-falcon-primary me-3 mb-1" type="submit">
+                          <span class="fas fa-save" data-fa-transform="shrink-3"></span>
+                          Update
+                        </button>
+                      </div>
+                    </form>
+                    <div class="border-dashed-bottom my-3"></div>
+                  </div>
+                    {{#each niveau}}
+                  <div class="d-flex ">
+                    <a href="#!">
+                      <div class="avatar avatar-3xl">
+                        <div class="avatar-name rounded-circle"><span class="ID">{{ID_Niv}}</span></div>
+                      </div>
+                    </a>
+                    <div class="flex-1 position-relative ps-3">
+                      <h6 class="fs-0 mb-0"> <a href="#!">Niveau {{Label_Niv}}<span data-bs-toggle="tooltip" data-bs-placement="top" title="Verified"><small class="fa fa-check-circle text-primary" data-fa-transform="shrink-4 down-2"></small></span></a></h6>
+                      <p class="mb-1">Frais de scolarité à payer pour ce niveau est</p>
+                      <p class="text-1000 mb-0">MGA {{Decimal Frais_Sco}}</p>
+                      <p class="text-1000 mb-0">Pendant {{Nb_mois}} pour le niveau {{Label_Niv}}</p>
+                      <div class="border-dashed-bottom my-3"></div>
+                    </div>
+                    <a class="mb-4 d-block d-flex align-items-center text-warning niveau" href="#education-form" data-bs-toggle="collapse" title="Edit" aria-expanded="false" aria-controls="education-form"><span class="circle-dashed bg-white">
+                      <span class="fas fa-edit"></span></span><span class="ms-3">  </span>
+                    <span class="ID" hidden>{{ID_Niv}}</span>
+                    <span class="NIV" hidden>{{Label_Niv}}</span>
+                    <span class="Mont" hidden>{{Frais_Sco}}</span>
+                    <span class="MOIS" hidden>{{Nb_mois}}</span>
+                    </a>
+                  </div>
+                  <script>
+                            $('a.newNIV').click(
+                            function(){
+                            $('#ID_Niv').val("");
+                            $('#Label_Niv').val("");
+                            $('#Frais_Sco').val("");
+                            $('#Nb_mois').val("");
+                            });
+                            $('a.niveau').click(
+                            function(){
+                              var id = $(this).find('span.ID').html();
+                              var niv = $(this).find('span.NIV').html();
+                              var mont = $(this).find('span.Mont').html();
+                              var mois = $(this).find('span.MOIS').html();
+                            $('#ID_Niv').val(id);
+                            $('#Label_Niv').val(niv);
+                            $('#Frais_Sco').val(mont);
+                            $('#Nb_mois').val(mois);
+                            });
+                          </script>
+                  {{/each}}
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-4 ps-lg-2">
+              <div class="sticky-sidebar">
+                <div class="card mb-3 overflow-hidden">
+                  <div class="card-header">
+                    <h5 class="mb-0">Année Scolaire</h5>
+                  </div>
+                  <div class="card-body bg-light">
+                    test
+                  </div>
+                </div>
+                <div class="card mb-3">
+                  <div class="card-header">
+                    <h5 class="mb-0">Les classes existantes</h5>
+                  </div>
+                  <div class="card-body bg-light">
+                    Classes
+                  </div>
+                </div>
+                <div class="card mb-3">
+                  <div class="card-header">
+                    <h5 class="mb-0">Les autres Frais de scolarité</h5>
+                  </div>
+                  <div class="card-body bg-light">
+                    frais
+                  </div>
+                </div>
+                <div class="card">
+                  <div class="card-header">
+                    <h5 class="mb-0">Danger Zone</h5>
+                  </div>
+                  <div class="card-body bg-light">
+                    <h5 class="fs-0">Transfer Ownership</h5>
+                    <p class="fs--1">Transfer this account to another user or to an organization where you have the ability to create repositories.</p><a class="btn btn-falcon-warning d-block" href="#!">Transfer</a>
+                    <div class="border-dashed-bottom my-4"></div>
+                    <h5 class="fs-0">Delete this account</h5>
+                    <p class="fs--1">Once you delete a account, there is no going back. Please be certain.</p><a class="btn btn-falcon-danger d-block" href="#!">Deactivate Account</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>

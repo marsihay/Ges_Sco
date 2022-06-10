@@ -8,10 +8,10 @@ if (typeof localStorage === "undefined" || localStorage === null) {
 
 exports.login = (req, res) => {
   if (req.session.loggedin && !req.session.lockScreen) {
-    return res.redirect('/');
+    return res.redirect('/home');
   } else
     if (req.session.loggedin && req.session.lockScreen) {
-      return res.redirect('../auth/lock_screen');
+      return res.redirect('/auth/lock_screen');
     } else {
       req.session.lockScreen = false;
       req.session.loggedin = false;
@@ -35,7 +35,7 @@ exports.loginSubmit = (req, res) => {
           req.session.lockScreen = false;
           const { password, ...user } = await results[0];
           req.session.user = user;
-          return res.redirect('/');
+          return res.redirect('/home');
         } else {
           return res.render('Auth/login', { error: 'Incorrect Email', data });
         }
@@ -47,10 +47,10 @@ exports.loginSubmit = (req, res) => {
 
 exports.register = (req, res) => {
   if (req.session.loggedin && !req.session.lockScreen) {
-    return res.redirect('/');
+    return res.redirect('/home');
   } else
     if (req.session.loggedin && req.session.lockScreen) {
-      return res.redirect('../auth/lock_screen');
+      return res.redirect('/auth/lock_screen');
     } else {
       req.session.lockScreen = false;
       req.session.loggedin = false;
@@ -77,7 +77,7 @@ exports.registerSubmit = async (req, res) => {
                 req.session.lockScreen = false;
                 const { password, ...user } = await results[0];
                 req.session.user = user;
-                return res.redirect('/');
+                return res.redirect('/home');
               } else {
                 return res.render('Auth/register', { error: 'Incorrect Email', data });
               }
@@ -101,8 +101,8 @@ exports.lockScreen = (req, res) => {
     return res.render('Auth/lock_screen', { userLocked: req.session.user });
   } else
     if (!req.session.loggedin && !req.session.lockScreen) {
-      return res.redirect('../auth/login');
-    } else if (req.session.loggedin && req.session.lockScreen) {
+      return res.redirect('/auth/login');
+    } else if (req.session.loggedin && req.session.lockScreen) {  
       return res.render('Auth/lock_screen', { userLocked: req.session.user });
     } else {
       return res.redirect('/');

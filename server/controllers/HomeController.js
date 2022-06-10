@@ -12,11 +12,14 @@ const storage = multer.diskStorage({
     })
 const upload = multer({ storage: storage })
 // home 
+exports.HomeRedirect = async (req, res) => {
+      return res.redirect('/home');
+}
 exports.view = async (req, res) => {
       if (!req.session.loggedin && !req.session.lockScreen) {
-            return res.redirect('auth/login');
+            return res.redirect('/auth/login');
       } if (req.session.loggedin && req.session.lockScreen) {
-            return res.redirect('auth/lock_screen');
+            return res.redirect('/auth/lock_screen');
       } else {
             req.session.lockScreen = false;
             req.session.loggedin = true;
@@ -28,9 +31,9 @@ exports.view = async (req, res) => {
 
 exports.userProfile =async (req, res) => {
       if (!req.session.loggedin && !req.session.lockScreen) {
-            return res.redirect('auth/login');
+            return res.redirect('/auth/login');
       } if (req.session.loggedin && req.session.lockScreen) {
-            return res.redirect('auth/lock_screen');
+            return res.redirect('/auth/lock_screen');
       } else {
             req.session.lockScreen = false;
             req.session.loggedin = true;
@@ -42,9 +45,9 @@ exports.userProfile =async (req, res) => {
 
 exports.EditProfile =async (req, res) => {
       if (!req.session.loggedin && !req.session.lockScreen) {
-            return res.redirect('auth/login');
+            return res.redirect('/auth/login');
       } if (req.session.loggedin && req.session.lockScreen) {
-            return res.redirect('auth/lock_screen');
+            return res.redirect('/auth/lock_screen');
       } else {
             req.session.lockScreen = false;
             req.session.loggedin = true;
@@ -101,7 +104,7 @@ exports.SaveEditProfileInfo =(req, res) => {
                         return res.render('auth/profileEdit', { user,error: "Modification échoué."});
                   }
             });
-      }else return res.redirect('auth/login');
+      }else return res.redirect('/auth/login');
 }
 
 exports.SaveEditProfilePassW =(req, res) => {
@@ -141,10 +144,10 @@ exports.SaveEditProfilePassW =(req, res) => {
           return res.render('Auth/lock_screen', { error: 'Incorrect Email', userLocked: req.session.user });
         }
       });
-      }else return res.redirect('auth/login');
+      }else return res.redirect('/auth/login');
 }
 
-async function actualizeUser(session) {
+var actualizeUser=async function actualizeUser(session) {
             let promise = new Promise((resolve, reject) => {
             con.query('SELECT * FROM login WHERE id = ? ', [session.user.id],
                   function (error, results, fields) {
@@ -160,4 +163,5 @@ async function actualizeUser(session) {
       });
       return await promise;
 } 
+module.exports.actualizeUser = actualizeUser;
 

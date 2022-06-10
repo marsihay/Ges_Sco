@@ -14,14 +14,22 @@ const storage = multer.diskStorage({
     })
 const upload = multer({ storage: storage })
 
-// Routes
-router.get('/', homeController.view);
+// Routes pour HOME
+router.get('/', homeController.HomeRedirect);
+router.get('/home', homeController.view);
 router.get('/profile', homeController.userProfile);
 router.get('/profileEdit', homeController.EditProfile);
 router.post('/profileEdit', upload.fields([{name: "profile"}, {name: "uploadcover"}]), homeController.SaveEditProfile);
 router.post('/profileEditInfo', homeController.SaveEditProfileInfo);
 router.post('/profileEditPassW', homeController.SaveEditProfilePassW);
 
+// Routes pour Setting
+const SettingController = require('../controllers/SettingController');
+
+router.get('/setting', SettingController.view);
+router.get('/editdroit/:ID', SettingController.edit);
+router.post('/editdroit/:ID', SettingController.update);
+router.post('/editMois', SettingController.updateMois);
 
 function buttonAction1(res){
     res.send('ok');

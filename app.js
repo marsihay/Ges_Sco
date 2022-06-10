@@ -53,21 +53,56 @@ const routes = require('./server/routes/home');
 app.use('/', routes);
 app.use('/auth', auth);
 
+const Home = require('./server/controllers/HomeController');
 app.use(function(req, res, next) {
     res.status(404);
   
     // respond with html page
-    if (req.accepts('html')) {
-      res.render('partials/404');
-      return;
+    if (req.accepts('html')) {   
+      let session=req.session;      
+      return res.render('partials/404', {session});
     }
   });
 
 Handlebars.registerHelper('copyrightYear', function() {
-  var year = new Date().getFullYear();
-  return new Handlebars.SafeString(year);
+  const options = { month: 'long'};
+  var date=new Date();
+  var month= new Intl.DateTimeFormat('fr-FR', options).format(date);
+  var year = date.getFullYear();
+  return new Handlebars.SafeString(month+" "+year);
 });
 
+Handlebars.registerHelper("Decimal", function (Nb) {
+  //return Nb1.toLocaleString('en-US', { style: 'currency', currency: 'MGA' });
+  return separateComma(parseFloat(Nb).toFixed(2));
+})
+function separateComma(val) {
+  // remove sign if negative
+  var sign = 1;
+  if (val < 0) {
+    sign = -1;
+    val = -val;
+  }
+  // trim the number decimal point if it exists
+  let num = val.toString().includes('.') ? val.toString().split('.')[0] : val.toString();
+  let len = num.toString().length;
+  let result = '';
+  let count = 1;
 
-  
+  for (let i = len - 1; i >= 0; i--) {
+    result = num.toString()[i] + result;
+    if (count % 3 === 0 && count !== 0 && i !== 0) {
+      // eto no Reglena hoe virgule ve ny séparateur sa espace
+      result = ' ' + result;
+    }
+    count++;
+  }
+
+  // add number after decimal point
+  if (val.toString().includes('.')) {
+    result = result + '.' + val.toString().split('.')[1];
+  }
+  // return result with - sign if negative
+  return sign < 0 ? '-' + result : result;
+}
 app.listen(port, () => console.log(`Listening on port ${port}`));
