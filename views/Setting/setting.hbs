@@ -129,28 +129,32 @@
                 </div>
                 <div class="card-body bg-light"><a class="mb-4 d-block d-flex align-items-center newNIV" href="#education-form" data-bs-toggle="collapse" aria-expanded="false" aria-controls="education-form"><span class="circle-dashed"><span class="fas fa-plus"></span></span><span class="ms-3">Ajouter un nouveau Niveau</span></a>
                   <div class="collapse" id="education-form">
-                    <form class="row">
+                    <form class="row" id="NIV_Form" action="" method="POST">
                       <div class="col-3 mb-3 text-lg-end">
                         <label class="form-label" for="Label_Niv">Désignation</label>
                       </div>
                       <div class="col-9 col-sm-7 mb-3">
                         <input class="form-control form-control-sm" id="ID_Niv" name="ID_Niv" type="text" hidden/>
-                        <input class="form-control form-control-sm" id="Label_Niv" name="Label_Niv" type="text" />
+                        <input class="form-control form-control-sm" id="Label_Niv" name="Label_Niv" type="text" required/>
                       </div>
                       <div class="col-3 mb-3 text-lg-end">
                         <label class="form-label" for="Frais_Sco">Frais de scolarité</label>
                       </div>
                       <div class="col-9 col-sm-7 mb-3">
-                        <input class="form-control form-control-sm" id="Frais_Sco" name="Frais_Sco" type="text" />
+                        <input class="form-control form-control-sm" id="Frais_Sco" name="Frais_Sco" type="number" required/>
                       </div>
                       <div class="col-3 mb-3 text-lg-end">
                         <label class="form-label" for="Nb_mois">Nombre du mois</label>
                       </div>
                       <div class="col-9 col-sm-7 mb-3">
-                        <input class="form-control form-control-sm" id="Nb_mois" name="Nb_mois" type="text" />
+                        <input class="form-control form-control-sm" id="Nb_mois" name="Nb_mois" type="number" max="12" required/>
                       </div>
                       <div class="col-9 col-sm-7 offset-3">
-                        <button class="btn btn-falcon-primary me-3 mb-1" type="submit">
+                        <a class="btn btn-falcon-default me-2 mb-1 cancel" href="#education-form" data-bs-toggle="collapse" aria-expanded="false" aria-controls="education-form">
+                          <span class="fas fa-times-circle" data-fa-transform="shrink-3"></span>
+                          Annuler
+                        </a>
+                        <button class="btn btn-falcon-primary me-3 mb-1" id="btnSubmit" type="submit">
                           <span class="fas fa-save" data-fa-transform="shrink-3"></span>
                           Update
                         </button>
@@ -179,27 +183,57 @@
                     <span class="Mont" hidden>{{Frais_Sco}}</span>
                     <span class="MOIS" hidden>{{Nb_mois}}</span>
                     </a>
+                    <a class="mb-4 d-block d-flex align-items-center text-danger delete" href="#education-form" data-bs-toggle="collapse" title="Delete" aria-expanded="false" aria-controls="education-form"><span class="circle-dashed bg-white">
+                      <span class="fas fa-trash"></span></span><span class="ms-3">  </span>
+                      <span class="ID" hidden>{{ID_Niv}}</span>
+                    <span class="NIV" hidden>{{Label_Niv}}</span>
+                    <span class="Mont" hidden>{{Frais_Sco}}</span>
+                    <span class="MOIS" hidden>{{Nb_mois}}</span>
+                    </a>
                   </div>
-                  <script>
+                  <script>                          
+                            var e = document.getElementById("NIV_Form"); //Get the element 
                             $('a.newNIV').click(
                             function(){
+                              $("#btnSubmit").html("Ajouter");
+                              e.setAttribute("action", "/addNiveau");
+                              initForm();
+                            });
+                            $('a.cancel').click(
+                            function(){
+                              initForm();
+                            });
+                            function initForm(){
                             $('#ID_Niv').val("");
                             $('#Label_Niv').val("");
                             $('#Frais_Sco').val("");
                             $('#Nb_mois').val("");
-                            });
+                            }
                             $('a.niveau').click(
                             function(){
-                              var id = $(this).find('span.ID').html();
-                              var niv = $(this).find('span.NIV').html();
-                              var mont = $(this).find('span.Mont').html();
-                              var mois = $(this).find('span.MOIS').html();
+                              $("#btnSubmit").html("Enregistrer");
+                              e.setAttribute("action", "/editNiveau");
+                              AddvalueInput(this);
+                            });
+                            $('a.delete').click(
+                            function(){
+                              $("#btnSubmit").html("Supprimer");
+                              e.setAttribute("action", "/DeleteNiveau");
+                              AddvalueInput(this);
+                            });
+                            function AddvalueInput(c){
+                              var id = $(c).find('span.ID').html();
+                              var niv = $(c).find('span.NIV').html();
+                              var mont = $(c).find('span.Mont').html();
+                              var mois = $(c).find('span.MOIS').html();
+                              
+                              console.log("val "+id+" "+niv);
                             $('#ID_Niv').val(id);
                             $('#Label_Niv').val(niv);
                             $('#Frais_Sco').val(mont);
                             $('#Nb_mois').val(mois);
-                            });
-                          </script>
+                            }
+                    </script>
                   {{/each}}
                 </div>
               </div>

@@ -11,9 +11,9 @@ exports.view = async (req, res) => {
             req.session.current_url = req.url;
             let user = await actualizeUser(req.session);
             let droit = await GetDroitInscription();
-            let ecolage=await GetMoisEcolage();
-            let niveau=await GetNiveau();
-            return res.render('Setting/setting', { user, droit,ecolage,niveau });
+            let ecolage = await GetMoisEcolage();
+            let niveau = await GetNiveau();
+            return res.render('Setting/setting', { user, droit, ecolage, niveau });
       }
 }
 
@@ -61,6 +61,48 @@ exports.updateMois = (req, res) => {
             [Label_Eco, ID_Eco], async (err, rows) => {
                   if (err) {
                         let user = req.session.user;
+                        return res.render('Setting/setting', { user, error: "Modification échoué" });
+                  } else {
+                        return res.redirect('/setting');
+                  }
+            });
+}
+exports.updateNIV = (req, res) => {
+      const { ID_Niv, Label_Niv, Frais_Sco, Nb_mois } = req.body;
+      // User the connection
+      con.query('UPDATE niveau SET Label_Niv = ?,Frais_Sco=?,Nb_mois=? WHERE ID_Niv = ?',
+            [Label_Niv, Frais_Sco, Nb_mois, ID_Niv], async (err, rows) => {
+                  if (err) {
+                        let user = req.session.user;
+                        return res.render('Setting/setting', { user, error: "Modification échoué" });
+                  } else {
+                        return res.redirect('/setting');
+                  }
+            });
+}
+exports.addNIV =async (req, res) => {
+      let ID_Niv= await GetLastID("niveau","ID_Niv");
+      const { Label_Niv, Frais_Sco, Nb_mois } = req.body;
+      // User the connection
+      con.query('INSERT INTO `niveau`(`ID_Niv`, `Label_Niv`, `Frais_Sco`, `Nb_mois`) VALUES ( ?, ?, ?, ?)',
+            [ID_Niv, Label_Niv, Frais_Sco, Nb_mois], async (err, rows) => {
+                  if (err) {
+                        let user = req.session.user;
+                        console.log(err);
+                        return res.render('Setting/setting', { user, error: "Modification échoué" });
+                  } else {
+                        return res.redirect('/setting');
+                  }
+            });
+}
+exports.delNIV =async (req, res) => {
+      const { ID_Niv} = req.body;
+      // User the connection
+      con.query('DELETE FROM `niveau` WHERE ID_Niv=?',
+            [ID_Niv], async (err, rows) => {
+                  if (err) {
+                        let user = req.session.user;
+                        console.log(err);
                         return res.render('Setting/setting', { user, error: "Modification échoué" });
                   } else {
                         return res.redirect('/setting');
@@ -126,4 +168,20 @@ async function GetNiveau() {
       });
       return await promise;
 }
-
+async function GetLastID(table,champ) {
+      console.log(table+" "+champ);
+      let str="SELECT MAX("+champ+") as lastID FROM "+table+";";
+      console.log(str);
+      let promise = new Promise((resolve, reject) => {
+            con.query(str,
+                  function (error, results, fields) {
+                        if (error) {
+                              console.log(error)
+                        }
+                        if (results.length > 0) {
+                              resolve(results[0].lastID);
+                        }
+                  });
+      });
+      return await promise;
+}
