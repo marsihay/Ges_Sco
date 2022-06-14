@@ -100,7 +100,7 @@
                           <tbody class="bg-light Eco">
                             {{#each ecolage}}
                             <tr>
-                              <td>{{ID_Eco}}</td></script>
+                              <td>{{ID_Eco}}</td>
                               <td>{{Label_Eco}}</td>
                               <td>
                                 <div>
@@ -135,27 +135,26 @@
                       </div>
                       <div class="col-9 col-sm-7 mb-3">
                         <input class="form-control form-control-sm" id="ID_Niv" name="ID_Niv" type="text" hidden/>
-                        <input class="form-control form-control-sm" id="Label_Niv" name="Label_Niv" type="text" required/>
+                        <input class="form-control form-control-sm" autocomplete="off" id="Label_Niv" name="Label_Niv" type="text" required/>
                       </div>
                       <div class="col-3 mb-3 text-lg-end">
                         <label class="form-label" for="Frais_Sco">Frais de scolarité</label>
                       </div>
                       <div class="col-9 col-sm-7 mb-3">
-                        <input class="form-control form-control-sm" id="Frais_Sco" name="Frais_Sco" type="number" required/>
+                        <input class="form-control form-control-sm" autocomplete="off" id="Frais_Sco" name="Frais_Sco" type="number" required/>
                       </div>
                       <div class="col-3 mb-3 text-lg-end">
                         <label class="form-label" for="Nb_mois">Nombre du mois</label>
                       </div>
                       <div class="col-9 col-sm-7 mb-3">
-                        <input class="form-control form-control-sm" id="Nb_mois" name="Nb_mois" type="number" max="12" required/>
+                        <input class="form-control form-control-sm" autocomplete="off" id="Nb_mois" name="Nb_mois" type="number" max="12" required/>
                       </div>
                       <div class="col-9 col-sm-7 offset-3">
                         <a class="btn btn-falcon-default me-2 mb-1 cancel" href="#education-form" data-bs-toggle="collapse" aria-expanded="false" aria-controls="education-form">
-                          <span class="fas fa-times-circle" data-fa-transform="shrink-3"></span>
+                          
                           Annuler
                         </a>
                         <button class="btn btn-falcon-primary me-3 mb-1" id="btnSubmit" type="submit">
-                          <span class="fas fa-save" data-fa-transform="shrink-3"></span>
                           Update
                         </button>
                       </div>
@@ -238,7 +237,44 @@
                 </div>
               </div>
             </div>
-            <div class="col-lg-4 ps-lg-2">
+            <div class="col-lg-6 ps-lg-2">
+<div class="modal fade" id="Classe-modal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 500px">
+    <div class="modal-content position-relative">
+      <div class="position-absolute top-0 end-0 mt-2 me-2 z-index-1">
+        <button class="btn-close btn btn-sm btn-circle d-flex flex-center transition-base" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form action="" id="Classe" method="POST">
+      <div class="modal-body p-0">
+        
+        <div class="rounded-top-lg py-3 ps-4 pe-6 bg-light">
+          <h4 class="mb-1" id="modalClasseLabel"></h4>
+        </div>
+        <div class="p-4 pb-0">          
+            <div class="mb-3">
+              <input class="form-control" id="ID_C" name="ID_C" type="text" hidden/>
+              <select class="form-select" aria-label="Default select example" name="ID_Niv" id="ID_NivDropdown">
+                
+              </select>
+            </div>
+            <div class="mb-3">
+              <label class="col-form-label" for="Label_C">Désignation:</label>
+              <input class="form-control" id="Label_C" autocomplete="off" maxlength="9" name="Label_C" type="text" />
+            </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-falcon-default me-2 mb-1 " type="button" data-bs-dismiss="modal">
+            Annuler
+        </button>
+          <button class="btn btn-falcon-primary me-3 mb-1" type="submit" id="btnSubClasse">
+            Update
+          </button>
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
               <div class="sticky-sidebar">
                 <div class="card mb-3 overflow-hidden">
                   <div class="card-header">
@@ -252,8 +288,75 @@
                   <div class="card-header">
                     <h5 class="mb-0">Les classes existantes</h5>
                   </div>
+
                   <div class="card-body bg-light">
-                    Classes
+                    <button class="btn btn-falcon-primary me-1 mb-1" onclick="AddClasse()" type="button">Nouveau Classe
+                    </button>
+                    <div class="table-responsive scrollbar">
+                        <table class="table text-center">
+                          <thead>
+                            <tr class="">
+                              <th scope="col">ID</th>
+                              <th scope="col">Désignation</th>
+                              <th scope="col">Actions</th>
+                            </tr>
+                          </thead>
+                          <tbody class="bg-light Eco">
+                            {{#each classe}}
+                            <tr>
+                              <td>{{ID_C}}</td>
+                              <td>{{Label_C}}</td>
+                              <td hidden>{{ID_Niv}}</td>
+                              <td>
+                                <div>
+                                  <button class="btn p-0" type="button" onclick="ModClasse(this.parentNode.parentNode)" title="Edit">
+                                    <span class="text-500 fas fa-edit"></span>
+                                  </button>
+                                  <button class="btn p-0" type="button" onclick="SupClasse(this.parentNode.parentNode)" title="Edit">
+                                    <span class="text-500 fas fa-trash-alt"></span>
+                                  </button>
+                                </div>
+                              </td>
+                            </tr>
+                            {{/each}}
+                          </tbody>
+                          <script>
+                            function AddClasse() {
+                              $("#modalClasseLabel").html("Nouveau Classe");
+                              $("#btnSubClasse").html("Ajouter");
+                            window.document.forms["Classe"].elements["Label_C"].value="";
+                            $.ajax({url: 'getNiveau', success:function(res){
+                                $('#ID_NivDropdown').html('');  
+                                var options = '';  
+                                options += '<option value="0">Choisr un Niveau</option>';  
+                                for (var i = 0; i < res.length; i++) {  
+                                    options += '<option value="' + res[i].ID_Niv + '">' + res[i].Label_Niv + '</option>';  
+                                }  
+                                $('#ID_NivDropdown').append(options); 
+                            }});
+                            $("#Classe-modal").modal('toggle');
+                            }
+                            function ModClasse(ligne) {
+                              $("#modalClasseLabel").html("Modification");
+                              var design=ligne.cells[0].innerText;
+                              var type=ligne.cells[1].innerText;
+                              var Caractéristiques=ligne.cells[2].innerText;
+                            window.document.forms["Classe"].elements["design"].value=design;
+                            window.document.forms["Classe"].elements["type"].value=type;
+                            $("#Classe-modal").modal();
+                            }
+                            function SupClasse(ligne) {
+                              $("#modalClasseLabel").html("Suppression");
+                              var design=ligne.cells[0].innerText;
+                              var type=ligne.cells[1].innerText;
+                              var Caractéristiques=ligne.cells[2].innerText;
+                            window.document.forms["stock"].elements["design"].value=design;
+                            window.document.forms["stock"].elements["type"].value=type;
+                            $("#Classe-modal").modal();
+                            }
+                          </script>
+                        </table>
+                      </div>
                   </div>
                 </div>
                 <div class="card mb-3">

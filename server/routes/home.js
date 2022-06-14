@@ -33,6 +33,7 @@ router.post('/editMois', SettingController.updateMois);
 router.post('/editNiveau', SettingController.updateNIV);
 router.post('/addNiveau', SettingController.addNIV);
 router.post('/DeleteNiveau', SettingController.delNIV);
+router.get('/getNiveau', SettingController.GetNiveau);
 
 function buttonAction1(res){
     res.send('ok');
