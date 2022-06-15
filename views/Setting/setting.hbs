@@ -129,6 +129,7 @@
                 </div>
                 <div class="card-body bg-light"><a class="mb-4 d-block d-flex align-items-center newNIV" href="#education-form" data-bs-toggle="collapse" aria-expanded="false" aria-controls="education-form"><span class="circle-dashed"><span class="fas fa-plus"></span></span><span class="ms-3">Ajouter un nouveau Niveau</span></a>
                   <div class="collapse" id="education-form">
+                    
                     <form class="row" id="NIV_Form" action="" method="POST">
                       <div class="col-3 mb-3 text-lg-end">
                         <label class="form-label" for="Label_Niv">Désignation</label>
@@ -194,8 +195,10 @@
                             var e = document.getElementById("NIV_Form"); //Get the element 
                             $('a.newNIV').click(
                             function(){
-                              $("#btnSubmit").html("Ajouter");
                               e.setAttribute("action", "/addNiveau");
+                              console.log(e.getAttribute('action'));
+                              console.log(e.getAttribute('method'));
+                              $("#btnSubmit").html("Ajouter");
                               initForm();
                             });
                             $('a.cancel').click(
@@ -209,15 +212,17 @@
                             $('#Nb_mois').val("");
                             }
                             $('a.niveau').click(
-                            function(){
-                              $("#btnSubmit").html("Enregistrer");
+                            function(){  
                               e.setAttribute("action", "/editNiveau");
+                              $("#btnSubmit").html("Enregistrer");
+                              console.log(e.getAttribute('action'));
                               AddvalueInput(this);
                             });
                             $('a.delete').click(
                             function(){
-                              $("#btnSubmit").html("Supprimer");
                               e.setAttribute("action", "/DeleteNiveau");
+                              $("#btnSubmit").html("Supprimer");
+                              console.log(e.getAttribute('action'));
                               AddvalueInput(this);
                             });
                             function AddvalueInput(c){
@@ -244,14 +249,16 @@
       <div class="position-absolute top-0 end-0 mt-2 me-2 z-index-1">
         <button class="btn-close btn btn-sm btn-circle d-flex flex-center transition-base" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <form action="" id="Classe" method="POST">
+      <form action="" id="ClasseForm" method="POST">
       <div class="modal-body p-0">
         
         <div class="rounded-top-lg py-3 ps-4 pe-6 bg-light">
           <h4 class="mb-1" id="modalClasseLabel"></h4>
         </div>
-        <div class="p-4 pb-0">          
+        <div class="px-4 pb-0 ">    
+          <h5 class="text-danger text-center" id="askTEXT">Voulez-vous la supprimer vraiment?</h5>      
             <div class="mb-3">
+              <label class="col-form-label" for="ID_Niv">Niveau:</label>
               <input class="form-control" id="ID_C" name="ID_C" type="text" hidden/>
               <select class="form-select" aria-label="Default select example" name="ID_Niv" id="ID_NivDropdown">
                 
@@ -301,31 +308,37 @@
                               <th scope="col">Actions</th>
                             </tr>
                           </thead>
-                          <tbody class="bg-light Eco">
+                          <tbody class="bg-light classe">
                             {{#each classe}}
                             <tr>
                               <td>{{ID_C}}</td>
                               <td>{{Label_C}}</td>
                               <td hidden>{{ID_Niv}}</td>
                               <td>
-                                <div>
-                                  <button class="btn p-0" type="button" onclick="ModClasse(this.parentNode.parentNode)" title="Edit">
+                                  <button class="btn px-2" type="button" onclick="ModClasse(this.parentNode.parentNode)" title="Edit">
                                     <span class="text-500 fas fa-edit"></span>
                                   </button>
-                                  <button class="btn p-0" type="button" onclick="SupClasse(this.parentNode.parentNode)" title="Edit">
+                                  <button class="btn px-2" type="button" onclick="SupClasse(this.parentNode.parentNode)" title="Edit">
                                     <span class="text-500 fas fa-trash-alt"></span>
                                   </button>
-                                </div>
                               </td>
                             </tr>
                             {{/each}}
                           </tbody>
                           <script>
-                            function AddClasse() {
+                            window.onload = function() {LoadNiv();}
+                            var c = document.getElementById("ClasseForm");
+                            function AddClasse() {                       
+                              c.setAttribute("action", "/AddClasse");
                               $("#modalClasseLabel").html("Nouveau Classe");
-                              $("#btnSubClasse").html("Ajouter");
-                            window.document.forms["Classe"].elements["Label_C"].value="";
-                            $.ajax({url: 'getNiveau', success:function(res){
+                              $("#btnSubClasse").html("Ajouter");  
+                              disable(false);     
+                            window.document.forms["ClasseForm"].elements["Label_C"].value="";
+                            window.document.forms["ClasseForm"].elements["ID_NivDropdown"].value=0;
+                            $("#Classe-modal").modal('toggle');
+                            }
+                            function LoadNiv(){                              
+                              $.ajax({url: 'getNiveau', success:function(res){
                                 $('#ID_NivDropdown').html('');  
                                 var options = '';  
                                 options += '<option value="0">Choisr un Niveau</option>';  
@@ -334,25 +347,35 @@
                                 }  
                                 $('#ID_NivDropdown').append(options); 
                             }});
-                            $("#Classe-modal").modal('toggle');
                             }
-                            function ModClasse(ligne) {
+                            function ModClasse(ligne) { 
+                              c.setAttribute("action", "/ModClasse");
                               $("#modalClasseLabel").html("Modification");
-                              var design=ligne.cells[0].innerText;
-                              var type=ligne.cells[1].innerText;
-                              var Caractéristiques=ligne.cells[2].innerText;
-                            window.document.forms["Classe"].elements["design"].value=design;
-                            window.document.forms["Classe"].elements["type"].value=type;
-                            $("#Classe-modal").modal();
+                              $("#btnSubClasse").html("Enregistrer");  
+                              setValue(ligne);    disable(false);             
+                              $("#Classe-modal").modal('toggle');
                             }
                             function SupClasse(ligne) {
+                              c.setAttribute("action", "/DelClasse");
                               $("#modalClasseLabel").html("Suppression");
-                              var design=ligne.cells[0].innerText;
-                              var type=ligne.cells[1].innerText;
-                              var Caractéristiques=ligne.cells[2].innerText;
-                            window.document.forms["stock"].elements["design"].value=design;
-                            window.document.forms["stock"].elements["type"].value=type;
-                            $("#Classe-modal").modal();
+                              $("#btnSubClasse").html("Supprimer"); 
+                              setValue(ligne); 
+                              disable(true);
+                              $("#Classe-modal").modal('toggle');
+                            }
+                            function setValue(ligne){ 
+                              var id_c=ligne.cells[0].innerText;
+                              var label=ligne.cells[1].innerText;
+                              var id_n=ligne.cells[2].innerText;
+                            $('#ID_C').val(id_c);
+                            $('#Label_C').val(label);
+                            $("#ID_NivDropdown").val(id_n);
+                            }
+                            function disable(bool){    
+                              if(bool){document.getElementById('askTEXT').style.visibility= 'visible';
+                              }else document.getElementById('askTEXT').style.visibility= 'hidden';
+                              document.querySelector('#Label_C').disabled = bool;
+                              document.querySelector('#ID_NivDropdown').disabled = bool;
                             }
                           </script>
                         </table>

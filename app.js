@@ -72,6 +72,10 @@ Handlebars.registerHelper('copyrightYear', function() {
   return new Handlebars.SafeString(month+" "+year);
 });
 
+Handlebars.registerHelper('AppName', function() {
+  return new Handlebars.SafeString("Gessco");
+});
+
 Handlebars.registerHelper("Decimal", function (Nb) {
   //return Nb1.toLocaleString('en-US', { style: 'currency', currency: 'MGA' });
   return separateComma(parseFloat(Nb).toFixed(2));

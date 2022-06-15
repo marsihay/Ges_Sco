@@ -34,6 +34,9 @@ router.post('/editNiveau', SettingController.updateNIV);
 router.post('/addNiveau', SettingController.addNIV);
 router.post('/DeleteNiveau', SettingController.delNIV);
 router.get('/getNiveau', SettingController.GetNiveau);
+router.post('/AddClasse', SettingController.AddClasse);
+router.post('/ModClasse', SettingController.updateClasse);
+router.post('/DelClasse', SettingController.delClasse);
 
 function buttonAction1(res){
     res.send('ok');

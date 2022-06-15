@@ -14,7 +14,7 @@ exports.view = async (req, res) => {
             let ecolage = await GetMoisEcolage();
             let niveau = await GetNiveau();
             let classe = await GetClasse();
-            return res.render('Setting/setting', { user, droit, ecolage, niveau });
+            return res.render('Setting/setting', { user, droit, ecolage, niveau, classe });
       }
 }
 
@@ -55,6 +55,7 @@ exports.update = (req, res) => {
                   }
             });
 }
+
 exports.updateMois = (req, res) => {
       const { ID_Eco, Label_Eco } = req.body;
       // User the connection
@@ -68,8 +69,10 @@ exports.updateMois = (req, res) => {
                   }
             });
 }
+
 exports.updateNIV = (req, res) => {
       const { ID_Niv, Label_Niv, Frais_Sco, Nb_mois } = req.body;
+      console.log("UPDATE");
       // User the connection
       con.query('UPDATE niveau SET Label_Niv = ?,Frais_Sco=?,Nb_mois=? WHERE ID_Niv = ?',
             [Label_Niv, Frais_Sco, Nb_mois, ID_Niv], async (err, rows) => {
@@ -81,6 +84,7 @@ exports.updateNIV = (req, res) => {
                   }
             });
 }
+
 exports.addNIV = async (req, res) => {
       let ID_Niv = await GetLastID("niveau", "ID_Niv");
       const { Label_Niv, Frais_Sco, Nb_mois } = req.body;
@@ -96,11 +100,34 @@ exports.addNIV = async (req, res) => {
                   }
             });
 }
+
 exports.delNIV = async (req, res) => {
+      console.log("Delete");
       const { ID_Niv } = req.body;
       // User the connection
       con.query('DELETE FROM `niveau` WHERE ID_Niv=?',
             [ID_Niv], async (err, rows) => {
+                  if (err) {
+                        let user = req.session.user;
+                        console.log(err);
+                        return res.render('Setting/setting', { user, error: "Suppression échoué" });
+                  } else {
+                        return res.redirect('/setting');
+                  }
+            });
+}
+
+exports.GetNiveau = async (req, res) => {
+      let niveau = await GetNiveau();
+      return res.send(niveau);
+}
+
+exports.AddClasse = async (req, res) => {
+      let ID_C = await GetLastID("classe", "ID_C");
+      const { ID_Niv, Label_C } = req.body;
+      console.log(ID_C);
+      con.query('INSERT INTO `classe`(`ID_C`, `Label_C`, `ID_Niv`) VALUES ( ?, ?, ?)',
+            [++ID_C, Label_C, ID_Niv], async (err, rows) => {
                   if (err) {
                         let user = req.session.user;
                         console.log(err);
@@ -110,11 +137,35 @@ exports.delNIV = async (req, res) => {
                   }
             });
 }
-exports.GetNiveau = async (req, res) => {
-      let niveau = await GetNiveau();
-      return res.send(niveau);
+
+exports.updateClasse = (req, res) => {
+      const { ID_C, Label_C, ID_Niv } = req.body;
+      // User the connection
+      con.query('UPDATE classe SET Label_C = ?,ID_Niv=? WHERE ID_C = ?',
+            [Label_C, ID_Niv, ID_C], async (err, rows) => {
+                  if (err) {
+                        let user = req.session.user;
+                        return res.render('Setting/setting', { user, error: "Modification échoué" });
+                  } else {
+                        return res.redirect('/setting');
+                  }
+            });
 }
 
+exports.delClasse = async (req, res) => {
+      const { ID_C } = req.body;
+      // User the connection
+      con.query('DELETE FROM `classe` WHERE ID_C=?',
+            [ID_C], async (err, rows) => {
+                  if (err) {
+                        let user = req.session.user;
+                        console.log(err);
+                        return res.render('Setting/setting', { user, error: "Suppression échoué" });
+                  } else {
+                        return res.redirect('/setting');
+                  }
+            });
+}
 async function actualizeUser(session) {
       let promise = new Promise((resolve, reject) => {
             con.query('SELECT * FROM login WHERE id = ? ', [session.user.id],
@@ -140,7 +191,7 @@ async function GetDroitInscription() {
                         }
                         if (results.length > 0) {
                               resolve(results);
-                        }else resolve("VIDE");
+                        } else resolve("VIDE");
                   });
       });
       return await promise;
@@ -154,7 +205,7 @@ async function GetMoisEcolage() {
                         }
                         if (results.length > 0) {
                               resolve(results);
-                        }else resolve("VIDE");
+                        } else resolve("VIDE");
                   });
       });
       return await promise;
@@ -168,28 +219,26 @@ async function GetNiveau() {
                         }
                         if (results.length > 0) {
                               resolve(results);
-                        }else resolve("VIDE");
+                        } else resolve("VIDE");
                   });
       });
       return await promise;
 }
 async function GetClasse() {
       let promise = new Promise((resolve, reject) => {
-            con.query('SELECT * FROM `classe`; ',
+            con.query('SELECT * FROM `classe` ORDER BY ID_C; ',
                   function (error, results, fields) {
                         if (error) {
                               console.log(error)
                         }
                         if (results.length > 0) {
-                              console.log(results);
                               resolve(results);
-                        }else resolve("VIDE");
+                        } else resolve("VIDE");
                   });
       });
       return await promise;
 }
 async function GetLastID(table, champ) {
-      console.log(table + " " + champ);
       let str = "SELECT MAX(" + champ + ") as lastID FROM " + table + ";";
       console.log(str);
       let promise = new Promise((resolve, reject) => {
@@ -199,8 +248,10 @@ async function GetLastID(table, champ) {
                               console.log(error)
                         }
                         if (results.length > 0) {
-                              resolve(results[0].lastID);
-                        }else resolve("VIDE");
+                              if (results[0].lastID != null) {
+                                    resolve(results[0].lastID);
+                              } else resolve(0);
+                        } else resolve("VIDE");
                   });
       });
       return await promise;
