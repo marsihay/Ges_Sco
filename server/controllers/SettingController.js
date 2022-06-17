@@ -14,7 +14,9 @@ exports.view = async (req, res) => {
             let ecolage = await GetMoisEcolage();
             let niveau = await GetNiveau();
             let classe = await GetClasse();
-            return res.render('Setting/setting', { user, droit, ecolage, niveau, classe });
+            let Frais_Sco= await GetFrais_Sco();
+            let A_S = await GetAS();
+            return res.render('Setting/setting', { user, droit, ecolage, niveau, classe, Frais_Sco, A_S });
       }
 }
 
@@ -34,7 +36,8 @@ exports.edit = (req, res) => {
                         req.session.current_url = req.url;
                         let user = await actualizeUser(req.session);
                         const { ...rows } = await rowsRes[0];
-                        return res.render('Setting/droit/edit_droit', { user, rows });
+                        let A_S= await GetAS();
+                        return res.render('Setting/droit/edit_droit', { user, rows,A_S });
                   }
             });
       }
@@ -49,7 +52,8 @@ exports.update = (req, res) => {
                         let user = req.session.user;
                         let rows = { ID_Droit: ID_Droit, Label_D: Label_D, montant: montant };
                         console.log(err);
-                        return res.render('Setting/droit/edit_droit', { user, rows, error: "Modification échoué", Droit: "2" });
+                        let A_S= await GetAS();
+                        return res.render('Setting/droit/edit_droit', { user, rows, error: "Modification échoué", Droit: "2", A_S });
                   } else {
                         return res.redirect('/setting');
                   }
@@ -63,7 +67,8 @@ exports.updateMois = (req, res) => {
             [Label_Eco, ID_Eco], async (err, rows) => {
                   if (err) {
                         let user = req.session.user;
-                        return res.render('Setting/setting', { user, error: "Modification échoué" });
+                        let A_S= await GetAS();
+                        return res.render('Setting/setting', { user, error: "Modification échoué",A_S });
                   } else {
                         return res.redirect('/setting');
                   }
@@ -78,7 +83,8 @@ exports.updateNIV = (req, res) => {
             [Label_Niv, Frais_Sco, Nb_mois, ID_Niv], async (err, rows) => {
                   if (err) {
                         let user = req.session.user;
-                        return res.render('Setting/setting', { user, error: "Modification échoué" });
+                        let A_S= await GetAS();
+                        return res.render('Setting/setting', { user, error: "Modification échoué",A_S });
                   } else {
                         return res.redirect('/setting');
                   }
@@ -94,7 +100,8 @@ exports.addNIV = async (req, res) => {
                   if (err) {
                         let user = req.session.user;
                         console.log(err);
-                        return res.render('Setting/setting', { user, error: "Modification échoué" });
+                        let A_S= await GetAS();
+                        return res.render('Setting/setting', { user, error: "Modification échoué",A_S });
                   } else {
                         return res.redirect('/setting');
                   }
@@ -110,7 +117,8 @@ exports.delNIV = async (req, res) => {
                   if (err) {
                         let user = req.session.user;
                         console.log(err);
-                        return res.render('Setting/setting', { user, error: "Suppression échoué" });
+                        let A_S= await GetAS();
+                        return res.render('Setting/setting', { user, error: "Suppression échoué",A_S });
                   } else {
                         return res.redirect('/setting');
                   }
@@ -122,6 +130,53 @@ exports.GetNiveau = async (req, res) => {
       return res.send(niveau);
 }
 
+exports.AddAS = async (req, res) => {
+      let Id_AS = await GetLastID("a_s", "Id_AS");
+      const { Label_AS } = req.body;
+      con.query('INSERT INTO `a_s`(`Id_AS`, `Label_AS`) VALUES ( ?, ?)',
+            [++Id_AS, Label_AS], async (err, rows) => {
+                  if (err) {
+                        let user = req.session.user;
+                        console.log(err);
+                        let A_S= await GetAS();
+                        return res.render('Setting/setting', { user, error: "Modification échoué",A_S });
+                  } else {
+                        return res.redirect('/setting');
+                  }
+            });
+}
+
+exports.updateAS = (req, res) => {
+      const { Id_AS, Label_AS } = req.body;
+      // User the connection
+      con.query('UPDATE a_s SET Label_AS=? WHERE Id_AS = ?',
+            [Label_AS,Id_AS], async (err, rows) => {
+                  if (err) {
+                        let user = req.session.user;
+                        let A_S= await GetAS();
+                        return res.render('Setting/setting', { user,A_S, error: "Modification échoué" });
+                  } else {
+                        return res.redirect('/setting');
+                  }
+            });
+}
+
+exports.delAS = async (req, res) => {
+      const { Id_AS } = req.body;
+      // User the connection
+      con.query('DELETE FROM `a_s` WHERE Id_AS=?',
+            [Id_AS], async (err, rows) => {
+                  if (err) {
+                        let user = req.session.user;
+                        console.log(err);
+                        let A_S= await GetAS();
+                        return res.render('Setting/setting', { user,A_S, error: "Suppression échoué" });
+                  } else {
+                        return res.redirect('/setting');
+                  }
+            });
+}
+
 exports.AddClasse = async (req, res) => {
       let ID_C = await GetLastID("classe", "ID_C");
       const { ID_Niv, Label_C } = req.body;
@@ -131,7 +186,8 @@ exports.AddClasse = async (req, res) => {
                   if (err) {
                         let user = req.session.user;
                         console.log(err);
-                        return res.render('Setting/setting', { user, error: "Modification échoué" });
+                        let A_S= await GetAS();
+                        return res.render('Setting/setting', { user,A_S, error: "Modification échoué" });
                   } else {
                         return res.redirect('/setting');
                   }
@@ -145,7 +201,8 @@ exports.updateClasse = (req, res) => {
             [Label_C, ID_Niv, ID_C], async (err, rows) => {
                   if (err) {
                         let user = req.session.user;
-                        return res.render('Setting/setting', { user, error: "Modification échoué" });
+                        let A_S= await GetAS();
+                        return res.render('Setting/setting', { user,A_S, error: "Modification échoué" });
                   } else {
                         return res.redirect('/setting');
                   }
@@ -160,7 +217,55 @@ exports.delClasse = async (req, res) => {
                   if (err) {
                         let user = req.session.user;
                         console.log(err);
-                        return res.render('Setting/setting', { user, error: "Suppression échoué" });
+                        let A_S= await GetAS();
+                        return res.render('Setting/setting', { user,A_S, error: "Suppression échoué" });
+                  } else {
+                        return res.redirect('/setting');
+                  }
+            });
+}
+
+exports.AddFrais = async (req, res) => {
+      let ID_autre = await GetLastID("autres_fs", "ID_autre");
+      const { Label_Autre, cout } = req.body;
+      con.query('INSERT INTO `autres_fs`(`ID_autre`, `Label_Autre`, `cout`) VALUES ( ?, ?, ?)',
+            [++ID_autre, Label_Autre, cout], async (err, rows) => {
+                  if (err) {
+                        let user = req.session.user;
+                        console.log(err);
+                        let A_S= await GetAS();
+                        return res.render('Setting/setting', { user,A_S, error: "Modification échoué" });
+                  } else {
+                        return res.redirect('/setting');
+                  }
+            });
+}
+
+exports.updateFrais = (req, res) => {
+      const { ID_autre, Label_Autre, cout } = req.body;
+      // User the connection
+      con.query('UPDATE autres_fs SET Label_Autre = ?,cout=? WHERE ID_autre = ?',
+            [Label_Autre, cout, ID_autre], async (err, rows) => {
+                  if (err) {
+                        let user = req.session.user;
+                        let A_S= await GetAS();
+                        return res.render('Setting/setting', { user,A_S, error: "Modification échoué" });
+                  } else {
+                        return res.redirect('/setting');
+                  }
+            });
+}
+
+exports.delFrais = async (req, res) => {
+      const { ID_autre } = req.body;
+      // User the connection
+      con.query('DELETE FROM `autres_fs` WHERE ID_autre=?',
+            [ID_autre], async (err, rows) => {
+                  if (err) {
+                        let user = req.session.user;
+                        console.log(err);
+                        let A_S= await GetAS();
+                        return res.render('Setting/setting', { user,A_S, error: "Suppression échoué" });
                   } else {
                         return res.redirect('/setting');
                   }
@@ -183,9 +288,10 @@ async function actualizeUser(session) {
       return await promise;
 }
 async function GetDroitInscription() {
+      let A_S= await GetActiveAS();
       let promise = new Promise((resolve, reject) => {
-            con.query('SELECT * FROM `droit`; ',
-                  function (error, results, fields) {
+            con.query('SELECT * FROM `droit` WHERE Id_AS = ? ORDER BY ID_Droit; ',
+            [A_S],  function (error, results, fields) {
                         if (error) {
                               console.log(error)
                         }
@@ -197,9 +303,10 @@ async function GetDroitInscription() {
       return await promise;
 }
 async function GetMoisEcolage() {
+      let A_S= await GetActiveAS();
       let promise = new Promise((resolve, reject) => {
-            con.query('SELECT * FROM `mois_ecolage`; ',
-                  function (error, results, fields) {
+            con.query('SELECT * FROM `mois_ecolage` WHERE Id_AS = ? ORDER BY ID_Eco; ',
+             [A_S], function (error, results, fields) {
                         if (error) {
                               console.log(error)
                         }
@@ -211,9 +318,10 @@ async function GetMoisEcolage() {
       return await promise;
 }
 async function GetNiveau() {
+      let A_S= await GetActiveAS();
       let promise = new Promise((resolve, reject) => {
-            con.query('SELECT * FROM `niveau`; ',
-                  function (error, results, fields) {
+            con.query('SELECT * FROM `niveau` WHERE Id_AS = ? ORDER BY ID_Niv; ',
+            [A_S],    function (error, results, fields) {
                         if (error) {
                               console.log(error)
                         }
@@ -228,6 +336,35 @@ async function GetClasse() {
       let promise = new Promise((resolve, reject) => {
             con.query('SELECT * FROM `classe` ORDER BY ID_C; ',
                   function (error, results, fields) {
+                        if (error) {
+                              console.log(error)
+                        }
+                        if (results.length > 0) {
+                              resolve(results);
+                        } else resolve("VIDE");
+                  });
+      });
+      return await promise;
+}
+var GetAS=async function GetAS() {
+      let promise = new Promise((resolve, reject) => {
+            con.query('SELECT * FROM `a_s` ORDER BY Id_AS; ',
+                  function (error, results, fields) {
+                        if (error) {
+                              console.log(error)
+                        }
+                        if (results.length > 0) {
+                              resolve(results);
+                        } else resolve("VIDE");
+                  });
+      });
+      return await promise;
+}
+async function GetFrais_Sco() {
+      let A_S= await GetActiveAS();
+      let promise = new Promise((resolve, reject) => {
+            con.query('SELECT * FROM `autres_fs` WHERE Id_AS = ? ORDER BY ID_autre; ',
+            [A_S],     function (error, results, fields) {
                         if (error) {
                               console.log(error)
                         }
@@ -256,3 +393,22 @@ async function GetLastID(table, champ) {
       });
       return await promise;
 }
+async function GetActiveAS() {
+      let str = "SELECT *  FROM active;";
+      let promise = new Promise((resolve, reject) => {
+            con.query(str,
+                  function (error, results, fields) {
+                        if (error) {
+                              console.log(error)
+                        }
+                        if (results.length > 0) {
+                              if (results[0].A_S != null) {
+                                    resolve(results[0].A_S);
+                              } else resolve(0);
+                        } else resolve("VIDE");
+                  });
+      });
+      return await promise;
+}
+
+module.exports.GetAS = GetAS;

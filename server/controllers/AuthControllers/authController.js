@@ -6,7 +6,7 @@ if (typeof localStorage === "undefined" || localStorage === null) {
   localStorage = new LocalStorage('./scratch');
 }
 
-exports.login = (req, res) => {
+exports.login = async (req, res) => {
   if (req.session.loggedin && !req.session.lockScreen) {
     return res.redirect('/home');
   } else
@@ -15,21 +15,24 @@ exports.login = (req, res) => {
     } else {
       req.session.lockScreen = false;
       req.session.loggedin = false;
-      return res.render('Auth/login', { data: { email: "" } });
+      let A_S = await GetAS();
+      return res.render('Auth/login', { A_S, data: { email: "" } });
     }
 }
 
-exports.loginSubmit = (req, res) => {
+exports.loginSubmit = async (req, res) => {
   const data = req.body;
   if (data.email && data.password) {
     con.query('SELECT * FROM login WHERE email = ? ', [data.email],
       async function (error, results, fields) {
         if (error) {
-          return res.render('Auth/login', { error: error, data });
+          let A_S = await GetAS();
+          return res.render('Auth/login', { error: error, data, A_S });
         }
         if (results.length > 0) {
           if (!await bcrypt.compare(data.password, results[0].password)) {
-            return res.render('Auth/login', { error: 'Mot de passe incorrect', data });
+            let A_S = await GetAS();
+            return res.render('Auth/login', { error: 'Mot de passe incorrect', data, A_S });
           }
           req.session.loggedin = true;
           req.session.lockScreen = false;
@@ -37,15 +40,17 @@ exports.loginSubmit = (req, res) => {
           req.session.user = user;
           return res.redirect('/home');
         } else {
-          return res.render('Auth/login', { error: 'Incorrect Email', data });
+          let A_S = await GetAS();
+          return res.render('Auth/login', { error: 'Incorrect Email', data, A_S });
         }
       });
   } else {
-    return res.render('Auth/login', { error: 'Completez le champ email et password' });
+    let A_S = await GetAS();
+    return res.render('Auth/login', { A_S, error: 'Completez le champ email et password' });
   }
 }
 
-exports.register = (req, res) => {
+exports.register = async (req, res) => {
   if (req.session.loggedin && !req.session.lockScreen) {
     return res.redirect('/home');
   } else
@@ -54,7 +59,8 @@ exports.register = (req, res) => {
     } else {
       req.session.lockScreen = false;
       req.session.loggedin = false;
-      return res.render('Auth/register', { data: { email: "", username: "" } });
+      let A_S = await GetAS();
+      return res.render('Auth/register', { A_S, data: { email: "", username: "" } });
     }
 }
 
@@ -65,9 +71,10 @@ exports.registerSubmit = async (req, res) => {
     //console.log(req.body.email+' '+req.body.password);
     const hashedPassword = await bcrypt.hash(data.password, salt);
     con.query("INSERT INTO login(username, email, password) values ( ?, ?, ?)",
-      [data.username, data.email, hashedPassword], (error, list) => {
+      [data.username, data.email, hashedPassword], async (error, list) => {
         if (error) {
-          return res.render('Auth/register', { error: error, data });
+          let A_S = await GetAS();
+          return res.render('Auth/register', { A_S, error: error, data });
         } else {
           con.query('SELECT * FROM login WHERE email = ? ', [data.email],
             async function (error, results, fields) {
@@ -79,60 +86,84 @@ exports.registerSubmit = async (req, res) => {
                 req.session.user = user;
                 return res.redirect('/home');
               } else {
-                return res.render('Auth/register', { error: 'Incorrect Email', data });
+                let A_S = await GetAS();
+                return res.render('Auth/register', { A_S, error: 'Incorrect Email', data });
               }
             });
         }
       })
   } else {
-    return res.render('Auth/register', { error: 'Mot de passe non identique', data });
+    let A_S = await GetAS();
+    return res.render('Auth/register', { A_S, error: 'Mot de passe non identique', data });
   }
 }
 
-exports.logout = (req, res) => {
+exports.logout = async (req, res) => {
   req.session.destroy();
-  return res.render('Auth/logout');
+  let A_S = await GetAS();
+  return res.render('Auth/logout', A_S);
 }
 
-exports.lockScreen = (req, res) => {
+exports.lockScreen = async (req, res) => {
   if (req.session.loggedin && !req.session.lockScreen) {
     req.session.lockScreen = true;
     req.session.loggedin = true;
-    return res.render('Auth/lock_screen', { userLocked: req.session.user });
+    let A_S = await GetAS();
+    return res.render('Auth/lock_screen', { A_S, userLocked: req.session.user });
   } else
     if (!req.session.loggedin && !req.session.lockScreen) {
       return res.redirect('/auth/login');
-    } else if (req.session.loggedin && req.session.lockScreen) {  
-      return res.render('Auth/lock_screen', { userLocked: req.session.user });
+    } else if (req.session.loggedin && req.session.lockScreen) {
+      let A_S = await GetAS();
+      return res.render('Auth/lock_screen', { A_S, userLocked: req.session.user });
     } else {
       return res.redirect('/');
     }
 }
 
-exports.lockScreenSub = (req, res) => {
+exports.lockScreenSub = async (req, res) => {
   const data = req.body;
   if (data.email && data.password) {
     con.query('SELECT * FROM login WHERE email = ? ', [data.email],
       async function (error, results, fields) {
         if (error) {
           let userLocked = req.session.user;
-          return res.render('Auth/lock_screen', { userLocked, error: error });
+          let A_S = await GetAS();
+          return res.render('Auth/lock_screen', { A_S, userLocked, error: error });
         }
         if (results.length > 0) {
           if (!await bcrypt.compare(data.password, results[0].password)) {
             let userLocked = req.session.user;
-            return res.render('Auth/lock_screen', { userLocked, error: 'Mot de passe incorrect' });
+            let A_S = await GetAS();
+            return res.render('Auth/lock_screen', { A_S, userLocked, error: 'Mot de passe incorrect' });
           }
           req.session.lockScreen = false;
           req.session.loggedin = true;
           const { password, ...user } = await results[0];
-          req.session.user = user;        
+          req.session.user = user;
           return res.redirect(req.session.current_url);
         } else {
-          return res.render('Auth/lock_screen', { error: 'Incorrect Email', userLocked: req.session.user });
+          let A_S = await GetAS();
+          return res.render('Auth/lock_screen', { A_S, error: 'Incorrect Email', userLocked: req.session.user });
         }
       });
   } else {
-    return res.render('Auth/lock_screen', { error: 'Completez le champ password', userLocked: req.session.user });
+    let A_S = await GetAS();
+    return res.render('Auth/lock_screen', { A_S, error: 'Completez le champ password', userLocked: req.session.user });
   }
+}
+
+async function GetAS() {
+  let promise = new Promise((resolve, reject) => {
+        con.query('SELECT * FROM `a_s` ORDER BY Id_AS; ',
+              function (error, results, fields) {
+                    if (error) {
+                          console.log(error)
+                    }
+                    if (results.length > 0) {
+                          resolve(results);
+                    } else resolve("VIDE");
+              });
+  });
+  return await promise;
 }

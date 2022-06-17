@@ -243,6 +243,42 @@
               </div>
             </div>
             <div class="col-lg-6 ps-lg-2">
+<!-- MODAL POUR Année Scolaire -->
+<div class="modal fade" id="AS-modal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 500px">
+    <div class="modal-content position-relative">
+      <div class="position-absolute top-0 end-0 mt-2 me-2 z-index-1">
+        <button class="btn-close btn btn-sm btn-circle d-flex flex-center transition-base" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form action="" id="ASForm" method="POST">
+      <div class="modal-body p-0">
+        
+        <div class="rounded-top-lg py-3 ps-4 pe-6 bg-light">
+          <h4 class="mb-1" id="modalASLabel"></h4>
+        </div>
+        <div class="px-4 pb-0 ">    
+          <h5 class="text-danger text-center" id="askASTEXT">Voulez-vous la supprimer vraiment?</h5>      
+            <div class="mb-3">
+              <label class="col-form-label" for="Label_AS">Désignation:</label>
+              <input class="form-control" id="Id_AS" name="Id_AS" type="text" hidden/>
+              <input class="form-control" id="Label_AS" name="Label_AS" type="text"/>
+            </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-falcon-default me-2 mb-1 " type="button" data-bs-dismiss="modal">
+            Annuler
+        </button>
+          <button class="btn btn-falcon-primary me-3 mb-1" type="submit" id="btnSubAS">
+            Update
+          </button>
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL POUR Classe-->
 <div class="modal fade" id="Classe-modal" tabindex="-1" role="dialog" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 500px">
     <div class="modal-content position-relative">
@@ -282,13 +318,119 @@
     </div>
   </div>
 </div>
+
+
+<!-- MODAL POUR Frais Scolarité -->
+<div class="modal fade" id="Frais-modal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 500px">
+    <div class="modal-content position-relative">
+      <div class="position-absolute top-0 end-0 mt-2 me-2 z-index-1">
+        <button class="btn-close btn btn-sm btn-circle d-flex flex-center transition-base" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form action="" id="FraisForm" method="POST">
+      <div class="modal-body p-0">
+        
+        <div class="rounded-top-lg py-3 ps-4 pe-6 bg-light">
+          <h4 class="mb-1" id="modalFraisLabel"></h4>
+        </div>
+        <div class="px-4 pb-0 ">    
+          <h5 class="text-danger text-center" id="askFraisTEXT">Voulez-vous le supprimer vraiment?</h5>      
+            <div class="mb-3">
+              <label class="col-form-label" for="Label_Autre">Désignation:</label>
+              <input class="form-control" id="ID_autre" name="ID_autre" type="text" hidden/>
+              <input class="form-control" id="Label_Autre" name="Label_Autre" type="text"/>
+            </div>
+            <div class="mb-3">
+              <label class="col-form-label" for="cout">Cout:</label>
+              <input class="form-control" id="cout" autocomplete="off" maxlength="9" name="cout" type="text" />
+            </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-falcon-default me-2 mb-1 " type="button" data-bs-dismiss="modal">
+            Annuler
+        </button>
+          <button class="btn btn-falcon-primary me-3 mb-1" type="submit" id="btnSubFrais">
+            Update
+          </button>
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
+
               <div class="sticky-sidebar">
                 <div class="card mb-3 overflow-hidden">
                   <div class="card-header">
                     <h5 class="mb-0">Année Scolaire</h5>
                   </div>
                   <div class="card-body bg-light">
-                    test
+                    <button class="btn btn-falcon-primary me-1 mb-1" onclick="AddAS()" type="button">Nouveau Année Scolaire
+                    </button>
+                    <div class="table-responsive scrollbar">
+                        <table class="table text-center">
+                          <thead>
+                            <tr class="">
+                              <th scope="col">ID</th>
+                              <th scope="col">Désignation</th>
+                              <th scope="col">Actions</th>
+                            </tr>
+                          </thead>
+                          <tbody class="bg-light ">
+                            {{#each A_S}}
+                            <tr>
+                              <td>{{Id_AS}}</td>
+                              <td>{{Label_AS}}</td>
+                              <td>
+                                  <button class="btn px-2" type="button" onclick="ModAS(this.parentNode.parentNode)" title="Edit">
+                                    <span class="text-500 fas fa-edit"></span>
+                                  </button>
+                                  <button class="btn px-2" type="button" onclick="SupAS(this.parentNode.parentNode)" title="Edit">
+                                    <span class="text-500 fas fa-trash-alt"></span>
+                                  </button>
+                              </td>
+                            </tr>
+                            {{/each}}
+                          </tbody>
+                          <script>
+                            var a = document.getElementById("ASForm");
+                            function AddAS() {                       
+                              a.setAttribute("action", "/AddAS");
+                              $("#modalASLabel").html("Nouveau Année Scolaire");
+                              $("#btnSubAS").html("Ajouter");  
+                              disableAS(false);     
+                            window.document.forms["ASForm"].elements["Label_AS"].value="";
+                            $("#AS-modal").modal('toggle');
+                            }
+                            function ModAS(ligne) { 
+                              a.setAttribute("action", "/ModAS");
+                              $("#modalASLabel").html("Modification");
+                              $("#btnSubAS").html("Enregistrer");  
+                              setValueAS(ligne);    disableAS(false);             
+                              $("#AS-modal").modal('toggle');
+                            }
+                            function SupAS(ligne) {
+                              a.setAttribute("action", "/DelAS");
+                              $("#modalASLabel").html("Suppression");
+                              $("#btnSubAS").html("Supprimer"); 
+                              setValueAS(ligne); 
+                              disableAS(true);
+                              $("#AS-modal").modal('toggle');
+                            }
+                            function setValueAS(ligne){ 
+                              var id=ligne.cells[0].innerText;
+                              var label=ligne.cells[1].innerText;
+                            $('#Id_AS').val(id);
+                            $('#Label_AS').val(label);
+                            }
+                            function disableAS(bool){    
+                              if(bool){console.log("Visible");document.getElementById('askASTEXT').style.visibility= 'visible';
+                              }else {console.log("Hidden");document.getElementById('askASTEXT').style.visibility= 'hidden';}
+                              document.querySelector('#Label_AS').disabled = bool;
+                            }
+                          </script>
+                        </table>
+                      </div>
                   </div>
                 </div>
                 <div class="card mb-3">
@@ -332,7 +474,7 @@
                               c.setAttribute("action", "/AddClasse");
                               $("#modalClasseLabel").html("Nouveau Classe");
                               $("#btnSubClasse").html("Ajouter");  
-                              disable(false);     
+                              disableC(false);     
                             window.document.forms["ClasseForm"].elements["Label_C"].value="";
                             window.document.forms["ClasseForm"].elements["ID_NivDropdown"].value=0;
                             $("#Classe-modal").modal('toggle');
@@ -352,18 +494,18 @@
                               c.setAttribute("action", "/ModClasse");
                               $("#modalClasseLabel").html("Modification");
                               $("#btnSubClasse").html("Enregistrer");  
-                              setValue(ligne);    disable(false);             
+                              setValueC(ligne);    disableC(false);             
                               $("#Classe-modal").modal('toggle');
                             }
                             function SupClasse(ligne) {
                               c.setAttribute("action", "/DelClasse");
                               $("#modalClasseLabel").html("Suppression");
                               $("#btnSubClasse").html("Supprimer"); 
-                              setValue(ligne); 
-                              disable(true);
+                              setValueC(ligne); 
+                              disableC(true);
                               $("#Classe-modal").modal('toggle');
                             }
-                            function setValue(ligne){ 
+                            function setValueC(ligne){ 
                               var id_c=ligne.cells[0].innerText;
                               var label=ligne.cells[1].innerText;
                               var id_n=ligne.cells[2].innerText;
@@ -371,7 +513,7 @@
                             $('#Label_C').val(label);
                             $("#ID_NivDropdown").val(id_n);
                             }
-                            function disable(bool){    
+                            function disableC(bool){    
                               if(bool){document.getElementById('askTEXT').style.visibility= 'visible';
                               }else document.getElementById('askTEXT').style.visibility= 'hidden';
                               document.querySelector('#Label_C').disabled = bool;
@@ -387,19 +529,79 @@
                     <h5 class="mb-0">Les autres Frais de scolarité</h5>
                   </div>
                   <div class="card-body bg-light">
-                    frais
-                  </div>
-                </div>
-                <div class="card">
-                  <div class="card-header">
-                    <h5 class="mb-0">Danger Zone</h5>
-                  </div>
-                  <div class="card-body bg-light">
-                    <h5 class="fs-0">Transfer Ownership</h5>
-                    <p class="fs--1">Transfer this account to another user or to an organization where you have the ability to create repositories.</p><a class="btn btn-falcon-warning d-block" href="#!">Transfer</a>
-                    <div class="border-dashed-bottom my-4"></div>
-                    <h5 class="fs-0">Delete this account</h5>
-                    <p class="fs--1">Once you delete a account, there is no going back. Please be certain.</p><a class="btn btn-falcon-danger d-block" href="#!">Deactivate Account</a>
+                    <button class="btn btn-falcon-primary me-1 mb-1" onclick="AddFrais()" type="button">Nouveau Frais scolarité
+                    </button>
+                    <div class="table-responsive scrollbar">
+                        <table class="table text-center">
+                          <thead>
+                            <tr class="">
+                              <th scope="col">ID</th>
+                              <th scope="col">Désignation</th>
+                              <th scope="col">Cout</th>
+                              <th scope="col">Actions</th>
+                            </tr>
+                          </thead>
+                          <tbody class="bg-light classe">
+                            {{#each Frais_Sco}}
+                            <tr>
+                              <td>{{ID_autre}}</td>
+                              <td>{{Label_Autre}}</td>
+                              <td>MGA {{Decimal cout}}<span class="CoutText" hidden>{{cout}}</span></td>
+                              <td>
+                                  <button class="btn px-2" type="button" onclick="ModFrais(this.parentNode.parentNode)" title="Edit">
+                                    <span class="text-500 fas fa-edit"></span>
+                                  </button>
+                                  <button class="btn px-2" type="button" onclick="SupFrais(this.parentNode.parentNode)" title="Edit">
+                                    <span class="text-500 fas fa-trash-alt"></span>
+                                  </button>
+                              </td>
+                            </tr>
+                            {{/each}}
+                          </tbody>
+                          <script>
+                            var f = document.getElementById("FraisForm");
+                            function AddFrais() {                       
+                              f.setAttribute("action", "/AddFrais");
+                              $("#modalFraisLabel").html("Nouveau Frais Scolarité");
+                              $("#btnSubFrais").html("Ajouter");  
+                              disable(false);     
+                            window.document.forms["FraisForm"].elements["Label_Autre"].value="";
+                            window.document.forms["FraisForm"].elements["cout"].value=0;
+                            $("#Frais-modal").modal('toggle');
+                            }
+                            function ModFrais(ligne) { 
+                              f.setAttribute("action", "/ModFrais");
+                              $("#modalFraisLabel").html("Modification");
+                              $("#btnSubFrais").html("Enregistrer");  
+                              setValue(ligne);    disable(false);             
+                              $("#Frais-modal").modal('toggle');
+                            }
+                            function SupFrais(ligne) {
+                              f.setAttribute("action", "/DelFrais");
+                              $("#modalFraisLabel").html("Suppression");
+                              $("#btnSubFrais").html("Supprimer"); 
+                              setValue(ligne); 
+                              disable(true);
+                              $("#Frais-modal").modal('toggle');
+                            }
+                            function setValue(ligne){ 
+                              var id=ligne.cells[0].innerText;
+                              var label=ligne.cells[1].innerText;
+                              var cout= $(ligne).find('span.CoutText').html();
+                              console.log(cout+' '+c);
+                            $('#ID_autre').val(id);
+                            $('#Label_Autre').val(label);
+                            $("#cout").val(cout);
+                            }
+                            function disable(bool){    
+                              if(bool){document.getElementById('askFraisTEXT').style.visibility= 'visible';
+                              }else document.getElementById('askFraisTEXT').style.visibility= 'hidden';
+                              document.querySelector('#Label_Autre').disabled = bool;
+                              document.querySelector('#cout').disabled = bool;
+                            }
+                          </script>
+                        </table>
+                      </div>
                   </div>
                 </div>
               </div>

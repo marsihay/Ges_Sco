@@ -108,6 +108,21 @@
         <button class="btn-close btn-close-white z-index-1 mt-0" type="button" data-bs-dismiss="offcanvas" aria-label="Close"></button>
       </div>
       <div class="offcanvas-body scrollbar-overlay px-card" id="themeController">
+        <h5 class="fs-0">Année Scolaire en cours</h5>
+        <p class="fs--1">Choisir ici,l'Année Scolaire qu'on va utiliser sur application</p>
+        <div class="btn-group d-block w-100 btn-group-navbar-style">
+          <div class="row gx-2">
+            <div class="col-6">
+              {{#each A_S}}
+              <div class="form-check">
+                <input class="form-check-input" id="RadioAS" type="radio" name="flexRadioDefault" />
+                <label class="form-check-label" for="RadioAS"><span id="RadioId_AS" hidden>{{Id_AS}}</span>{{Label_AS}}</label>
+              </div>
+              {{/each}}
+            </div>
+          </div>
+        </div>
+        <hr />
         <h5 class="fs-0">Color Scheme</h5>
         <p class="fs--1">Choose the perfect color mode for your app.</p>
         <div class="btn-group d-block w-100 btn-group-navbar-style">
