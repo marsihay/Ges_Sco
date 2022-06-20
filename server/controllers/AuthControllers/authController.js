@@ -15,8 +15,7 @@ exports.login = async (req, res) => {
     } else {
       req.session.lockScreen = false;
       req.session.loggedin = false;
-      let A_S = await GetAS();
-      return res.render('Auth/login', { A_S, data: { email: "" } });
+      return res.render('Auth/login', { data: { email: "" } });
     }
 }
 
@@ -26,13 +25,11 @@ exports.loginSubmit = async (req, res) => {
     con.query('SELECT * FROM login WHERE email = ? ', [data.email],
       async function (error, results, fields) {
         if (error) {
-          let A_S = await GetAS();
-          return res.render('Auth/login', { error: error, data, A_S });
+          return res.render('Auth/login', { error: error, data});
         }
         if (results.length > 0) {
           if (!await bcrypt.compare(data.password, results[0].password)) {
-            let A_S = await GetAS();
-            return res.render('Auth/login', { error: 'Mot de passe incorrect', data, A_S });
+            return res.render('Auth/login', { error: 'Mot de passe incorrect', data});
           }
           req.session.loggedin = true;
           req.session.lockScreen = false;
@@ -40,13 +37,11 @@ exports.loginSubmit = async (req, res) => {
           req.session.user = user;
           return res.redirect('/home');
         } else {
-          let A_S = await GetAS();
-          return res.render('Auth/login', { error: 'Incorrect Email', data, A_S });
+          return res.render('Auth/login', { error: 'Incorrect Email', data });
         }
       });
   } else {
-    let A_S = await GetAS();
-    return res.render('Auth/login', { A_S, error: 'Completez le champ email et password' });
+    return res.render('Auth/login', { error: 'Completez le champ email et password' });
   }
 }
 
@@ -59,8 +54,7 @@ exports.register = async (req, res) => {
     } else {
       req.session.lockScreen = false;
       req.session.loggedin = false;
-      let A_S = await GetAS();
-      return res.render('Auth/register', { A_S, data: { email: "", username: "" } });
+      return res.render('Auth/register', { data: { email: "", username: "" } });
     }
 }
 
@@ -73,8 +67,7 @@ exports.registerSubmit = async (req, res) => {
     con.query("INSERT INTO login(username, email, password) values ( ?, ?, ?)",
       [data.username, data.email, hashedPassword], async (error, list) => {
         if (error) {
-          let A_S = await GetAS();
-          return res.render('Auth/register', { A_S, error: error, data });
+          return res.render('Auth/register', { error: error, data });
         } else {
           con.query('SELECT * FROM login WHERE email = ? ', [data.email],
             async function (error, results, fields) {
@@ -86,36 +79,31 @@ exports.registerSubmit = async (req, res) => {
                 req.session.user = user;
                 return res.redirect('/home');
               } else {
-                let A_S = await GetAS();
-                return res.render('Auth/register', { A_S, error: 'Incorrect Email', data });
+                return res.render('Auth/register', { error: 'Incorrect Email', data });
               }
             });
         }
       })
   } else {
-    let A_S = await GetAS();
-    return res.render('Auth/register', { A_S, error: 'Mot de passe non identique', data });
+    return res.render('Auth/register', { error: 'Mot de passe non identique', data });
   }
 }
 
 exports.logout = async (req, res) => {
   req.session.destroy();
-  let A_S = await GetAS();
-  return res.render('Auth/logout', A_S);
+  return res.render('Auth/logout');
 }
 
 exports.lockScreen = async (req, res) => {
   if (req.session.loggedin && !req.session.lockScreen) {
     req.session.lockScreen = true;
     req.session.loggedin = true;
-    let A_S = await GetAS();
-    return res.render('Auth/lock_screen', { A_S, userLocked: req.session.user });
+    return res.render('Auth/lock_screen', { userLocked: req.session.user });
   } else
     if (!req.session.loggedin && !req.session.lockScreen) {
       return res.redirect('/auth/login');
     } else if (req.session.loggedin && req.session.lockScreen) {
-      let A_S = await GetAS();
-      return res.render('Auth/lock_screen', { A_S, userLocked: req.session.user });
+      return res.render('Auth/lock_screen', { userLocked: req.session.user });
     } else {
       return res.redirect('/');
     }
@@ -128,14 +116,12 @@ exports.lockScreenSub = async (req, res) => {
       async function (error, results, fields) {
         if (error) {
           let userLocked = req.session.user;
-          let A_S = await GetAS();
-          return res.render('Auth/lock_screen', { A_S, userLocked, error: error });
+          return res.render('Auth/lock_screen', { userLocked, error: error });
         }
         if (results.length > 0) {
           if (!await bcrypt.compare(data.password, results[0].password)) {
             let userLocked = req.session.user;
-            let A_S = await GetAS();
-            return res.render('Auth/lock_screen', { A_S, userLocked, error: 'Mot de passe incorrect' });
+            return res.render('Auth/lock_screen', { userLocked, error: 'Mot de passe incorrect' });
           }
           req.session.lockScreen = false;
           req.session.loggedin = true;
@@ -143,27 +129,11 @@ exports.lockScreenSub = async (req, res) => {
           req.session.user = user;
           return res.redirect(req.session.current_url);
         } else {
-          let A_S = await GetAS();
-          return res.render('Auth/lock_screen', { A_S, error: 'Incorrect Email', userLocked: req.session.user });
+          return res.render('Auth/lock_screen', { error: 'Incorrect Email', userLocked: req.session.user });
         }
       });
   } else {
-    let A_S = await GetAS();
-    return res.render('Auth/lock_screen', { A_S, error: 'Completez le champ password', userLocked: req.session.user });
+    return res.render('Auth/lock_screen', { error: 'Completez le champ password', userLocked: req.session.user });
   }
 }
 
-async function GetAS() {
-  let promise = new Promise((resolve, reject) => {
-        con.query('SELECT * FROM `a_s` ORDER BY Id_AS; ',
-              function (error, results, fields) {
-                    if (error) {
-                          console.log(error)
-                    }
-                    if (results.length > 0) {
-                          resolve(results);
-                    } else resolve("VIDE");
-              });
-  });
-  return await promise;
-}

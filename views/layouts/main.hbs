@@ -108,6 +108,7 @@
         <button class="btn-close btn-close-white z-index-1 mt-0" type="button" data-bs-dismiss="offcanvas" aria-label="Close"></button>
       </div>
       <div class="offcanvas-body scrollbar-overlay px-card" id="themeController">
+        {{#if A_S}}
         <h5 class="fs-0">Année Scolaire en cours</h5>
         <p class="fs--1">Choisir ici,l'Année Scolaire qu'on va utiliser sur application</p>
         <div class="btn-group d-block w-100 btn-group-navbar-style">
@@ -115,14 +116,15 @@
             <div class="col-6">
               {{#each A_S}}
               <div class="form-check">
-                <input class="form-check-input" id="RadioAS" type="radio" name="flexRadioDefault" />
-                <label class="form-check-label" for="RadioAS"><span id="RadioId_AS" hidden>{{Id_AS}}</span>{{Label_AS}}</label>
+                <input class="form-check-input" value="{{Id_AS}}" id="{{Id_AS}}" type="radio" name="A_SflexRadioDefault" onchange="RadioChanged(this)"/>
+                <label class="form-check-label" for="{{Id_AS}}"><span id="RadioId_AS" hidden>{{Id_AS}}</span>{{Label_AS}}</label>
               </div>
               {{/each}}
             </div>
           </div>
         </div>
         <hr />
+        {{/if}}
         <h5 class="fs-0">Color Scheme</h5>
         <p class="fs--1">Choose the perfect color mode for your app.</p>
         <div class="btn-group d-block w-100 btn-group-navbar-style">
@@ -241,6 +243,30 @@
 	});
 
 }).apply( this, [ jQuery ]);
+
+      window.onload = function() {
+        LoadNiv();
+        LoadNivDroit();
+        $.ajax({url: 'http://localhost:3000/getAS', success:function(res){
+        $('#'+res).prop('checked',true);
+                            }});
+      }
+        
+        function RadioChanged(r){
+          $.ajax({
+                url: "http://localhost:3000/setActiveAS",
+                type: "POST",
+                data: {
+                Id_AS: $(r).attr('value'),
+                },
+                dataType: 'json',
+                success: function(res) {
+                  $('#'+res).prop('checked',true);
+                  location.reload();
+                }
+                });
+          }
+        
     </script>
     
 
