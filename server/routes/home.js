@@ -27,8 +27,11 @@ router.post('/profileEditPassW', homeController.SaveEditProfilePassW);
 const SettingController = require('../controllers/SettingController');
 
 router.get('/setting', SettingController.view);
+router.post('/AddDroit', SettingController.AddDroit);
 router.get('/editdroit/:ID', SettingController.edit);
 router.post('/editdroit/:ID', SettingController.update);
+router.get('/getMoisID', SettingController.GetIDMois);
+router.post('/AddMois', SettingController.addMois);
 router.post('/editMois', SettingController.updateMois);
 router.post('/editNiveau', SettingController.updateNIV);
 router.post('/addNiveau', SettingController.addNIV);

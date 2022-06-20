@@ -1,3 +1,4 @@
+const { bool } = require('joi');
 const con = require('./db');
 // Setting view 
 exports.view = async (req, res) => {
@@ -20,14 +21,34 @@ exports.view = async (req, res) => {
       }
 }
 
-exports.edit = (req, res) => {
+exports.AddDroit = async (req, res) => {
+      const data = req.body;
+      let A_S = await GetActiveAS();
+      let id = await GetLastID("droit", "id");
+      let ID_Droit = await GetLastIDwith_AS("droit", "ID_Droit");
+      let str = "INSERT INTO `droit`(`id`, `ID_Droit`, `type`, `Label_D`, `montant`, `Id_AS`, `ID_Niv`) VALUES ( "+(++id)+", "+(++ID_Droit)+", 'false', '"+data.Label_NivD+" VAOVAO', "+data.montant0+", "+A_S+", "+data.ID_Niv+");";
+      str += "INSERT INTO `droit`(`id`, `ID_Droit`, `type`, `Label_D`, `montant`, `Id_AS`, `ID_Niv`) VALUES ( "+(++id)+", "+(++ID_Droit)+", 'false', '"+data.Label_NivD+" TRANAINY', "+data.montant+", "+A_S+", "+data.ID_Niv+");";
+      con.query(str, async (err, rows) => {
+                  if (err) {
+                        let user = req.session.user;
+                        console.log(err);
+                        let A_S = await GetAS();
+                        return res.render('Setting/setting', { user, error: "Modification échoué", A_S });
+                  } else {
+                        return res.redirect('/setting');
+                  }
+            });
+}
+
+exports.edit =async (req, res) => {
       if (!req.session.loggedin && !req.session.lockScreen) {
             return res.redirect('/auth/login');
       } if (req.session.loggedin && req.session.lockScreen) {
             return res.redirect('/auth/lock_screen');
       } else {
             // User the connection
-            con.query('SELECT * FROM droit WHERE ID_Droit = ?', [req.params.ID], async (err, rowsRes) => {
+            let A_S = await GetActiveAS();
+            con.query('SELECT * FROM droit WHERE ID_Droit = ? AND Id_AS = ?', [req.params.ID,A_S], async (err, rowsRes) => {
                   if (err) {
                         return console.log(err);
                   } else {
@@ -43,11 +64,12 @@ exports.edit = (req, res) => {
       }
 }
 
-exports.update = (req, res) => {
+exports.update =async (req, res) => {
       const { ID_Droit, Label_D, montant } = req.body;
+      let A_S = await GetActiveAS();
       // User the connection
-      con.query('UPDATE droit SET Label_D = ?, montant = ? WHERE ID_Droit = ?',
-            [Label_D, montant, req.params.ID], async (err, rows) => {
+      con.query('UPDATE droit SET Label_D = ?, montant = ? WHERE ID_Droit = ? AND Id_AS = ?',
+            [Label_D, montant, req.params.ID,A_S], async (err, rows) => {
                   if (err) {
                         let user = req.session.user;
                         let rows = { ID_Droit: ID_Droit, Label_D: Label_D, montant: montant };
@@ -60,11 +82,40 @@ exports.update = (req, res) => {
             });
 }
 
-exports.updateMois = (req, res) => {
-      const { ID_Eco, Label_Eco } = req.body;
+exports.GetIDMois = async (req, res) => {
+      let ID_Eco = await GetLastIDwith_AS("mois_ecolage", "ID_Eco");
+      let Nb_moisMAX= await GetNB_MoisMAX();
+      let bool=false;
+      if (++ID_Eco <= Nb_moisMAX) {
+            bool=true;
+      }
+      return res.send(bool);
+}
+
+exports.addMois =async (req, res) => {
+      const { Label_Eco } = req.body;
+      let A_S = await GetActiveAS();
+      let id = await GetLastID("mois_ecolage", "id");
+      let ID_Eco = await GetLastIDwith_AS("mois_ecolage", "ID_Eco");
       // User the connection
-      con.query('UPDATE mois_ecolage SET Label_Eco = ? WHERE ID_Eco = ?',
-            [Label_Eco, ID_Eco], async (err, rows) => {
+      con.query('INSERT INTO `mois_ecolage`(`id`, `ID_Eco`, `Label_Eco`, `Id_AS`) VALUES ( ?, ?, ?, ?)',
+            [++id, ++ID_Eco,Label_Eco, A_S], async (err, rows) => {
+                  if (err) {
+                        let user = req.session.user;
+                        let A_S = await GetAS();
+                        return res.render('Setting/setting', { user, error: "Modification échoué", A_S });
+                  } else {
+                        return res.redirect('/setting');
+                  }
+            });
+}
+
+exports.updateMois =async (req, res) => {
+      const { ID_Eco, Label_Eco } = req.body;
+      let A_S = await GetActiveAS();
+      // User the connection
+      con.query('UPDATE mois_ecolage SET Label_Eco = ? WHERE ID_Eco = ? AND Id_AS = ?',
+            [Label_Eco, ID_Eco, A_S], async (err, rows) => {
                   if (err) {
                         let user = req.session.user;
                         let A_S = await GetAS();
@@ -113,9 +164,10 @@ exports.addNIV = async (req, res) => {
 exports.delNIV = async (req, res) => {
       let A_S = await GetActiveAS();
       const { ID_Niv } = req.body;
+      let str="DELETE FROM `droit` WHERE ID_Niv = "+ID_Niv+" and Id_AS = "+A_S+";";
+      str += "DELETE FROM `niveau` WHERE ID_Niv = "+ID_Niv+" and Id_AS = "+A_S+";"
       // User the connection
-      con.query('DELETE FROM `niveau` WHERE ID_Niv=? and Id_AS=?',
-            [ID_Niv, A_S], async (err, rows) => {
+      con.query(str, async (err, rows) => {
                   if (err) {
                         let user = req.session.user;
                         console.log(err);
@@ -344,7 +396,7 @@ async function GetNiveau() {
 async function GetNiveauDroit() {
       let A_S = await GetActiveAS();
       let promise = new Promise((resolve, reject) => {
-            con.query('SELECT * FROM niveau WHERE ID_Niv NOT IN (SELECT DISTINCT ID_Niv FROM droit WHERE Id_AS=?) and Id_AS=?;',
+            con.query('SELECT * FROM niveau WHERE ID_Niv NOT IN (SELECT DISTINCT ID_Niv FROM droit WHERE Id_AS=?) and Id_AS=? LIMIT 1;',
                   [A_S, A_S], function (error, results, fields) {
                         if (error) {
                               console.log(error)
@@ -419,7 +471,6 @@ async function GetLastID(table, champ) {
 async function GetLastIDwith_AS(table, champ) {
       let A_S = await GetActiveAS();
       let str = "SELECT MAX(" + champ + ") as lastID FROM " + table + " WHERE Id_AS = " + A_S + ";";
-      console.log(str);
       let promise = new Promise((resolve, reject) => {
             con.query(str,
                   function (error, results, fields) {
@@ -435,6 +486,26 @@ async function GetLastIDwith_AS(table, champ) {
       });
       return await promise;
 }
+
+async function GetNB_MoisMAX() {
+      let A_S = await GetActiveAS();
+      let str = "SELECT MAX(Nb_mois) as Nb_moisMAX FROM niveau WHERE Id_AS = " + A_S + ";";
+      let promise = new Promise((resolve, reject) => {
+            con.query(str,
+                  function (error, results, fields) {
+                        if (error) {
+                              console.log(error)
+                        }
+                        if (results.length > 0) {
+                              if (results[0].Nb_moisMAX != null) {
+                                    resolve(results[0].Nb_moisMAX);
+                              } else resolve(0);
+                        } else resolve(null);
+                  });
+      });
+      return await promise;
+}
+
 async function GetActiveAS() {
       let str = "SELECT *  FROM active;";
       let promise = new Promise((resolve, reject) => {
@@ -465,6 +536,7 @@ async function SetActiveAS(Id_AS) {
       return await promise;
 }
 
+// Change The Current Année Scolaire
 exports.GetAS  = async (req, res) => {
       return res.send(''+ await GetActiveAS());
 }

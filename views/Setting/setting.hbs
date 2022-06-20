@@ -90,7 +90,6 @@
                             function AddNIV(){
                               e.setAttribute("action", "/addNiveau");
                               console.log(e.getAttribute('action'));
-                              console.log(e.getAttribute('method'));
                               $("#btnSubmit").html("Ajouter");
                               initForm();
                             }
@@ -138,7 +137,7 @@
                   <h5 class="mb-0">Droit d'inscription</h5>
                 </div>
                 <div class="card-body bg-light">
-                  <button class="btn btn-falcon-primary me-1 mb-1" onclick="AddDroit_Insc()" type="button">Nouveau Droit
+                  <button class="btn btn-falcon-primary me-1 mb-1" id="NewDroit" onclick="AddDroit_Insc()" type="button">Nouveau Droit
                   </button>
                   <div class="table-responsive scrollbar">
                         <table class="table">
@@ -164,43 +163,22 @@
                           </tbody>
                         </table>
                       </div>
-                      <script>
-                          function AddDroit_Insc() {                       
-                              {{!-- a.setAttribute("action", "/AddAS");
-                              $("#modalASLabel").html("Nouveau Année Scolaire");
-                              $("#btnSubAS").html("Ajouter");  
-                              disableAS(false);     
-                            window.document.forms["ASForm"].elements["Label_AS"].value=""; --}}
-                            $("#Droit-modal").modal('toggle');
-                            }
-                            function LoadNivDroit(){      
-                              // any @main.hbs no misy ny APPEL                      
-                              $.ajax({url: 'getNiveauDroit', success:function(res){
-                                $('#ID_NivDropdownDroit').html('');  
-                                var options = '';   
-                                console.log(" dropdown "+res.length);
-                                for (var i = 0; i < res.length; i++) {  
-                                    options += '<option value="' + res[i].ID_Niv + '">' + res[i].Label_Niv + '</option>';  
-                                }  
-                                $('#ID_NivDropdownDroit').append(options);
-                            }});
-                            }
-                      </script>
                 </div>
               </div>
               <div class="card mb-3  mb-lg-0">
-                
+
+<!-- Modal pour le MOIS -->          
 <div class="modal fade" id="Mois-modal" tabindex="-1" role="dialog" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 500px">
     <div class="modal-content position-relative">
       <div class="position-absolute top-0 end-0 mt-2 me-2 z-index-1">
         <button class="btn-close btn btn-sm btn-circle d-flex flex-center transition-base" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <form action="/editMois" method="POST">
+      <form action="" id="Mois_Form" method="POST">
       <div class="modal-body p-0">
         
         <div class="rounded-top-lg py-3 ps-4 pe-6 bg-light">
-          <h4 class="mb-1" id="modalExampleDemoLabel">Modification</h4>
+          <h4 class="mb-1" id="modalMoisLabel"></h4>
         </div>
         <div class="p-4 pb-0">          
             <div class="mb-3">
@@ -217,8 +195,7 @@
             <span class="fas fa-times-circle" data-fa-transform="shrink-3"></span>
             Annuler
         </button>
-          <button class="btn btn-falcon-primary me-3 mb-1" type="submit">
-            <span class="fas fa-save" data-fa-transform="shrink-3"></span>
+          <button class="btn btn-falcon-primary me-3 mb-1" id="btnSubMois" type="submit">
             Update
           </button>
       </div>
@@ -230,7 +207,7 @@
                   <h5 class="mb-0">Les mois pour l'écolage</h5>
                 </div>
                 <div class="card-body bg-light">
-                  <button class="btn btn-falcon-primary me-1 mb-1"  type="button">Ajouter les mois
+                  <button class="btn btn-falcon-primary me-1 mb-1" id="AddMOISbtn" onclick="AddMois()" type="button">Ajouter les mois
                   </button>
                   <div class="table-responsive scrollbar">
                         <table class="table text-center">
@@ -255,8 +232,26 @@
                             {{/each}}
                           </tbody>
                           <script>
+                            var mois = document.getElementById("Mois_Form");
+                            function LoadMoisLastID(){      
+                              // any @main.hbs no misy ny APPEL                      
+$.ajax({url: 'getMoisID', success:function(res){
+                                if(res){
+                                    document.querySelector('#AddMOISbtn').disabled = false;
+                                } else {
+                                    document.querySelector('#AddMOISbtn').disabled = true;
+                                }
+                            }});
+                            }
+                            function AddMois() {                       
+                              mois.setAttribute("action", "/AddMois");
+                              $("#modalMoisLabel").html("Ajout d'un mois");
+                              $("#btnSubMois").html("Ajouter");    
+                            $("#Mois-modal").modal('toggle');
+                            }
                             $('tbody.Eco tr').click(
-                            function(){
+                            function(){                              
+                              mois.setAttribute("action", "/editMois");
                               var id = $(this).find("td:nth-child(1)").html();
                               var label = $(this).find("td:nth-child(2)").html();
                             $('#ID_Eco').val(id);
@@ -285,19 +280,18 @@
         <div class="px-4 pb-0 ">    
             <div class="mb-3">
               <label class="col-form-label" for="ID_Niv">Niveau:</label>
-              <input class="form-control" id="ID_Droit" name="ID_Droit" type="text" hidden/>
+              <input class="form-control" id="Label_NivD" name="Label_NivD" type="text" hidden/>
               <select class="form-select" aria-label="Default select example" name="ID_Niv" id="ID_NivDropdownDroit">
                 
               </select>
             </div>     
             <div class="mb-3">
-              <label class="col-form-label" for="Label_AS">Droit pour les Nouveaux:</label>
-              <input class="form-control" id="montant" name="montant" type="text" hidden/>
-              <input class="form-control" id="montant" name="montant" type="text"/>
+              <label class="col-form-label" for="montant0">Droit pour les Nouveaux:</label>
+              <input class="form-control" id="montant0" name="montant0" type="number" autocomplete="off"/>
             </div>         
             <div class="mb-3">
               <label class="col-form-label" for="montant">Droit pour les anciens:</label>
-              <input class="form-control" id="montant" name="montant" type="text"/>
+              <input class="form-control" id="montant" name="montant" type="number" autocomplete="off"/>
             </div>
         </div>
       </div>
@@ -313,6 +307,33 @@
     </div>
   </div>
 </div>
+
+                      <script>                          
+                            var droit = document.getElementById("DroitForm");
+                          function AddDroit_Insc() {                       
+                              droit.setAttribute("action", "/AddDroit");
+                              $("#modalDroitLabel").html("Droit D'inscription");
+                              $("#btnSubDroit").html("Ajouter");    
+                            $("#Droit-modal").modal('toggle');
+                            }
+                            function LoadNivDroit(){      
+                              // any @main.hbs no misy ny APPEL                      
+                              $.ajax({url: 'getNiveauDroit', success:function(res){
+                                if(res != 0){
+                                    document.querySelector('#NewDroit').disabled = false;
+                                $('#ID_NivDropdownDroit').html('');  
+                                var options = '';   
+                                for (var i = 0; i < res.length; i++) {  
+                                    options += '<option value="' + res[i].ID_Niv + '">' + res[i].Label_Niv + '</option>'; 
+                                    $('#Label_NivD').val(res[i].Label_Niv); 
+                                }  
+                                $('#ID_NivDropdownDroit').append(options);
+                                } else {
+                                    document.querySelector('#NewDroit').disabled = true;
+                                }
+                            }});
+                            }
+                      </script>
 
 <!-- MODAL POUR Année Scolaire -->
 <div class="modal fade" id="AS-modal" tabindex="-1" role="dialog" aria-hidden="true">
@@ -495,8 +516,8 @@
                             $('#Label_AS').val(label);
                             }
                             function disableAS(bool){    
-                              if(bool){console.log("Visible");document.getElementById('askASTEXT').style.visibility= 'visible';
-                              }else {console.log("Hidden");document.getElementById('askASTEXT').style.visibility= 'hidden';}
+                              if(bool){document.getElementById('askASTEXT').style.visibility= 'visible';
+                              }else {document.getElementById('askASTEXT').style.visibility= 'hidden';}
                               document.querySelector('#Label_AS').disabled = bool;
                             }
                           </script>
@@ -550,13 +571,11 @@
                             $("#Classe-modal").modal('toggle');
                             }
                             function LoadNiv(){   
-                              console.log("Niv");   
                               // any @main.hbs no misy ny APPEL                      
                               $.ajax({url: 'getNiveau', success:function(res){
                                 $('#ID_NivDropdown').html('');  
                                 var options = '';  
-                                options += '<option value="0">Choisr un Niveau</option>';  
-                                console.log(" dropdown "+res.length);
+                                //options += '<option value="0">Choisr un Niveau</option>'; 
                                 for (var i = 0; i < res.length; i++) {  
                                     options += '<option value="' + res[i].ID_Niv + '">' + res[i].Label_Niv + '</option>';  
                                 }  

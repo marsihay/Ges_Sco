@@ -247,6 +247,7 @@
       window.onload = function() {
         LoadNiv();
         LoadNivDroit();
+        LoadMoisLastID();
         $.ajax({url: 'http://localhost:3000/getAS', success:function(res){
         $('#'+res).prop('checked',true);
                             }});
