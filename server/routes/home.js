@@ -50,6 +50,12 @@ router.post('/AddFrais', SettingController.AddFrais);
 router.post('/ModFrais', SettingController.updateFrais);
 router.post('/DelFrais', SettingController.delFrais);
 
+// Pour le Cahier Journalier
+
+const PaimentController = require('../controllers/PaimentController');
+
+router.get('/cahierJr', PaimentController.view);
+
 function buttonAction1(res){
     res.send('ok');
 }

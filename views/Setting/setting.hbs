@@ -65,7 +65,7 @@
                       <h6 class="fs-0 mb-0"> <a href="#!">Niveau {{Label_Niv}}<span data-bs-toggle="tooltip" data-bs-placement="top" title="Verified"><small class="fa fa-check-circle text-primary" data-fa-transform="shrink-4 down-2"></small></span></a></h6>
                       <p class="mb-1">Frais de scolarité à payer pour ce niveau est</p>
                       <p class="text-1000 mb-0">MGA {{Decimal Frais_Sco}}</p>
-                      <p class="text-1000 mb-0">Pendant {{Nb_mois}} pour le niveau {{Label_Niv}}</p>
+                      <p class="text-1000 mb-0">Pendant {{Nb_mois}} mois pour le niveau {{Label_Niv}}</p>
                       <div class="border-dashed-bottom my-3"></div>
                     </div>
                     <a class="mb-4 d-block d-flex align-items-center text-warning niveau" href="#education-form" data-bs-toggle="collapse" title="Edit" aria-expanded="false" aria-controls="education-form"><span class="circle-dashed bg-white">
@@ -84,7 +84,7 @@
                     </a>
                   </div>
                   {{/each}}
-                  <script>                          
+                  <script>   
                             var e = document.getElementById("NIV_Form"); //Get the element 
                             
                             function AddNIV(){
@@ -691,6 +691,13 @@ $.ajax({url: 'getMoisID', success:function(res){
                               document.querySelector('#Label_Autre').disabled = bool;
                               document.querySelector('#cout').disabled = bool;
                             }
+
+                            // On initialise ici les DROPDOWN SELECT
+                            if(true){
+                            LoadNivDroit();
+                            LoadMoisLastID();
+                            LoadNiv();  
+                          }
                           </script>
                         </table>
                       </div>
