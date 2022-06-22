@@ -55,12 +55,7 @@ router.post('/DelFrais', SettingController.delFrais);
 const PaimentController = require('../controllers/PaimentController');
 
 router.get('/cahierJr', PaimentController.view);
+router.post('/Inscription', PaimentController.Inscrire);
 
-function buttonAction1(res){
-    res.send('ok');
-}
-router.get("/test1", function (req, res) {
-    buttonAction1(res);
-});
   
 module.exports = router;

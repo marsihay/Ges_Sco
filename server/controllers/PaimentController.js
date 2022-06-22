@@ -1,5 +1,5 @@
 const con = require('./db');
-// Setting view 
+// Cahier Journalier view 
 exports.view = async (req, res) => {
       if (!req.session.loggedin && !req.session.lockScreen) {
             return res.redirect('/auth/login');
@@ -15,6 +15,9 @@ exports.view = async (req, res) => {
       }
 }
 
+exports.Inscrire = async (req, res) => {
+      console.log(req.body);
+}
 
 async function actualizeUser(session) {
     let promise = new Promise((resolve, reject) => {

@@ -163,7 +163,7 @@
 
 <!-- Modals pour INSCRIPTION -->
 <div class="modal fade" id="DroitstaticBackdrop" data-bs-keyboard="false" data-bs-backdrop="static" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg mt-6" role="document">
+  <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
     <div class="modal-content border-0">
       <div class="position-absolute top-0 end-0 mt-3 me-3 z-index-1">
         <button class="btn-close btn btn-sm btn-circle d-flex flex-center transition-base" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -171,50 +171,191 @@
       <div class="modal-body p-0">
         <div class="bg-light rounded-top-lg py-3 ps-4 pe-6">
           <h4 class="mb-1" id="staticBackdropLabel">Inscription d'un nouveaux ou anciens élèves</h4>
-          <p class="fs--2 mb-0">Added by <a class="link-600 fw-semi-bold" href="#!">{{user.username}}</a></p>
+          <p class="fs--2 mb-0">Added by <a class="link-600 fw-semi-bold" href="/profile">{{user.username}}</a></p>
         </div>
         <div class="p-4">
           <div class="row">
-            <div class="col-lg-9">
-              <div class="d-flex"><span class="fa-stack ms-n1 me-3"><i class="fas fa-circle fa-stack-2x text-200"></i><i class="fa-inverse fa-stack-1x text-primary fas fa-tag" data-fa-transform="shrink-2"></i></span>
-                <div class="flex-1">
-                  <h5 class="mb-2 fs-0">Labels</h5>
-                  <div class="d-flex"><span class="badge me-1 py-2 badge-soft-success">New</span><span class="badge me-1 py-2 badge-soft-primary">Goal</span><span class="badge me-1 py-2 badge-soft-info">Enhancement</span>
-                    <div class="dropdown dropend">
-                      <button class="btn btn-sm btn-secondary px-2 fsp-75 bg-400 border-400 dropdown-toggle dropdown-caret-none" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="fas fa-plus"></span></button>
-                      <div class="dropdown-menu">
-                        <h6 class="dropdown-header py-0 px-3 mb-0">Select Label</h6>
-                        <div class="dropdown-divider"></div>
-                        <div class="px-3">
-                          <button class="badge-soft-danger dropdown-item rounded-1 mb-2" type="button">New</button>
-                          <button class="badge-soft-primary dropdown-item rounded-1 mb-2" type="button">Goal</button>
-                          <button class="badge-soft-info dropdown-item rounded-1 mb-2" type="button">Enhancement</button>
-                        </div>
-                        <div class="dropdown-divider"></div>
-                        <div class="px-3">
-                          <button class="btn btn-sm d-block w-100 btn-outline-secondary border-400">Create Label</button>
-                        </div>
-                      </div>
+            <div class="col-lg-12">
+              <form action="/Inscription" method="post" class="row g-3">
+                <div class="col-md-2 ms-auto mt-0 pt-2 bg-soft-info">
+                  <div class="form-check">
+                    <input class="form-check-input" id="RadioNouveau" type="radio" name="Ancien" value="false" />
+                    <label class="form-check-label" for="RadioNouveau">Nouveau</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" id="RadioAncien" type="radio" name="Ancien" value="true" />
+                    <label class="form-check-label" for="RadioAncien">Ancien</label>
+                  </div>
+                </div>
+                <div class="col-md-2 mt-0 bg-soft-info">
+                  <label class="form-label" for="Matr">Matricule</label>
+                  <input class="form-control" id="Matr" name="Matr" type="number" />
+                </div>
+                <div class="col-md-4 mt-0 bg-light">
+                  <label class="form-label" for="Nom">Nom</label>
+                  <input class="form-control" id="Nom" name="Nom" type="text" />
+                </div>
+                <div class="col-md-4 mt-0 bg-light">
+                  <label class="form-label" for="Prenom">Prénoms</label>
+                  <input class="form-control" id="Prenom" name="Prenom" type="text" />
+                </div>
+                <div class="col-4 mt-0 bg-soft-info">
+                  <label class="form-label" for="Date_insc">Date d'inscription</label>
+                  <input class="form-control datetimepicker" id="Date_insc" name="Date_insc" type="text" placeholder="d/m/y" data-options='{"disableMobile":true}'  />
+                </div>
+                <div class="col-8 mt-0 bg-light ">
+                  <label class="form-label" for="Adresse">Address</label>
+                  <input class="form-control" id="Adresse" name="Adresse" type="text" placeholder="1234 Main St" />
+                </div>
+                <div class="dropdown-divider mt-2 mb-0"></div>
+                <div class="row g-0 mt-0 bg-light">
+                  <div class="col-4 me-3 form-floating">
+                    <select class="form-select" id="ID_Niv" name="ID_Niv" aria-label="Floating label select example">
+                      <option value="1">Seconde</option>
+                      <option value="2">Premiere</option>
+                      <option value="3">terminal</option>
+                    </select>
+                    <label for="floatingSelect">Niveau pour l'inscription</label>
+                  </div>
+                  <div class="col-4 me-3 form-floating">
+                    <select class="form-select" id="ID_Obs" name="ID_Obs" aria-label="Floating label select example">
+                      <option value="1">Tsotra</option>
+                      <option value="2">Z. Katekista</option>
+                      <option value="3">Z. Mpampianatra</option>
+                    </select>
+                    <label for="floatingSelect">Situation</label>
+                  </div>
+                  <div class="col-auto">
+                    <div class="form-check ms-3 mt-3 mb-0">
+                      <input class="form-check-input bg-warning" id="av_Droit" type="checkbox" />
+                      <label class="form-check-label mb-0" for="av_Droit">Faire une avance</label>
                     </div>
                   </div>
-                  <hr class="my-4" />
                 </div>
-              </div>
-              <div class="d-flex"><span class="fa-stack ms-n1 me-3"><i class="fas fa-circle fa-stack-2x text-200"></i><i class="fa-inverse fa-stack-1x text-primary fas fa-align-left" data-fa-transform="shrink-2"></i></span>
-                <div class="flex-1">
-                  <h5 class="mb-2 fs-0">Description</h5>
-                  <p class="text-word-break fs--1">The illustration must match to the contrast of the theme. The illustraion must described the concept of the design. To know more about the theme visit the page. </p>
+                <div class=" mt-1 bg-light input-group">
+                  <span class="input-group-text">Avec Ecolage de </span><input class="form-control col-3" id="Nb_Eco" name="Nb_Eco" type="text" /><span class="input-group-text">Mois</span>
+                  <span class="input-group-text">Montant réçu </span><input class="form-control col-3" id="Argent" name="Argent" type="text" /><span class="input-group-text">MGA</span>
                 </div>
-              </div>
-            </div>
-            <div class="col-lg-3">
-              <h6 class="mt-5 mt-lg-0">Add To Card</h6>
-              <ul class="nav flex-lg-column fs--1">
-                <li class="nav-item me-2 me-lg-0"><a class="nav-link nav-link-card-details" href="#!"><span class="fas fa-user me-2"></span>Members</a></li>
-                <li class="nav-item me-2 me-lg-0"><a class="nav-link nav-link-card-details" href="#!"><span class="fas fa-tag me-2"></span>Label</a></li>
-                <li class="nav-item me-2 me-lg-0"><a class="nav-link nav-link-card-details" href="#!"><span class="fas fa-paperclip me-2"></span>Attachments</a></li>
-                <li class="nav-item me-2 me-lg-0"><a class="nav-link nav-link-card-details" href="#!"><span class="fa fa-align-left me-2"></span>Description </a></li>
-              </ul>
+                <div class="dropdown-divider mt-2 mb-0"></div>
+                  <div class="col-4 mt-0 bg-light">
+                    <div class="form-check ">
+                      <input class="form-check-input bg-danger" id="pere" name="pere" type="checkbox" value="" />
+                      <label class="form-check-label" for="pere">Père</label>
+                    </div>
+                  </div>
+                  <div class="col-4 mt-0 bg-light">
+                  <div class="form-check">
+                    <input class="form-check-input bg-info" id="mere" name="mere" type="checkbox" value="" />
+                    <label class="form-check-label" for="mere">Mère</label>
+                  </div>
+                </div>
+                <div class="col-4 mt-0 mb-0 bg-light align-center">
+                  <div class="form-check">
+                    <input class="form-check-input bg-primary" id="tuteur" name="tuteur" type="checkbox" value="" />
+                    <label class="form-check-label" for="tuteur">Tuteur</label>
+                  </div>
+                </div>
+                <div class="dropdown-divider mt-2 mb-0"></div>
+                <div class="col-2 mt-0 bg-soft-danger  ">
+                  <div class="justify-content-center ">
+                    <h2 class="text-center mt-3">Père</h2>
+                  </div>
+                </div>
+                <div class="col-md-5 mt-0 bg-light">
+                  <label class="form-label" for="Nom_Pere">Nom</label>
+                  <input class="form-control" id="Nom_Pere" name="Nom_Pere" type="text" />
+                </div>
+                <div class="col-md-5 mt-0 bg-light">
+                  <label class="form-label" for="Prenom_Pere">Prénoms</label>
+                  <input class="form-control" id="Prenom_Pere" name="Prenom_Pere" type="text" />
+                </div>
+                <div class="col-12 mt-0 bg-light">
+                  <label class="form-label" for="email_Pere">Email</label>
+                  <input class="form-control" id="email_Pere" name="email_Pere" type="email" placeholder="Apartment, studio, or floor" />
+                </div>
+                <div class="col-md-4 mt-0 bg-light">
+                  <label class="form-label" for="Tel_1pere">Téléphone 1</label>
+                  <input class="form-control" id="Tel_1pere" name="Tel_1pere" type="text" />
+                </div>
+                <div class="col-md-4 mt-0 bg-light">
+                  <label class="form-label" for="Tel_2pere">Téléphone 2</label>
+                  <input class="form-control" id="Tel_2pere" name="Tel_2pere" type="text" />
+                </div>
+                <div class="col-md-4 mt-0 bg-light">
+                  <label class="form-label" for="Tel_3pere">Téléphone 3</label>
+                  <input class="form-control" id="Tel_3pere" name="Tel_3pere" type="text" />
+                </div>
+                <div class="dropdown-divider mt-2 mb-0"></div>
+                <div class="col-2 mt-0 bg-soft-info">
+                  <div class="justify-content-center ">
+                    <h2 class="text-center mt-3">Mère</h2>
+                  </div>
+                </div>
+                <div class="col-md-5 mt-0 bg-light">
+                  <label class="form-label" for="Nom_mere">Nom</label>
+                  <input class="form-control" id="Nom_mere" name="Nom_mere" type="text" />
+                </div>
+                <div class="col-md-5 mt-0 bg-light">
+                  <label class="form-label" for="Prenom_mere">Prénoms</label>
+                  <input class="form-control" id="Prenom_mere" name="Prenom_mere" type="text" />
+                </div>
+                <div class="col-12 mt-0 bg-light">
+                  <label class="form-label" for="email_mere">Email</label>
+                  <input class="form-control" id="email_mere" name="email_mere" type="email" placeholder="Apartment, studio, or floor" />
+                </div>
+                <div class="col-md-4 mt-0 bg-light">
+                  <label class="form-label" for="Tel_1mere">Téléphone 1</label>
+                  <input class="form-control" id="Tel_1mere" name="Tel_1mere" type="text" />
+                </div>
+                <div class="col-md-4 mt-0 bg-light">
+                  <label class="form-label" for="Tel_2mere">Téléphone 2</label>
+                  <input class="form-control" id="Tel_2mere" name="Tel_2mere" type="text" />
+                </div>
+                <div class="col-md-4 mt-0 bg-light">
+                  <label class="form-label" for="Tel_3mere">Téléphone 3</label>
+                  <input class="form-control" id="Tel_3mere" name="Tel_3mere" type="text" />
+                </div>
+                <div class="dropdown-divider mt-2 mb-0"></div>
+                <div class="col-2 mt-0 bg-soft-primary">
+                  <div class="justify-content-center ">
+                    <h2 class="text-center mt-3">Tuteur</h2>
+                  </div>
+                </div>
+                <div class="col-md-5 mt-0 bg-light">
+                  <label class="form-label" for="Nom_T">Nom</label>
+                  <input class="form-control" id="Nom_T" name="Nom_T" type="text" />
+                </div>
+                <div class="col-md-5 mt-0 bg-light">
+                  <label class="form-label" for="Prenom_T">Prénoms</label>
+                  <input class="form-control" id="Prenom_T" name="Prenom_T" type="text" />
+                </div>
+                <div class="col-12 mt-0 bg-light">
+                  <label class="form-label" for="email_T">Email</label>
+                  <input class="form-control" id="email_T" name="email_T" type="email" placeholder="Apartment, studio, or floor" />
+                </div>
+                <div class="col-md-4 mt-0 bg-light">
+                  <label class="form-label" for="Tel_1T">Téléphone 1</label>
+                  <input class="form-control" id="Tel_1T" name="Tel_1T" type="text" />
+                </div>
+                <div class="col-md-4 mt-0 bg-light">
+                  <label class="form-label" for="Tel_2T">Téléphone 2</label>
+                  <input class="form-control" id="Tel_2T" name="Tel_2T" type="text" />
+                </div>
+                <div class="col-md-4 mt-0 bg-light">
+                  <label class="form-label" for="Tel_3T">Téléphone 3</label>
+                  <input class="form-control" id="Tel_3T" name="Tel_3T" type="text" />
+                </div>
+                <div class="col-12 d-flex justify-content-end">
+                  <a href="" class="btn btn-falcon-default me-2 mb-1 " data-bs-dismiss="modal" aria-label="Close" type="button">
+                    <span class="fas fa-times-circle" data-fa-transform="shrink-3"></span>
+                    Annuler
+                  </a>
+                  <button class="btn btn-falcon-primary me-3 mb-1" type="submit">
+                    <span class="fas fa-save" data-fa-transform="shrink-3"></span>
+                    Inscrire
+                  </button>
+                </div>
+              </form>
             </div>
           </div>
         </div>
@@ -226,7 +367,7 @@
 
 <!-- Modals pour Payé ECOLAGE -->
 <div class="modal fade" id="EcolagestaticBackdrop" data-bs-keyboard="false" data-bs-backdrop="static" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg mt-6" role="document">
+  <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
     <div class="modal-content border-0">
       <div class="position-absolute top-0 end-0 mt-3 me-3 z-index-1">
         <button class="btn-close btn btn-sm btn-circle d-flex flex-center transition-base" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -290,7 +431,7 @@
 
 <!-- Modals pour Payé AUTRES FRAIS SCOLARITE -->
 <div class="modal fade" id="FraisScostaticBackdrop" data-bs-keyboard="false" data-bs-backdrop="static" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg mt-6" role="document">
+  <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
     <div class="modal-content border-0">
       <div class="position-absolute top-0 end-0 mt-3 me-3 z-index-1">
         <button class="btn-close btn btn-sm btn-circle d-flex flex-center transition-base" data-bs-dismiss="modal" aria-label="Close"></button>

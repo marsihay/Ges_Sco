@@ -127,19 +127,10 @@
                     </form>
                   </div>
                 </div>
-               
-     <button id='button1'> Test </button>
               </div> 
             </div>
             </div>
 <script>
-  $('#button1').click(function(){
-    console.log('button clicked');
-    $.ajax({url: 'test1', success:function(res){
-        console.log('server response is', res);
-    }});
-});
-
   var x = document.getElementById("Btn");
   x.style.display = "none";
   var loadProfile = function(event) {
