@@ -160,6 +160,80 @@
 </div>
 
 
+<script type="text/javascript">
+    $(function() {
+      $('#RadioAncien').prop('checked',true);      
+      $('#Nb_Eco').val('1'); 
+      $( "#Date_insc" ).flatpickr({
+        dateFormat:"d-m-Y",
+        disableMobile: "true",
+        defaultDate: new Date()
+      });  
+      togglevisibilityInfo("true");
+    });
+    function RadioNouveauChanged(t) {
+      togglevisibilityInfo($(t).attr('value'));
+    }
+    function RadioAncienChanged(t) {
+      togglevisibilityInfo($(t).attr('value'));
+    }
+    function togglevisibilityInfo(bool){
+      var Info = document.querySelectorAll('.inf');
+      if (bool != "true") {
+        for (var index = 0; index < Info.length; index++) {
+          Info[index].style.display = 'block';
+        }
+          disableEleveInfo(false);
+          ToggleCheck("pere");
+          ToggleCheck("mere");
+          ToggleCheck("tuteur");
+      } else {
+        for (var index = 0; index < Info.length; index++) {
+          Info[index].style.display = 'none';
+        }
+        disableEleveInfo(true);
+      }
+    }
+    function disableEleveInfo(bool){
+        var Info = document.querySelectorAll('.inf-eleve');      
+        for (var index = 0; index < Info.length; index++) {
+          Info[index].disabled = bool;
+        }
+    }
+    function Show(t){
+      var attr=$(t).attr('id');
+      var P = document.getElementById(attr);
+      var Info = document.querySelectorAll('.inf-'+attr);
+      if (P.checked == true){
+          for (var index = 0; index < Info.length; index++) {
+          Info[index].style.display = 'block';
+        }
+      } else {
+        for (var index = 0; index < Info.length; index++) {
+          Info[index].style.display = 'none';
+        }
+      }
+    }
+    function ToggleCheck(t){
+      $('#'+t).prop('checked', false);
+      var Info = document.querySelectorAll('.inf-'+t);      
+        for (var index = 0; index < Info.length; index++) {
+          Info[index].style.display = 'none';
+        }
+    }
+    function MakeAvance(t){
+      var av = document.getElementById('avance');
+      var nb = document.querySelector('#Nb_Eco');
+      if (av.checked == true){        
+          $('#Nb_Eco').val('0');     
+          nb.disabled = true;
+      } else {
+          $('#Nb_Eco').val('1');     
+          nb.disabled = false;
+      }
+    }
+</script>
+
 
 <!-- Modals pour INSCRIPTION -->
 <div class="modal fade" id="DroitstaticBackdrop" data-bs-keyboard="false" data-bs-backdrop="static" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
@@ -179,36 +253,36 @@
               <form action="/Inscription" method="post" class="row g-3">
                 <div class="col-md-2 ms-auto mt-0 pt-2 bg-soft-info">
                   <div class="form-check">
-                    <input class="form-check-input" id="RadioNouveau" type="radio" name="Ancien" value="false" />
-                    <label class="form-check-label" for="RadioNouveau">Nouveau</label>
-                  </div>
-                  <div class="form-check">
-                    <input class="form-check-input" id="RadioAncien" type="radio" name="Ancien" value="true" />
+                    <input class="form-check-input" id="RadioAncien" type="radio" name="Ancien" value="true" onchange="RadioAncienChanged(this)"/>
                     <label class="form-check-label" for="RadioAncien">Ancien</label>
                   </div>
+                  <div class="form-check">
+                    <input class="form-check-input" id="RadioNouveau" type="radio" name="Ancien" value="false" onchange="RadioNouveauChanged(this)"/>
+                    <label class="form-check-label" for="RadioNouveau">Nouveau</label>
+                  </div>
                 </div>
-                <div class="col-md-2 mt-0 bg-soft-info">
+                <div class="col-md-2 mt-0 bg-soft-info ">
                   <label class="form-label" for="Matr">Matricule</label>
                   <input class="form-control" id="Matr" name="Matr" type="number" />
                 </div>
-                <div class="col-md-4 mt-0 bg-light">
+                <div class="col-md-4 mt-0 bg-soft-light ">
                   <label class="form-label" for="Nom">Nom</label>
-                  <input class="form-control" id="Nom" name="Nom" type="text" />
+                  <input class="form-control inf-eleve" id="Nom" name="Nom" type="text" />
                 </div>
-                <div class="col-md-4 mt-0 bg-light">
+                <div class="col-md-4 mt-0 bg-soft-light ">
                   <label class="form-label" for="Prenom">Prénoms</label>
-                  <input class="form-control" id="Prenom" name="Prenom" type="text" />
+                  <input class="form-control inf-eleve" id="Prenom" name="Prenom" type="text" />
                 </div>
                 <div class="col-4 mt-0 bg-soft-info">
                   <label class="form-label" for="Date_insc">Date d'inscription</label>
-                  <input class="form-control datetimepicker" id="Date_insc" name="Date_insc" type="text" placeholder="d/m/y" data-options='{"disableMobile":true}'  />
+                  <input class="form-control datetimepicker" id="Date_insc" name="Date_insc" type="text" placeholder="d/m/y"   />
                 </div>
-                <div class="col-8 mt-0 bg-light ">
+                <div class="col-8 mt-0 bg-soft-light ">
                   <label class="form-label" for="Adresse">Address</label>
-                  <input class="form-control" id="Adresse" name="Adresse" type="text" placeholder="1234 Main St" />
+                  <input class="form-control inf-eleve" id="Adresse" name="Adresse" type="text" placeholder="1234 Main St" />
                 </div>
                 <div class="dropdown-divider mt-2 mb-0"></div>
-                <div class="row g-0 mt-0 bg-light">
+                <div class="row g-0 mt-0 bg-soft-light">
                   <div class="col-4 me-3 form-floating">
                     <select class="form-select" id="ID_Niv" name="ID_Niv" aria-label="Floating label select example">
                       <option value="1">Seconde</option>
@@ -217,8 +291,8 @@
                     </select>
                     <label for="floatingSelect">Niveau pour l'inscription</label>
                   </div>
-                  <div class="col-4 me-3 form-floating">
-                    <select class="form-select" id="ID_Obs" name="ID_Obs" aria-label="Floating label select example">
+                  <div class="col-4 me-3 form-floating ">
+                    <select class="form-select inf-eleve" id="ID_Obs" name="ID_Obs" aria-label="Floating label select example">
                       <option value="1">Tsotra</option>
                       <option value="2">Z. Katekista</option>
                       <option value="3">Z. Mpampianatra</option>
@@ -227,121 +301,121 @@
                   </div>
                   <div class="col-auto">
                     <div class="form-check ms-3 mt-3 mb-0">
-                      <input class="form-check-input bg-warning" id="av_Droit" type="checkbox" />
+                      <input class="form-check-input bg-warning" onclick="MakeAvance(this)" id="avance" name="av_Droit" value="avance" type="checkbox" />
                       <label class="form-check-label mb-0" for="av_Droit">Faire une avance</label>
                     </div>
                   </div>
                 </div>
-                <div class=" mt-1 bg-light input-group">
+                <div class=" mt-1 bg-soft-light input-group">
                   <span class="input-group-text">Avec Ecolage de </span><input class="form-control col-3" id="Nb_Eco" name="Nb_Eco" type="text" /><span class="input-group-text">Mois</span>
                   <span class="input-group-text">Montant réçu </span><input class="form-control col-3" id="Argent" name="Argent" type="text" /><span class="input-group-text">MGA</span>
                 </div>
                 <div class="dropdown-divider mt-2 mb-0"></div>
-                  <div class="col-4 mt-0 bg-light">
+                  <div class="col-4 mt-0 bg-light inf">
                     <div class="form-check ">
-                      <input class="form-check-input bg-danger" id="pere" name="pere" type="checkbox" value="" />
+                      <input class="form-check-input bg-danger" onclick="Show(this)" id="pere" name="pere" type="checkbox" value="pere" />
                       <label class="form-check-label" for="pere">Père</label>
                     </div>
                   </div>
-                  <div class="col-4 mt-0 bg-light">
+                  <div class="col-4 mt-0 bg-light inf">
                   <div class="form-check">
-                    <input class="form-check-input bg-info" id="mere" name="mere" type="checkbox" value="" />
+                    <input class="form-check-input bg-info" onclick="Show(this)" id="mere" name="mere" type="checkbox" value="mere" />
                     <label class="form-check-label" for="mere">Mère</label>
                   </div>
                 </div>
-                <div class="col-4 mt-0 mb-0 bg-light align-center">
+                <div class="col-4 mt-0 mb-0 bg-light align-center inf">
                   <div class="form-check">
-                    <input class="form-check-input bg-primary" id="tuteur" name="tuteur" type="checkbox" value="" />
+                    <input class="form-check-input bg-primary" onclick="Show(this)" id="tuteur" name="tuteur" type="checkbox" value="tuteur" />
                     <label class="form-check-label" for="tuteur">Tuteur</label>
                   </div>
                 </div>
-                <div class="dropdown-divider mt-2 mb-0"></div>
-                <div class="col-2 mt-0 bg-soft-danger  ">
+                <div class="dropdown-divider mt-2 mb-0 inf inf-pere "></div>
+                <div class="col-2 mt-0 bg-soft-danger inf inf-pere ">
                   <div class="justify-content-center ">
                     <h2 class="text-center mt-3">Père</h2>
                   </div>
                 </div>
-                <div class="col-md-5 mt-0 bg-light">
+                <div class="col-md-5 mt-0 bg-light inf inf-pere">
                   <label class="form-label" for="Nom_Pere">Nom</label>
                   <input class="form-control" id="Nom_Pere" name="Nom_Pere" type="text" />
                 </div>
-                <div class="col-md-5 mt-0 bg-light">
+                <div class="col-md-5 mt-0 bg-light inf inf-pere">
                   <label class="form-label" for="Prenom_Pere">Prénoms</label>
                   <input class="form-control" id="Prenom_Pere" name="Prenom_Pere" type="text" />
                 </div>
-                <div class="col-12 mt-0 bg-light">
+                <div class="col-12 mt-0 bg-light inf inf-pere">
                   <label class="form-label" for="email_Pere">Email</label>
                   <input class="form-control" id="email_Pere" name="email_Pere" type="email" placeholder="Apartment, studio, or floor" />
                 </div>
-                <div class="col-md-4 mt-0 bg-light">
+                <div class="col-md-4 mt-0 bg-light inf inf-pere">
                   <label class="form-label" for="Tel_1pere">Téléphone 1</label>
                   <input class="form-control" id="Tel_1pere" name="Tel_1pere" type="text" />
                 </div>
-                <div class="col-md-4 mt-0 bg-light">
+                <div class="col-md-4 mt-0 bg-light inf inf-pere">
                   <label class="form-label" for="Tel_2pere">Téléphone 2</label>
                   <input class="form-control" id="Tel_2pere" name="Tel_2pere" type="text" />
                 </div>
-                <div class="col-md-4 mt-0 bg-light">
+                <div class="col-md-4 mt-0 bg-light inf inf-pere">
                   <label class="form-label" for="Tel_3pere">Téléphone 3</label>
                   <input class="form-control" id="Tel_3pere" name="Tel_3pere" type="text" />
                 </div>
-                <div class="dropdown-divider mt-2 mb-0"></div>
-                <div class="col-2 mt-0 bg-soft-info">
+                <div class="dropdown-divider mt-2 mb-0 inf inf-mere"></div>
+                <div class="col-2 mt-0 bg-soft-info inf inf-mere">
                   <div class="justify-content-center ">
                     <h2 class="text-center mt-3">Mère</h2>
                   </div>
                 </div>
-                <div class="col-md-5 mt-0 bg-light">
+                <div class="col-md-5 mt-0 bg-light inf inf-mere">
                   <label class="form-label" for="Nom_mere">Nom</label>
                   <input class="form-control" id="Nom_mere" name="Nom_mere" type="text" />
                 </div>
-                <div class="col-md-5 mt-0 bg-light">
+                <div class="col-md-5 mt-0 bg-light inf inf-mere">
                   <label class="form-label" for="Prenom_mere">Prénoms</label>
                   <input class="form-control" id="Prenom_mere" name="Prenom_mere" type="text" />
                 </div>
-                <div class="col-12 mt-0 bg-light">
+                <div class="col-12 mt-0 bg-light inf inf-mere">
                   <label class="form-label" for="email_mere">Email</label>
                   <input class="form-control" id="email_mere" name="email_mere" type="email" placeholder="Apartment, studio, or floor" />
                 </div>
-                <div class="col-md-4 mt-0 bg-light">
+                <div class="col-md-4 mt-0 bg-light inf inf-mere">
                   <label class="form-label" for="Tel_1mere">Téléphone 1</label>
                   <input class="form-control" id="Tel_1mere" name="Tel_1mere" type="text" />
                 </div>
-                <div class="col-md-4 mt-0 bg-light">
+                <div class="col-md-4 mt-0 bg-light inf inf-mere">
                   <label class="form-label" for="Tel_2mere">Téléphone 2</label>
                   <input class="form-control" id="Tel_2mere" name="Tel_2mere" type="text" />
                 </div>
-                <div class="col-md-4 mt-0 bg-light">
+                <div class="col-md-4 mt-0 bg-light inf inf-mere">
                   <label class="form-label" for="Tel_3mere">Téléphone 3</label>
                   <input class="form-control" id="Tel_3mere" name="Tel_3mere" type="text" />
                 </div>
-                <div class="dropdown-divider mt-2 mb-0"></div>
-                <div class="col-2 mt-0 bg-soft-primary">
+                <div class="dropdown-divider mt-2 mb-0 inf inf-tuteur"></div>
+                <div class="col-2 mt-0 bg-soft-primary inf inf-tuteur">
                   <div class="justify-content-center ">
                     <h2 class="text-center mt-3">Tuteur</h2>
                   </div>
                 </div>
-                <div class="col-md-5 mt-0 bg-light">
+                <div class="col-md-5 mt-0 bg-light inf inf-tuteur">
                   <label class="form-label" for="Nom_T">Nom</label>
                   <input class="form-control" id="Nom_T" name="Nom_T" type="text" />
                 </div>
-                <div class="col-md-5 mt-0 bg-light">
+                <div class="col-md-5 mt-0 bg-light inf inf-tuteur">
                   <label class="form-label" for="Prenom_T">Prénoms</label>
                   <input class="form-control" id="Prenom_T" name="Prenom_T" type="text" />
                 </div>
-                <div class="col-12 mt-0 bg-light">
+                <div class="col-12 mt-0 bg-light inf inf-tuteur">
                   <label class="form-label" for="email_T">Email</label>
                   <input class="form-control" id="email_T" name="email_T" type="email" placeholder="Apartment, studio, or floor" />
                 </div>
-                <div class="col-md-4 mt-0 bg-light">
+                <div class="col-md-4 mt-0 bg-light inf inf-tuteur">
                   <label class="form-label" for="Tel_1T">Téléphone 1</label>
                   <input class="form-control" id="Tel_1T" name="Tel_1T" type="text" />
                 </div>
-                <div class="col-md-4 mt-0 bg-light">
+                <div class="col-md-4 mt-0 bg-light inf inf-tuteur">
                   <label class="form-label" for="Tel_2T">Téléphone 2</label>
                   <input class="form-control" id="Tel_2T" name="Tel_2T" type="text" />
                 </div>
-                <div class="col-md-4 mt-0 bg-light">
+                <div class="col-md-4 mt-0 bg-light inf inf-tuteur">
                   <label class="form-label" for="Tel_3T">Téléphone 3</label>
                   <input class="form-control" id="Tel_3T" name="Tel_3T" type="text" />
                 </div>
@@ -363,7 +437,6 @@
     </div>
   </div>
 </div>
-
 
 <!-- Modals pour Payé ECOLAGE -->
 <div class="modal fade" id="EcolagestaticBackdrop" data-bs-keyboard="false" data-bs-backdrop="static" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">

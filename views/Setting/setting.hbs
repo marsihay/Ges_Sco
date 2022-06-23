@@ -235,7 +235,7 @@
                             var mois = document.getElementById("Mois_Form");
                             function LoadMoisLastID(){      
                               // any @main.hbs no misy ny APPEL                      
-$.ajax({url: 'getMoisID', success:function(res){
+                              $.ajax({url: 'getMoisID', success:function(res){
                                 if(res){
                                     document.querySelector('#AddMOISbtn').disabled = false;
                                 } else {
