@@ -13,10 +13,10 @@ const port = process.env.PORT || 5000;
 
 //use express session
 app.use(session({
-	secret: 'secret',
-	resave: true,
-	saveUninitialized: true,
-  cookie:{
+  secret: 'secret',
+  resave: true,
+  saveUninitialized: true,
+  cookie: {
     maxAge: 24 * 60 * 60 * 1000 // 1 day
   }
 }));
@@ -53,26 +53,25 @@ const routes = require('./server/routes/home');
 app.use('/', routes);
 app.use('/auth', auth);
 
-const Home = require('./server/controllers/HomeController');
-app.use(function(req, res, next) {
-    res.status(404);
-  
-    // respond with html page
-    if (req.accepts('html')) {   
-      let session=req.session;      
-      return res.render('partials/404', {session});
-    }
-  });
+app.use(function (req, res, next) {
+  res.status(404);
 
-Handlebars.registerHelper('copyrightYear', function() {
-  const options = { month: 'long'};
-  var date=new Date();
-  var month= new Intl.DateTimeFormat('fr-FR', options).format(date);
-  var year = date.getFullYear();
-  return new Handlebars.SafeString(month+" "+year);
+  // respond with html page
+  if (req.accepts('html')) {
+    let session = req.session;
+    return res.render('partials/404', { session });
+  }
 });
 
-Handlebars.registerHelper('AppName', function() {
+Handlebars.registerHelper('copyrightYear', function () {
+  const options = { month: 'long' };
+  var date = new Date();
+  var month = new Intl.DateTimeFormat('fr-FR', options).format(date);
+  var year = date.getFullYear();
+  return new Handlebars.SafeString(month + " " + year);
+});
+
+Handlebars.registerHelper('AppName', function () {
   return new Handlebars.SafeString("Gessco");
 });
 

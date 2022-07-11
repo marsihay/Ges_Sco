@@ -1,148 +1,153 @@
 <nav class="navbar navbar-light navbar-vertical navbar-expand-xl">
-          <script>
-            var navbarStyle = localStorage.getItem("navbarStyle");
-            if (navbarStyle && navbarStyle !== 'transparent') {
-              document.querySelector('.navbar-vertical').classList.add(`navbar-${navbarStyle}`);
-            }
-          </script>
-          <div class="d-flex align-items-center">
-            <div class="toggle-icon-wrapper">
+  <script>
+    var navbarStyle = localStorage.getItem("navbarStyle");
+    if (navbarStyle && navbarStyle !== 'transparent') {
+      document.querySelector('.navbar-vertical').classList.add(`navbar-${navbarStyle}`);
+    }
+  </script>
+  <div class="d-flex align-items-center">
+    <div class="toggle-icon-wrapper">
 
-              <button class="btn navbar-toggler-humburger-icon navbar-vertical-toggle" data-bs-toggle="tooltip" data-bs-placement="left" title="Toggle Navigation"><span class="navbar-toggle-icon"><span class="toggle-line"></span></span></button>
+      <button class="btn navbar-toggler-humburger-icon navbar-vertical-toggle" data-bs-toggle="tooltip"
+        data-bs-placement="left" title="Toggle Navigation"><span class="navbar-toggle-icon"><span
+            class="toggle-line"></span></span></button>
 
-            </div><a class="navbar-brand" href="/">
-              <div class="d-flex align-items-center py-3"><img class="me-2" src="http://localhost:3000/assets/img/icons/spot-illustrations/Marsihay.png" alt="" width="40" /><span class="font-sans-serif"> {{AppName}}</span>
-              </div>
-            </a>
-          </div>
-          <div class="collapse navbar-collapse" id="navbarVerticalCollapse">
-            <div class="navbar-vertical-content scrollbar">
-              <ul class="navbar-nav flex-column mb-3" id="navbarVerticalNav">
-                <li class="nav-item">
-                  <!-- parent pages--><a class="nav-link" href="/home" role="button" aria-expanded="false" aria-controls="dashboard">
-                    <div class="d-flex align-items-center"><span class="nav-link-icon"><span class="fas fa-home"></span></span><span class="nav-link-text ps-1">Accueil</span>
-                    </div>
-                  </a>
-                  <!-- parent pages--><a class="nav-link" href="/cahierJr" role="button" aria-expanded="false">
-                    <div class="d-flex align-items-center"><span class="nav-link-icon"><span class="fas fa-book-open"></span></span><span class="nav-link-text ps-1">Cahier Journalier</span>
-                    </div>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <!-- label-->
-                  <div class="row navbar-vertical-label-wrapper mt-3 mb-2">
-                    <div class="col-auto navbar-vertical-label">Paiements
-                    </div>
-                    <div class="col ps-0">
-                      <hr class="mb-0 navbar-vertical-divider" />
-                    </div>
-                  </div>
-                  <!-- parent pages--><a class="nav-link" href="#social" role="button" data-bs-toggle="collapse" aria-expanded="false" aria-controls="social">
-                    <div class="d-flex align-items-center"><span class="nav-link-icon"><span class="fas fa-money-bill-wave"></span></span><span class="nav-link-text ps-1">Droits de Scolarité</span>
-                    </div>
-                  </a>
-                  <!-- parent pages--><a class="nav-link dropdown-indicator" href="#Paiments" role="button" data-bs-toggle="collapse" aria-expanded="false" aria-controls="errors">
-                    <div class="d-flex align-items-center"><span class="nav-link-icon"><span class="fas fa-donate"></span></span><span class="nav-link-text ps-1">Frais Scolaire</span>
-                    </div>
-                  </a>
-                  <ul class="nav collapse false" id="Paiments">
-                    <li class="nav-item"><a class="nav-link" href="pages/errors/404.html" aria-expanded="false">
-                        <div class="d-flex align-items-center"><span class="nav-link-text ps-1">Payer Ecolage</span>
-                        </div>
-                      </a>
-                      <!-- more inner pages-->
-                    </li>
-                    <li class="nav-item"><a class="nav-link" href="pages/errors/500.html" aria-expanded="false">
-                        <div class="d-flex align-items-center"><span class="nav-link-text ps-1">Payer Autres</span>
-                        </div>
-                      </a>
-                      <!-- more inner pages-->
-                    </li>
-                  </ul>
-                </li>
-                <li class="nav-item">
-                  <!-- label-->
-                  <div class="row navbar-vertical-label-wrapper mt-3 mb-2">
-                    <div class="col-auto navbar-vertical-label">Classes
-                    </div>
-                    <div class="col ps-0">
-                      <hr class="mb-0 navbar-vertical-divider" />
-                    </div>
-                  </div>
-                  <!-- parent pages--><a class="nav-link" href="pages/starter.html" role="button" aria-expanded="false">
-                    <div class="d-flex align-items-center"><span class="nav-link-icon"><span class="fas fa-spa"></span></span><span class="nav-link-text ps-1">Répartition des élèves</span>
-                    </div>
-                  </a>
-                  <!-- parent pages--><a class="nav-link" href="documentation/getting-started.html" role="button" aria-expanded="false">
-                    <div class="d-flex align-items-center"><span class="nav-link-icon"><span class="fas fa-user-friends"></span></span><span class="nav-link-text ps-1">Liste par Classe</span>
-                    </div>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <!-- label-->
-                  <div class="row navbar-vertical-label-wrapper mt-3 mb-2">
-                    <div class="col-auto navbar-vertical-label">Contrôles
-                    </div>
-                    <div class="col ps-0">
-                      <hr class="mb-0 navbar-vertical-divider" />
-                    </div>
-                  </div>
-                  <!-- parent pages--><a class="nav-link" href="documentation/getting-started.html" role="button" aria-expanded="false">
-                    <div class="d-flex align-items-center"><span class="nav-link-icon"><span class="fas fa-money-check"></span></span><span class="nav-link-text ps-1">Droit Incomplète</span>
-                    </div>
-                  </a>
-                  <!-- parent pages--><a class="nav-link dropdown-indicator" href="#Control" role="button" data-bs-toggle="collapse" aria-expanded="false" aria-controls="errors">
-                    <div class="d-flex align-items-center"><span class="nav-link-icon"><span class="fas fa-luggage-cart"></span></span><span class="nav-link-text ps-1">Frais Scolaire</span>
-                    </div>
-                  </a>
-                  <ul class="nav collapse false" id="Control">
-                    <li class="nav-item"><a class="nav-link" href="pages/errors/404.html" aria-expanded="false">
-                        <div class="d-flex align-items-center"><span class="nav-link-text ps-1">Contrôler Ecolage</span>
-                        </div>
-                      </a>
-                      <!-- more inner pages-->
-                    </li>
-                    <li class="nav-item"><a class="nav-link" href="pages/errors/500.html" aria-expanded="false">
-                        <div class="d-flex align-items-center"><span class="nav-link-text ps-1">Contrôler Autres</span>
-                        </div>
-                      </a>
-                      <!-- more inner pages-->
-                    </li>
-                  </ul>
-                </li>
-                <li class="nav-item">
-                  <!-- label-->
-                  <div class="row navbar-vertical-label-wrapper mt-3 mb-2">
-                    <div class="col-auto navbar-vertical-label">Elèves
-                    </div>
-                    <div class="col ps-0">
-                      <hr class="mb-0 navbar-vertical-divider" />
-                    </div>
-                  </div>
-                  <!-- parent pages--><a class="nav-link" href="documentation/getting-started.html" role="button" aria-expanded="false">
-                    <div class="d-flex align-items-center"><span class="nav-link-icon"><span class="fas fa-users"></span></span><span class="nav-link-text ps-1">Renseignement</span>
-                    </div>
-                  </a>
-                  <!-- parent pages--><a class="nav-link" href="documentation/getting-started.html" role="button" aria-expanded="false">
-                    <div class="d-flex align-items-center"><span class="nav-link-icon"><span class="fas fa-swatchbook"></span></span><span class="nav-link-text ps-1">Les parents</span>
-                    </div>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <!-- label-->
-                  <div class="row navbar-vertical-label-wrapper mt-3 mb-2">
-                    <div class="col-auto navbar-vertical-label">Fichier
-                    </div>
-                    <div class="col ps-0">
-                      <hr class="mb-0 navbar-vertical-divider" />
-                    </div>
-                  </div>
-                  <!-- parent pages--><a class="nav-link" href="documentation/getting-started.html" role="button" aria-expanded="false">
-                    <div class="d-flex align-items-center"><span class="nav-link-icon"><span class="fas fa-print"></span></span><span class="nav-link-text ps-1">Exporter</span>
-                    </div>
-                  </a>
-                </li>
-              </ul>
+    </div><a class="navbar-brand" href="/">
+      <div class="d-flex align-items-center py-3"><img class="me-2"
+          src="http://localhost:3000/assets/img/icons/spot-illustrations/Marsihay.png" alt="" width="40" /><span
+          class="font-sans-serif"> {{AppName}}</span>
+      </div>
+    </a>
+  </div>
+  <div class="collapse navbar-collapse" id="navbarVerticalCollapse">
+    <div class="navbar-vertical-content scrollbar">
+      <ul class="navbar-nav flex-column mb-3" id="navbarVerticalNav">
+        <li class="nav-item">
+          <!-- parent pages--><a class="nav-link" href="/home" role="button" aria-expanded="false"
+            aria-controls="dashboard">
+            <div class="d-flex align-items-center"><span class="nav-link-icon"><span
+                  class="fas fa-home"></span></span><span class="nav-link-text ps-1">Accueil</span>
+            </div>
+          </a>
+          <!-- parent pages--><a class="nav-link" href="/cahierJr" role="button" aria-expanded="false">
+            <div class="d-flex align-items-center"><span class="nav-link-icon"><span
+                  class="fas fa-book-open"></span></span><span class="nav-link-text ps-1">Cahier Journalier</span>
+            </div>
+          </a>
+        </li>
+        <li class="nav-item">
+          <!-- label-->
+          <div class="row navbar-vertical-label-wrapper mt-3 mb-2">
+            <div class="col-auto navbar-vertical-label">Inscription
+            </div>
+            <div class="col ps-0">
+              <hr class="mb-0 navbar-vertical-divider" />
             </div>
           </div>
-        </nav>
+          <!-- parent pages--><a class="nav-link" href="/eleveInscris" role="button" aria-expanded="false">
+            <div class="d-flex align-items-center"><span class="nav-link-icon"><span
+                  class="fas fa-money-bill-wave"></span></span><span class="nav-link-text ps-1">Les élèves
+                inscrit</span>
+            </div>
+          </a>
+          <!-- parent pages--><a class="nav-link" href="/DroitIncommplet" role="button"
+            aria-expanded="false">
+            <div class="d-flex align-items-center"><span class="nav-link-icon"><span
+                  class="fas fa-money-check"></span></span><span class="nav-link-text ps-1">Droit Incomplète</span>
+            </div>
+          </a>
+        </li>
+        <li class="nav-item">
+          <!-- label-->
+          <div class="row navbar-vertical-label-wrapper mt-3 mb-2">
+            <div class="col-auto navbar-vertical-label">Classes
+            </div>
+            <div class="col ps-0">
+              <hr class="mb-0 navbar-vertical-divider" />
+            </div>
+          </div>
+          <!-- parent pages--><a class="nav-link" href="/RepartirEleve" role="button" aria-expanded="false">
+            <div class="d-flex align-items-center"><span class="nav-link-icon"><span
+                  class="fas fa-spa"></span></span><span class="nav-link-text ps-1">Répartition des élèves</span>
+            </div>
+          </a>
+          <!-- parent pages--><a class="nav-link" href="/ListeParClasse" role="button"
+            aria-expanded="false">
+            <div class="d-flex align-items-center"><span class="nav-link-icon"><span
+                  class="fas fa-user-friends"></span></span><span class="nav-link-text ps-1">Liste par Classe</span>
+            </div>
+          </a>
+        </li>
+        <li class="nav-item">
+          <!-- label-->
+          <div class="row navbar-vertical-label-wrapper mt-3 mb-2">
+            <div class="col-auto navbar-vertical-label">Contrôles
+            </div>
+            <div class="col ps-0">
+              <hr class="mb-0 navbar-vertical-divider" />
+            </div>
+          </div>
+          
+          <!-- parent pages--><a class="nav-link dropdown-indicator" href="#Control" role="button"
+            data-bs-toggle="collapse" aria-expanded="false" aria-controls="errors">
+            <div class="d-flex align-items-center"><span class="nav-link-icon"><span
+                  class="fas fa-luggage-cart"></span></span><span class="nav-link-text ps-1">Frais Scolaire</span>
+            </div>
+          </a>
+          <ul class="nav collapse false" id="Control">
+            <li class="nav-item"><a class="nav-link" href="/controlerECO" aria-expanded="false">
+                <div class="d-flex align-items-center"><span class="nav-link-text ps-1">Contrôler Ecolage</span>
+                </div>
+              </a>
+              <!-- more inner pages-->
+            </li>
+            <li class="nav-item"><a class="nav-link" href="/ControlerFRAIS" aria-expanded="false">
+                <div class="d-flex align-items-center"><span class="nav-link-text ps-1">Contrôler Autres</span>
+                </div>
+              </a>
+              <!-- more inner pages-->
+            </li>
+          </ul>
+        </li>
+        <li class="nav-item">
+          <!-- label-->
+          <div class="row navbar-vertical-label-wrapper mt-3 mb-2">
+            <div class="col-auto navbar-vertical-label">Elèves
+            </div>
+            <div class="col ps-0">
+              <hr class="mb-0 navbar-vertical-divider" />
+            </div>
+          </div>
+          <!-- parent pages--><a class="nav-link" href="documentation/getting-started.html" role="button"
+            aria-expanded="false">
+            <div class="d-flex align-items-center"><span class="nav-link-icon"><span
+                  class="fas fa-users"></span></span><span class="nav-link-text ps-1">Renseignement</span>
+            </div>
+          </a>
+          <!-- parent pages--><a class="nav-link" href="documentation/getting-started.html" role="button"
+            aria-expanded="false">
+            <div class="d-flex align-items-center"><span class="nav-link-icon"><span
+                  class="fas fa-swatchbook"></span></span><span class="nav-link-text ps-1">Les parents</span>
+            </div>
+          </a>
+        </li>
+        <li class="nav-item">
+          <!-- label-->
+          <div class="row navbar-vertical-label-wrapper mt-3 mb-2">
+            <div class="col-auto navbar-vertical-label">Fichier
+            </div>
+            <div class="col ps-0">
+              <hr class="mb-0 navbar-vertical-divider" />
+            </div>
+          </div>
+          <!-- parent pages--><a class="nav-link" href="documentation/getting-started.html" role="button"
+            aria-expanded="false">
+            <div class="d-flex align-items-center"><span class="nav-link-icon"><span
+                  class="fas fa-print"></span></span><span class="nav-link-text ps-1">Exporter</span>
+            </div>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>

@@ -1,0 +1,124 @@
+<div class="card mb-3">
+  <div class="bg-holder d-none d-lg-block bg-card"
+    style="background-image:url(http://localhost:3000/assets/img/icons/spot-illustrations/corner-4.png);">
+  </div>
+  <!--/.bg-holder-->
+
+  <div class="card-body position-relative">
+    <div class="row">
+      <div class="col-lg-11">
+        <h3>Les élèves inscrits</h3>
+        <p class="mb-0">On trouve ici la liste des élèves inscris par niveau dans une année scolaire.</p>
+      </div>
+      <div class="col-lg-1 text-center">
+        <h1 class="mt-3" id="NB">0</h1>
+        </div>
+    </div>
+  </div>
+</div>
+<div class="row g-0 position-relative justify-content-center">
+  <div class="card border h-100 border-light">
+    <div class="card-body">
+      <div class="card shadow-none">
+        <div class="card-body p-0 pb-3">
+          <div class="d-flex align-items-center justify-content-end my-3">
+            <div id="bulk-select-replace-element">
+              <form id="Filtre" action="/FiltreList" method="POST">
+                   <select id="DropdownNiv" onchange="FiltreList()" name="ID_Niv" class="form-select form-select-sm" aria-label=".form-select-sm example">
+                    
+                  </select>
+                  </form>
+            </div>
+            <div class="d-none ms-3" id="bulk-select-actions">
+              <div class="d-flex">
+                <select class="form-select form-select-sm" aria-label="Bulk actions">
+                  <option value="selected">Bulk actions</option>
+                  <option value="Delete">Delete</option>
+                  <option value="Archive">Archive</option>
+                </select>
+                <button class="btn btn-falcon-danger btn-sm ms-2" type="button">Apply</button>
+              </div>
+            </div>
+          </div>
+          <div class="table-responsive scrollbar">
+            <table id="dataTables" class="table mb-0">
+              <thead class="text-black bg-200">
+                <tr>
+                  <th class="align-middle white-space-nowrap">
+                    <div class="form-check mb-0">
+                      <input class="form-check-input" type="checkbox"
+                        data-bulk-select='{"body":"bulk-select-body","actions":"bulk-select-actions","replacedElement":"bulk-select-replace-element"}' />
+                    </div>
+                  </th>
+                  <th class="align-middle ">Nom et Prénoms</th>
+                  <th class="align-middle">OBS </th>
+                  <th class="align-middle">Adresse</th>
+                  <th class="align-middle white-space-nowrap pe-3">Date Inscription</th>
+                </tr>
+              </thead>
+              <tbody id="bulk-select-body">
+              {{#each list}}
+                <tr id="rw">
+                  <td class="align-middle white-space-nowrap">
+                    <div class="form-check mb-0">
+                      <input class="form-check-input" type="checkbox" id="checkbox-1"
+                        data-bulk-select-row="data-bulk-select-row" value="{{Matr}}"/>
+                    </div>
+                  </td>
+                  <th class="align-middle"><span class="d-inline-block text-truncate text-dark" style="max-width: 500px;">{{Nom}} {{Prenom}}</span></th>
+                  <td class="align-middle">{{Label_Obs}}</td>
+                  <td class="align-middle">{{Adresse}}</td>
+                  <td class="align-middle white-space-nowrap text-end pe-3">{{Date_insc}}</td>
+                </tr>
+              {{/each}}
+              </tbody>
+            </table>
+  </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  if(true){
+      LoadNivInsc();
+      }
+  $(function () {
+    var rowtable = document.querySelectorAll('#rw');
+    $('#NB').html(rowtable.length);
+    $('#DropdownNiv').val(Number('{{ID_Niv}}'));
+    });
+    function LoadNivInsc() {                  
+    $.ajax({
+      url: 'getNiveau', success: function (res) {
+        $('#DropdownNiv').html('');
+        var options = '';
+        options += '<option value="0">Tous</option>'; 
+        for (var i = 0; i < res.length; i++) {
+          options += '<option value="' + res[i].ID_Niv + '">' + res[i].Label_Niv + '</option>';
+        }
+        $('#DropdownNiv').append(options);
+      }
+    });
+  }
+  function FiltreList(){
+    const form = document.getElementById('Filtre');
+    form.submit();
+    }
+</script>
+
+    <script type="text/javascript" src="http://localhost:3000/vendors/datatable/JS/jquery.dataTables.js"></script>
+    <link rel="stylesheet" type="text/css" href="http://localhost:3000/vendors/datatable/CSS/jquery.dataTables.css">
+          <script type="text/javascript">var i=1;</script>
+      <script type="text/javascript">
+    $(document).ready(function(){
+      $('#dataTables').DataTable({
+        buttons: [
+        'copy'
+        ]
+      });
+    });
+  
+  </script>
+

@@ -1,45 +1,73 @@
 <div class="row position-relative justify-content-center">
-  <div class="col-sm-4 col-lg-4 mb-2 ">
-  <div class="card border h-100 border-primary">
-    <div
-      class="bg-holder d-none d-lg-block bg-card"
-      style="background-image:url(http://localhost:3000/assets/img/icons/spot-illustrations/corner-4.png);"
-    ></div>
-    <div class="card-body position-relative my-0 py-0">
-      <div class="card-title mb-1">
-        <p class="mb-0 text-center ">Inscription d'un élève</p>
+  <div class="col-sm-2 col-lg-2 mb-2 ">
+    <div class="card border h-100 border-light">
+      <div class="bg-holder d-none d-lg-block bg-card"
+        style="background-image:url(http://localhost:3000/assets/img/icons/spot-illustrations/corner-4.png);"></div>
+      <div class="card-body position-relative my-0 py-0">
+        <div class="card-title mb-1">
+          <p class="mb-0 text-center ">Calendrier</p>
+        </div>
       </div>
+      <form id="dateform" action="/getJournalier" method="POST">
+        {{#if date}}
+        <div class="col-12 mt-0 position-relative ">
+          <input class="form-control datetimepicker text-center bg-soft-light"
+            onchange="GetJournalierBydate(this.value)" id="DateJr" name="date" type="text" placeholder="DD-MM-YYYY" />
+        </div>
+        {{else}}
+        <div class="col-12 mt-0 position-relative ">
+          <input class="form-control datetimepicker text-center bg-soft-light"
+            onchange="GetJournalierBydate(this.value)" id="DateCahierJr" name="date" type="text"
+            placeholder="dd-mm-yyyy" />
+        </div>
+        {{/if}}
+      </form>
     </div>
-    <button class="btn btn-primary position-relative" type="button" data-bs-toggle="modal" data-bs-target="#DroitstaticBackdrop">
-      <span class="fas fa-money-bill-wave" data-fa-transform="shrink-3"></span> Droit
-    </button>
-
   </div>
-</div>
+  <div class="col-sm-3 col-lg-3 mb-2 ">
+    <div class="card border h-100 border-primary">
+      <div class="bg-holder d-none d-lg-block bg-card"
+        style="background-image:url(http://localhost:3000/assets/img/icons/spot-illustrations/corner-4.png);"></div>
+      <div class="card-body position-relative my-0 py-0">
+        <div class="card-title mb-1">
+          <p class="mb-0 text-center ">Inscription d'un élève</p>
+        </div>
+      </div>
+      <button class="btn btn-primary position-relative" type="button" data-bs-toggle="modal"
+        data-bs-target="#DroitstaticBackdrop">
+        <span class="fas fa-money-bill-wave" data-fa-transform="shrink-3"></span> Droit
+      </button>
+
+    </div>
+  </div>
   <div class="col-sm-4 col-lg-4 mb-2">
     <div class="card border h-100 border-secondary">
-        <div class="bg-holder d-none d-lg-block bg-card" style="background-image:url(http://localhost:3000/assets/img/icons/spot-illustrations/corner-4.png);">
-        </div>
+      <div class="bg-holder d-none d-lg-block bg-card"
+        style="background-image:url(http://localhost:3000/assets/img/icons/spot-illustrations/corner-4.png);">
+      </div>
       <div class="card-body position-relative my-0 py-0">
-      <div class="card-title mb-1">
-        <p class="mb-0 text-center ">Payement d'un écolage</p>
+        <div class="card-title mb-1">
+          <p class="mb-0 text-center ">Payement d'un écolage</p>
+        </div>
       </div>
-      </div>
-    <button class="btn btn-secondary position-relative" type="button" data-bs-toggle="modal" data-bs-target="#EcolagestaticBackdrop">
-      <span class="fas fa-dollar-sign me-1" data-fa-transform="shrink-3"></span> Ecolage
-    </button>
+      <button class="btn btn-secondary position-relative" type="button" data-bs-toggle="modal"
+        data-bs-target="#EcolagestaticBackdrop">
+        <span class="fas fa-dollar-sign me-1" data-fa-transform="shrink-3"></span> Ecolage
+      </button>
     </div>
   </div>
-  <div class="col-sm-4 col-lg-4 mb-2">
+  <div class="col-sm-3 col-lg-3 mb-2">
     <div class="card border h-100 border-success">
-        <div class="bg-holder d-none d-lg-block bg-card" style="background-image:url(http://localhost:3000/assets/img/icons/spot-illustrations/corner-4.png);">
-        </div>
+      <div class="bg-holder d-none d-lg-block bg-card"
+        style="background-image:url(http://localhost:3000/assets/img/icons/spot-illustrations/corner-4.png);">
+      </div>
       <div class="card-body position-relative my-0 py-0">
-      <div class="card-title mb-1">
-        <p class="mb-0 text-center ">Les autres frais de scolarité</p>
+        <div class="card-title mb-1">
+          <p class="mb-0 text-center ">Autres frais de scolarité</p>
+        </div>
       </div>
-      </div>
-      <button class="btn btn-success position-relative" type="button" data-bs-toggle="modal" data-bs-target="#FraisScostaticBackdrop">
+      <button class="btn btn-success position-relative" type="button" data-bs-toggle="modal"
+        data-bs-target="#FraisScostaticBackdrop">
         <span class="fas fa-donate me-1" data-fa-transform="shrink-3"></span> Frais Scolarité
       </button>
     </div>
@@ -47,200 +75,75 @@
   <div class="col-sm-12 col-lg-12 mb-12 mb-2">
     <div class="card border h-100 border-light">
       <div class="card-body">
-          <div class="table-responsive scrollbar">
-  <table class="table table-hover table-striped overflow-hidden">
-    <thead>
-      <tr>
-        <th scope="col">Name</th>
-        <th scope="col">Email</th>
-        <th scope="col">Phone</th>
-        <th scope="col">Address</th>
-        <th scope="col">Status</th>
-        <th class="text-end" scope="col">Amount</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr class="align-middle">
-        <td class="text-nowrap">
-          <div class="d-flex align-items-center">
-            <div class="avatar avatar-xl">
-              <img class="rounded-circle" src="../../assets/img/team/4.jpg" alt="" />
-            </div>
-            <div class="ms-2">Ricky Antony</div>
-          </div>
-        </td>
-        <td class="text-nowrap">ricky@example.com</td>
-        <td class="text-nowrap">(201) 200-1851</td>
-        <td class="text-nowrap">2392 Main Avenue, Penasauka</td>
-        <td><span class="badge badge rounded-pill d-block p-2 badge-soft-success">Completed<span class="ms-1 fas fa-check" data-fa-transform="shrink-2"></span></span>
-        </td>
-        <td class="text-end">$99</td>
-      </tr>
-      <tr class="align-middle">
-        <td class="text-nowrap">
-          <div class="d-flex align-items-center">
-            <div class="avatar avatar-xl">
-              <img class="rounded-circle" src="../../assets/img/team/13.jpg" alt="" />
-            </div>
-            <div class="ms-2">Emma Watson</div>
-          </div>
-        </td>
-        <td class="text-nowrap">emma@example.com</td>
-        <td class="text-nowrap">(212) 228-8403</td>
-        <td class="text-nowrap">2289 5th Avenue, New York</td>
-        <td><span class="badge badge rounded-pill d-block p-2 badge-soft-success">Completed<span class="ms-1 fas fa-check" data-fa-transform="shrink-2"></span></span>
-        </td>
-        <td class="text-end">$199</td>
-      </tr>
-      <tr class="align-middle">
-        <td class="text-nowrap">
-          <div class="d-flex align-items-center">
-            <div class="avatar avatar-xl">
-              <div class="avatar-name rounded-circle"><span>RA</span></div>
-            </div>
-            <div class="ms-2">Rowen Atkinson</div>
-          </div>
-        </td>
-        <td class="text-nowrap">rown@example.com</td>
-        <td class="text-nowrap">(201) 200-1851</td>
-        <td class="text-nowrap">112 Bostwick Avenue, Jersey City</td>
-        <td><span class="badge badge rounded-pill d-block p-2 badge-soft-primary">Processing<span class="ms-1 fas fa-redo" data-fa-transform="shrink-2"></span></span>
-        </td>
-        <td class="text-end">$755</td>
-      </tr>
-      <tr class="align-middle">
-        <td class="text-nowrap">
-          <div class="d-flex align-items-center">
-            <div class="avatar avatar-xl">
-              <img class="rounded-circle" src="../../assets/img/team/2.jpg" alt="" />
-            </div>
-            <div class="ms-2">Antony Hopkins</div>
-          </div>
-        </td>
-        <td class="text-nowrap">antony@example.com</td>
-        <td class="text-nowrap">(901) 324-3127</td>
-        <td class="text-nowrap">3448 Ile De France St #242</td>
-        <td><span class="badge badge rounded-pill d-block p-2 badge-soft-secondary">On Hold<span class="ms-1 fas fa-ban" data-fa-transform="shrink-2"></span></span>
-        </td>
-        <td class="text-end">$50</td>
-      </tr>
-      <tr class="align-middle">
-        <td class="text-nowrap">
-          <div class="d-flex align-items-center">
-            <div class="avatar avatar-xl">
-              <img class="rounded-circle" src="../../assets/img/team/3.jpg" alt="" />
-            </div>
-            <div class="ms-2">Jennifer Schramm</div>
-          </div>
-        </td>
-        <td class="text-nowrap">jennifer@example.com</td>
-        <td class="text-nowrap">(828) 382-9631</td>
-        <td class="text-nowrap">659 Hannah Street, Charlotte</td>
-        <td><span class="badge badge rounded-pill d-block p-2 badge-soft-warning">Pending<span class="ms-1 fas fa-stream" data-fa-transform="shrink-2"></span></span>
-        </td>
-        <td class="text-end">$150</td>
-      </tr>
-    </tbody>
-  </table>
-</div>
+        <div class="table-responsive scrollbar">
+          <table class="table table-hover table-striped overflow-hidden">
+            <thead>
+              <tr>
+                <th scope="col">N°</th>
+                <th scope="col">Nom et Prénoms</th>
+                <th scope="col">Paiement</th>
+                <th scope="col">OBS</th>
+                <th scope="col"></th>
+                <th scope="col">Mode</th>
+                <th class="text-end" scope="col">Argent</th>
+              </tr>
+            </thead>
+            <tbody>
+              {{#each Jr}}
+              <tr class="align-middle">
+                <td>{{Matr}}</td>
+                <td class="text-nowrap">
+                  <div class="d-flex align-items-center">
+                    <div class="avatar avatar-xl">
+                      <img class="rounded-circle"
+                        src="http://localhost:3000/assets/img/icons/spot-illustrations/Marsihay.png" alt="" />
+                    </div>
+                    <div class="ms-2"><span class="d-inline-block text-truncate" style="max-width: 150px;">{{Nom}}
+                        {{Prenom}}</span></div>
+                  </div>
+                </td>
+                <td class="text-nowrap text-dark">{{Paiement}}</td>
+                <td class="text-nowrap">{{Label_Obs}}</td>
+                <td class="text-nowrap"><span id="{{type}}">{{type}}</span>
+                </td>
+                <td>
+                  <span id="{{Mode_P}}"><span id="{{Mode_P}}Text">{{Mode_P}}</span></span>
+                </td>
+                <td class="text-end text-dark">MGA {{Decimal Argent}}</td>
+                <span id="Money" hidden>{{Argent}}</span>
+              </tr>
+              {{/each}}
+            </tbody>
+          </table>
+        </div>
 
       </div>
     </div>
   </div>
   <div class="col-sm-4 col-lg-12 mb-2 ">
-  <div class="card border h-100 border-light">
-    <div class="card-body position-relative my-0 py-0">
-      <div class="card-title my-1">
-        <p class="mb-0">Total</p>
+    <div class="card border h-100 border-light">
+      <div class="card-body position-relative my-0 py-0">
+        <div class="card-title my-1 text-center">
+          <p class="mb-0">Somme : MGA <span id="MoneyTotal" class="text-info"></span></p>
+        </div>
       </div>
-    </div>
 
+    </div>
   </div>
 </div>
-</div>
 
 
-<script type="text/javascript">
-    $(function() {
-      $('#RadioAncien').prop('checked',true);      
-      $('#Nb_Eco').val('1'); 
-      $( "#Date_insc" ).flatpickr({
-        dateFormat:"d-m-Y",
-        disableMobile: "true",
-        defaultDate: new Date()
-      });  
-      togglevisibilityInfo("true");
-    });
-    function RadioNouveauChanged(t) {
-      togglevisibilityInfo($(t).attr('value'));
-    }
-    function RadioAncienChanged(t) {
-      togglevisibilityInfo($(t).attr('value'));
-    }
-    function togglevisibilityInfo(bool){
-      var Info = document.querySelectorAll('.inf');
-      if (bool != "true") {
-        for (var index = 0; index < Info.length; index++) {
-          Info[index].style.display = 'block';
-        }
-          disableEleveInfo(false);
-          ToggleCheck("pere");
-          ToggleCheck("mere");
-          ToggleCheck("tuteur");
-      } else {
-        for (var index = 0; index < Info.length; index++) {
-          Info[index].style.display = 'none';
-        }
-        disableEleveInfo(true);
-      }
-    }
-    function disableEleveInfo(bool){
-        var Info = document.querySelectorAll('.inf-eleve');      
-        for (var index = 0; index < Info.length; index++) {
-          Info[index].disabled = bool;
-        }
-    }
-    function Show(t){
-      var attr=$(t).attr('id');
-      var P = document.getElementById(attr);
-      var Info = document.querySelectorAll('.inf-'+attr);
-      if (P.checked == true){
-          for (var index = 0; index < Info.length; index++) {
-          Info[index].style.display = 'block';
-        }
-      } else {
-        for (var index = 0; index < Info.length; index++) {
-          Info[index].style.display = 'none';
-        }
-      }
-    }
-    function ToggleCheck(t){
-      $('#'+t).prop('checked', false);
-      var Info = document.querySelectorAll('.inf-'+t);      
-        for (var index = 0; index < Info.length; index++) {
-          Info[index].style.display = 'none';
-        }
-    }
-    function MakeAvance(t){
-      var av = document.getElementById('avance');
-      var nb = document.querySelector('#Nb_Eco');
-      if (av.checked == true){        
-          $('#Nb_Eco').val('0');     
-          nb.disabled = true;
-      } else {
-          $('#Nb_Eco').val('1');     
-          nb.disabled = false;
-      }
-    }
-</script>
 
+{{> ScriptForCahier.JS}}
 
 <!-- Modals pour INSCRIPTION -->
-<div class="modal fade" id="DroitstaticBackdrop" data-bs-keyboard="false" data-bs-backdrop="static" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+<div class="modal fade" id="DroitstaticBackdrop" data-bs-keyboard="false" data-bs-backdrop="static" tabindex="-1"
+  aria-labelledby="staticBackdropLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
     <div class="modal-content border-0">
       <div class="position-absolute top-0 end-0 mt-3 me-3 z-index-1">
-        <button class="btn-close btn btn-sm btn-circle d-flex flex-center transition-base" data-bs-dismiss="modal" aria-label="Close"></button>
+        <button class="btn-close btn btn-sm btn-circle d-flex flex-center transition-base" data-bs-dismiss="modal"
+          aria-label="Close"></button>
       </div>
       <div class="modal-body p-0">
         <div class="bg-light rounded-top-lg py-3 ps-4 pe-6">
@@ -251,81 +154,89 @@
           <div class="row">
             <div class="col-lg-12">
               <form action="/Inscription" method="post" class="row g-3">
-                <div class="col-md-2 ms-auto mt-0 pt-2 bg-soft-info">
+                <div class="col-md-2 ms-auto mt-0 pt-2">
                   <div class="form-check">
-                    <input class="form-check-input" id="RadioAncien" type="radio" name="Ancien" value="true" onchange="RadioAncienChanged(this)"/>
+                    <input class="form-check-input" id="RadioAncien" type="radio" name="Ancien" value="true"
+                      onchange="RadioAncienChanged(this)" />
                     <label class="form-check-label" for="RadioAncien">Ancien</label>
                   </div>
                   <div class="form-check">
-                    <input class="form-check-input" id="RadioNouveau" type="radio" name="Ancien" value="false" onchange="RadioNouveauChanged(this)"/>
+                    <input class="form-check-input" id="RadioNouveau" type="radio" name="Ancien" value="false"
+                      onchange="RadioNouveauChanged(this)" />
                     <label class="form-check-label" for="RadioNouveau">Nouveau</label>
                   </div>
                 </div>
-                <div class="col-md-2 mt-0 bg-soft-info ">
+                <div class="col-md-2 mt-0">
                   <label class="form-label" for="Matr">Matricule</label>
-                  <input class="form-control" id="Matr" name="Matr" type="number" />
+                  <input class="form-control" id="Matr" name="Matr" type="text" onkeyup="CheckMatricule(this.value)" />
                 </div>
-                <div class="col-md-4 mt-0 bg-soft-light ">
+                <div class="col-md-4 mt-0">
                   <label class="form-label" for="Nom">Nom</label>
                   <input class="form-control inf-eleve" id="Nom" name="Nom" type="text" />
                 </div>
-                <div class="col-md-4 mt-0 bg-soft-light ">
+                <div class="col-md-4 mt-0">
                   <label class="form-label" for="Prenom">Prénoms</label>
                   <input class="form-control inf-eleve" id="Prenom" name="Prenom" type="text" />
                 </div>
-                <div class="col-4 mt-0 bg-soft-info">
+                <div class="col-4 mt-0">
                   <label class="form-label" for="Date_insc">Date d'inscription</label>
-                  <input class="form-control datetimepicker" id="Date_insc" name="Date_insc" type="text" placeholder="d/m/y"   />
+                  <input class="form-control datetimepicker" id="Date_insc" name="Date_insc" type="text"
+                    placeholder="d/m/y" />
                 </div>
-                <div class="col-8 mt-0 bg-soft-light ">
+                <div class="col-8 mt-0">
                   <label class="form-label" for="Adresse">Address</label>
-                  <input class="form-control inf-eleve" id="Adresse" name="Adresse" type="text" placeholder="1234 Main St" />
+                  <input class="form-control inf-eleve" id="Adresse" name="Adresse" type="text" placeholder="Adresse" />
                 </div>
                 <div class="dropdown-divider mt-2 mb-0"></div>
-                <div class="row g-0 mt-0 bg-soft-light">
+                <div class="row g-0 mt-0">
                   <div class="col-4 me-3 form-floating">
-                    <select class="form-select" id="ID_Niv" name="ID_Niv" aria-label="Floating label select example">
-                      <option value="1">Seconde</option>
-                      <option value="2">Premiere</option>
-                      <option value="3">terminal</option>
+                    <select class="form-select" id="ID_Niv" name="ID_Niv" onchange="CalculateSum()"
+                      aria-label="Floating label select example">
+
                     </select>
                     <label for="floatingSelect">Niveau pour l'inscription</label>
                   </div>
                   <div class="col-4 me-3 form-floating ">
-                    <select class="form-select inf-eleve" id="ID_Obs" name="ID_Obs" aria-label="Floating label select example">
-                      <option value="1">Tsotra</option>
-                      <option value="2">Z. Katekista</option>
-                      <option value="3">Z. Mpampianatra</option>
+                    <select class="form-select inf-eleve" id="ID_Obs" name="ID_Obs" onchange="CalculateSum()"
+                      aria-label="Floating label select example">
+
                     </select>
                     <label for="floatingSelect">Situation</label>
                   </div>
                   <div class="col-auto">
                     <div class="form-check ms-3 mt-3 mb-0">
-                      <input class="form-check-input bg-warning" onclick="MakeAvance(this)" id="avance" name="av_Droit" value="avance" type="checkbox" />
+                      <input class="form-check-input bg-warning" onclick="MakeAvance(this)" id="avance" name="av_Droit"
+                        value="avance" type="checkbox" />
                       <label class="form-check-label mb-0" for="av_Droit">Faire une avance</label>
                     </div>
                   </div>
                 </div>
                 <div class=" mt-1 bg-soft-light input-group">
-                  <span class="input-group-text">Avec Ecolage de </span><input class="form-control col-3" id="Nb_Eco" name="Nb_Eco" type="text" /><span class="input-group-text">Mois</span>
-                  <span class="input-group-text">Montant réçu </span><input class="form-control col-3" id="Argent" name="Argent" type="text" /><span class="input-group-text">MGA</span>
+                  <span class="input-group-text">Avec Ecolage de </span><input class="form-control col-3"
+                    onkeyup="CalculateSum()" id="Nb_Eco" name="Nb_Eco" type="number" /><span
+                    class="input-group-text">Mois</span>
+                  <span class="input-group-text">Montant réçu </span><input class="form-control col-3" id="Argent"
+                    name="Argent" type="text" /><span class="input-group-text">MGA</span>
                 </div>
                 <div class="dropdown-divider mt-2 mb-0"></div>
-                  <div class="col-4 mt-0 bg-light inf">
-                    <div class="form-check ">
-                      <input class="form-check-input bg-danger" onclick="Show(this)" id="pere" name="pere" type="checkbox" value="pere" />
-                      <label class="form-check-label" for="pere">Père</label>
-                    </div>
+                <div class="col-4 mt-0 bg-light inf">
+                  <div class="form-check mt-3 ms-5">
+                    <input class="form-check-input bg-danger " onclick="Show(this)" id="pere" name="pere"
+                      type="checkbox" value="Pere" />
+                    <label class="form-check-label" for="pere">Père</label>
                   </div>
-                  <div class="col-4 mt-0 bg-light inf">
-                  <div class="form-check">
-                    <input class="form-check-input bg-info" onclick="Show(this)" id="mere" name="mere" type="checkbox" value="mere" />
+                </div>
+                <div class="col-4 mt-0 bg-light inf">
+                  <div class="form-check mt-3 ms-5">
+                    <input class="form-check-input bg-info" onclick="Show(this)" id="mere" name="mere" type="checkbox"
+                      value="Mere" />
                     <label class="form-check-label" for="mere">Mère</label>
                   </div>
                 </div>
                 <div class="col-4 mt-0 mb-0 bg-light align-center inf">
-                  <div class="form-check">
-                    <input class="form-check-input bg-primary" onclick="Show(this)" id="tuteur" name="tuteur" type="checkbox" value="tuteur" />
+                  <div class="form-check mt-3 ms-5">
+                    <input class="form-check-input bg-primary" onclick="Show(this)" id="tuteur" name="tuteur"
+                      type="checkbox" value="Tuteur" />
                     <label class="form-check-label" for="tuteur">Tuteur</label>
                   </div>
                 </div>
@@ -345,7 +256,8 @@
                 </div>
                 <div class="col-12 mt-0 bg-light inf inf-pere">
                   <label class="form-label" for="email_Pere">Email</label>
-                  <input class="form-control" id="email_Pere" name="email_Pere" type="email" placeholder="Apartment, studio, or floor" />
+                  <input class="form-control" id="email_Pere" name="email_Pere" type="email"
+                    placeholder="Apartment, studio, or floor" />
                 </div>
                 <div class="col-md-4 mt-0 bg-light inf inf-pere">
                   <label class="form-label" for="Tel_1pere">Téléphone 1</label>
@@ -375,7 +287,8 @@
                 </div>
                 <div class="col-12 mt-0 bg-light inf inf-mere">
                   <label class="form-label" for="email_mere">Email</label>
-                  <input class="form-control" id="email_mere" name="email_mere" type="email" placeholder="Apartment, studio, or floor" />
+                  <input class="form-control" id="email_mere" name="email_mere" type="email"
+                    placeholder="Apartment, studio, or floor" />
                 </div>
                 <div class="col-md-4 mt-0 bg-light inf inf-mere">
                   <label class="form-label" for="Tel_1mere">Téléphone 1</label>
@@ -405,7 +318,8 @@
                 </div>
                 <div class="col-12 mt-0 bg-light inf inf-tuteur">
                   <label class="form-label" for="email_T">Email</label>
-                  <input class="form-control" id="email_T" name="email_T" type="email" placeholder="Apartment, studio, or floor" />
+                  <input class="form-control" id="email_T" name="email_T" type="email"
+                    placeholder="Apartment, studio, or floor" />
                 </div>
                 <div class="col-md-4 mt-0 bg-light inf inf-tuteur">
                   <label class="form-label" for="Tel_1T">Téléphone 1</label>
@@ -420,7 +334,8 @@
                   <input class="form-control" id="Tel_3T" name="Tel_3T" type="text" />
                 </div>
                 <div class="col-12 d-flex justify-content-end">
-                  <a href="" class="btn btn-falcon-default me-2 mb-1 " data-bs-dismiss="modal" aria-label="Close" type="button">
+                  <a href="" class="btn btn-falcon-default me-2 mb-1 " data-bs-dismiss="modal" aria-label="Close"
+                    type="button">
                     <span class="fas fa-times-circle" data-fa-transform="shrink-3"></span>
                     Annuler
                   </a>
@@ -439,11 +354,13 @@
 </div>
 
 <!-- Modals pour Payé ECOLAGE -->
-<div class="modal fade" id="EcolagestaticBackdrop" data-bs-keyboard="false" data-bs-backdrop="static" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+<div class="modal fade" id="EcolagestaticBackdrop" data-bs-keyboard="false" data-bs-backdrop="static" tabindex="-1"
+  aria-labelledby="staticBackdropLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
     <div class="modal-content border-0">
       <div class="position-absolute top-0 end-0 mt-3 me-3 z-index-1">
-        <button class="btn-close btn btn-sm btn-circle d-flex flex-center transition-base" data-bs-dismiss="modal" aria-label="Close"></button>
+        <button class="btn-close btn btn-sm btn-circle d-flex flex-center transition-base" data-bs-dismiss="modal"
+          aria-label="Close"></button>
       </div>
       <div class="modal-body p-0">
         <div class="bg-light rounded-top-lg py-3 ps-4 pe-6">
@@ -452,46 +369,66 @@
         </div>
         <div class="p-4">
           <div class="row">
-            <div class="col-lg-9">
-              <div class="d-flex"><span class="fa-stack ms-n1 me-3"><i class="fas fa-circle fa-stack-2x text-200"></i><i class="fa-inverse fa-stack-1x text-primary fas fa-tag" data-fa-transform="shrink-2"></i></span>
-                <div class="flex-1">
-                  <h5 class="mb-2 fs-0">Labels</h5>
-                  <div class="d-flex"><span class="badge me-1 py-2 badge-soft-success">New</span><span class="badge me-1 py-2 badge-soft-primary">Goal</span><span class="badge me-1 py-2 badge-soft-info">Enhancement</span>
-                    <div class="dropdown dropend">
-                      <button class="btn btn-sm btn-secondary px-2 fsp-75 bg-400 border-400 dropdown-toggle dropdown-caret-none" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="fas fa-plus"></span></button>
-                      <div class="dropdown-menu">
-                        <h6 class="dropdown-header py-0 px-3 mb-0">Select Label</h6>
-                        <div class="dropdown-divider"></div>
-                        <div class="px-3">
-                          <button class="badge-soft-danger dropdown-item rounded-1 mb-2" type="button">New</button>
-                          <button class="badge-soft-primary dropdown-item rounded-1 mb-2" type="button">Goal</button>
-                          <button class="badge-soft-info dropdown-item rounded-1 mb-2" type="button">Enhancement</button>
-                        </div>
-                        <div class="dropdown-divider"></div>
-                        <div class="px-3">
-                          <button class="btn btn-sm d-block w-100 btn-outline-secondary border-400">Create Label</button>
-                        </div>
-                      </div>
-                    </div>
+            <div class="col-lg-12">
+              <form action="/Ecolage" method="post" class="row g-3">
+                <div class="col-md-4 mt-0 ">
+                  <label class="form-label" for="Matr">N° Matricule</label>
+                  <input class="form-control" id="MatrECO" name="Matr" type="text"
+                    onkeyup="CheckMatriculeInfo(this.value)" />
+                </div>
+                <div class="col-md-8 mt-0 ">
+                  <label class="form-label" for="Nom">Nom et Prénoms</label>
+                  <input class="form-control" id="NomECO" name="Nom" type="text" disabled />
+                </div>
+                <div class="col-4 mt-0">
+                  <label class="form-label" for="Date_Paiement">Date de Paiement</label>
+                  <input class="form-control datetimepicker" id="Date_Paiement" name="Date_Paiement" type="text"
+                    placeholder="d/m/y" />
+                </div>
+                <div class="col-8 mt-0">
+                  <label class="form-label" for="Adresse">Adresse</label>
+                  <input class="form-control" id="AdresseECO" name="Adresse" type="text" placeholder="Adresse"
+                    disabled />
+                </div>
+                <div class="dropdown-divider mt-2 mb-0"></div>
+                <div class="row g-0 mt-0">
+                  <div class="col-5 me-0 form-floating">
+                    <select class="form-select" id="ID_NivECO" name="ID_Niv" aria-label="Floating label select example"
+                      disabled>
+
+                    </select>
+                    <label for="floatingSelect">Son Niveau</label>
                   </div>
-                  <hr class="my-4" />
+                  <div class="col-2 me-0 form-floating">
+
+                  </div>
+                  <div class="col-5 me-0 form-floating ">
+                    <select class="form-select" id="ID_ObsECO" name="ID_Obs" aria-label="Floating label select example"
+                      disabled>
+
+                    </select>
+                    <label for="floatingSelect">Situation</label>
+                  </div>
                 </div>
-              </div>
-              <div class="d-flex"><span class="fa-stack ms-n1 me-3"><i class="fas fa-circle fa-stack-2x text-200"></i><i class="fa-inverse fa-stack-1x text-primary fas fa-align-left" data-fa-transform="shrink-2"></i></span>
-                <div class="flex-1">
-                  <h5 class="mb-2 fs-0">Description</h5>
-                  <p class="text-word-break fs--1">The illustration must match to the contrast of the theme. The illustraion must described the concept of the design. To know more about the theme visit the page. </p>
+                <div class=" mt-1 input-group">
+                  <span class="input-group-text">Avec Ecolage de </span><input class="form-control col-3"
+                    onkeyup="CalculateSumECO()" id="Nb_Mois" name="Nb_Eco" type="number" autocomplete="off" /><span
+                    class="input-group-text">Mois</span>
+                  <span class="input-group-text">Montant réçu </span><input class="form-control text-center col-3"
+                    id="ArgentEco" name="Argent" type="text" /><span class="input-group-text">MGA</span>
                 </div>
-              </div>
-            </div>
-            <div class="col-lg-3">
-              <h6 class="mt-5 mt-lg-0">Add To Card</h6>
-              <ul class="nav flex-lg-column fs--1">
-                <li class="nav-item me-2 me-lg-0"><a class="nav-link nav-link-card-details" href="#!"><span class="fas fa-user me-2"></span>Members</a></li>
-                <li class="nav-item me-2 me-lg-0"><a class="nav-link nav-link-card-details" href="#!"><span class="fas fa-tag me-2"></span>Label</a></li>
-                <li class="nav-item me-2 me-lg-0"><a class="nav-link nav-link-card-details" href="#!"><span class="fas fa-paperclip me-2"></span>Attachments</a></li>
-                <li class="nav-item me-2 me-lg-0"><a class="nav-link nav-link-card-details" href="#!"><span class="fa fa-align-left me-2"></span>Description </a></li>
-              </ul>
+                <div class="col-12 d-flex justify-content-end">
+                  <a href="" class="btn btn-falcon-default me-2 mb-1 " data-bs-dismiss="modal" aria-label="Close"
+                    type="button">
+                    <span class="fas fa-times-circle" data-fa-transform="shrink-3"></span>
+                    Annuler
+                  </a>
+                  <button class="btn btn-falcon-primary me-3 mb-1" type="submit">
+                    <span class="fas fa-check" data-fa-transform="shrink-3"></span>
+                    Payer
+                  </button>
+                </div>
+              </form>
             </div>
           </div>
         </div>
@@ -503,59 +440,69 @@
 
 
 <!-- Modals pour Payé AUTRES FRAIS SCOLARITE -->
-<div class="modal fade" id="FraisScostaticBackdrop" data-bs-keyboard="false" data-bs-backdrop="static" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+<div class="modal fade" id="FraisScostaticBackdrop" data-bs-keyboard="false" data-bs-backdrop="static" tabindex="-1"
+  aria-labelledby="staticBackdropLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
     <div class="modal-content border-0">
       <div class="position-absolute top-0 end-0 mt-3 me-3 z-index-1">
-        <button class="btn-close btn btn-sm btn-circle d-flex flex-center transition-base" data-bs-dismiss="modal" aria-label="Close"></button>
+        <button class="btn-close btn btn-sm btn-circle d-flex flex-center transition-base" data-bs-dismiss="modal"
+          aria-label="Close"></button>
       </div>
       <div class="modal-body p-0">
         <div class="bg-light rounded-top-lg py-3 ps-4 pe-6">
-          <h4 class="mb-1" id="staticBackdropLabel">Paiement d'une autre frais de scolaritépour les élèves</h4>
+          <h4 class="mb-1" id="staticBackdropLabel">Paiement d'une autre frais de scolarité</h4>
           <p class="fs--2 mb-0">Added by <a class="link-600 fw-semi-bold" href="#!">{{user.username}}</a></p>
         </div>
         <div class="p-4">
           <div class="row">
-            <div class="col-lg-9">
-              <div class="d-flex"><span class="fa-stack ms-n1 me-3"><i class="fas fa-circle fa-stack-2x text-200"></i><i class="fa-inverse fa-stack-1x text-primary fas fa-tag" data-fa-transform="shrink-2"></i></span>
-                <div class="flex-1">
-                  <h5 class="mb-2 fs-0">Labels</h5>
-                  <div class="d-flex"><span class="badge me-1 py-2 badge-soft-success">New</span><span class="badge me-1 py-2 badge-soft-primary">Goal</span><span class="badge me-1 py-2 badge-soft-info">Enhancement</span>
-                    <div class="dropdown dropend">
-                      <button class="btn btn-sm btn-secondary px-2 fsp-75 bg-400 border-400 dropdown-toggle dropdown-caret-none" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="fas fa-plus"></span></button>
-                      <div class="dropdown-menu">
-                        <h6 class="dropdown-header py-0 px-3 mb-0">Select Label</h6>
-                        <div class="dropdown-divider"></div>
-                        <div class="px-3">
-                          <button class="badge-soft-danger dropdown-item rounded-1 mb-2" type="button">New</button>
-                          <button class="badge-soft-primary dropdown-item rounded-1 mb-2" type="button">Goal</button>
-                          <button class="badge-soft-info dropdown-item rounded-1 mb-2" type="button">Enhancement</button>
-                        </div>
-                        <div class="dropdown-divider"></div>
-                        <div class="px-3">
-                          <button class="btn btn-sm d-block w-100 btn-outline-secondary border-400">Create Label</button>
-                        </div>
-                      </div>
-                    </div>
+            <div class="col-lg-12">
+              <form action="/FraisSco" method="post" class="row g-3  justify-content-center">
+                <div class="col-md-4 mt-0">
+                  <label class="form-label" for="Matr">N° Matricule</label>
+                  <input class="form-control" id="MatrFS" name="Matr" onkeyup="CheckMatriculeStatus(this.value)"
+                    type="text" />
+                </div>
+                <div class="col-md-8 mt-0">
+                  <label class="form-label" for="Nom">Nom et Prénoms</label>
+                  <input class="form-control" id="NomFS" name="Nom" type="text" disabled />
+                </div>
+                <div class="col-4 mt-0">
+                  <label class="form-label" for="Date_Paiement">Date de Paiement</label>
+                  <input class="form-control datetimepicker" id="Date_PaiementFS" name="Date_Paiement" type="text"
+                    placeholder="d/m/y" />
+                </div>
+                <div class="col-8 mt-0">
+                  <label class="form-label" for="Adresse">Adresse</label>
+                  <input class="form-control" id="AdresseFS" name="Adresse" type="text" placeholder="Adresse"
+                    disabled />
+                </div>
+                <div class="dropdown-divider mt-2 mb-0"></div>
+                {{#each AutreFS}}
+                <div class="col-3 mt-2 bg-soft-info">
+                  <div class="form-check mt-3 ms-5">
+                    <input class="form-check-input bg-info FS{{ID_autre}}" onclick="CalculateSumFS()"
+                      id="FS{{ID_autre}}" name="{{ID_autre}} {{Label_Autre}}" type="checkbox" value="{{ID_autre}}" />
+                    <label class="form-check-label" for="{{Label_Autre}}">{{Label_Autre}}</label>
                   </div>
-                  <hr class="my-4" />
                 </div>
-              </div>
-              <div class="d-flex"><span class="fa-stack ms-n1 me-3"><i class="fas fa-circle fa-stack-2x text-200"></i><i class="fa-inverse fa-stack-1x text-primary fas fa-align-left" data-fa-transform="shrink-2"></i></span>
-                <div class="flex-1">
-                  <h5 class="mb-2 fs-0">Description</h5>
-                  <p class="text-word-break fs--1">The illustration must match to the contrast of the theme. The illustraion must described the concept of the design. To know more about the theme visit the page. </p>
+                {{/each}}
+                <div class="dropdown-divider mt-2 mb-0"></div>
+                <div class=" mt-1 input-group">
+                  <span class="input-group-text">Montant réçu </span><input class="form-control text-center col-3"
+                    id="ArgentFS" name="Argent" type="text" /><span class="input-group-text">MGA</span>
                 </div>
-              </div>
-            </div>
-            <div class="col-lg-3">
-              <h6 class="mt-5 mt-lg-0">Add To Card</h6>
-              <ul class="nav flex-lg-column fs--1">
-                <li class="nav-item me-2 me-lg-0"><a class="nav-link nav-link-card-details" href="#!"><span class="fas fa-user me-2"></span>Members</a></li>
-                <li class="nav-item me-2 me-lg-0"><a class="nav-link nav-link-card-details" href="#!"><span class="fas fa-tag me-2"></span>Label</a></li>
-                <li class="nav-item me-2 me-lg-0"><a class="nav-link nav-link-card-details" href="#!"><span class="fas fa-paperclip me-2"></span>Attachments</a></li>
-                <li class="nav-item me-2 me-lg-0"><a class="nav-link nav-link-card-details" href="#!"><span class="fa fa-align-left me-2"></span>Description </a></li>
-              </ul>
+                <div class="col-12 d-flex justify-content-end">
+                  <a href="" class="btn btn-falcon-default me-2 mb-1 " data-bs-dismiss="modal" aria-label="Close"
+                    type="button">
+                    <span class="fas fa-times-circle" data-fa-transform="shrink-3"></span>
+                    Annuler
+                  </a>
+                  <button class="btn btn-falcon-primary me-3 mb-1" type="submit">
+                    <span class="fas fa-check" data-fa-transform="shrink-3"></span>
+                    Payer
+                  </button>
+                </div>
+              </form>
             </div>
           </div>
         </div>

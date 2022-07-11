@@ -1,0 +1,353 @@
+<script type="text/javascript">
+  $(function () {
+    $('#RadioAncien').prop('checked', true);
+    $('#Nb_Eco').val('1');
+    $("#Date_insc").flatpickr({
+      dateFormat: "d-m-Y",
+      disableMobile: "true",
+      defaultDate: new Date()
+    });
+    $("#DateJr").flatpickr({
+      dateFormat: "d-m-Y",
+      disableMobile: "true",
+      defaultDate: "{{date}}"
+    });
+    $("#DateCahierJr").flatpickr({
+      dateFormat: "d-m-Y",
+      disableMobile: "true",
+      defaultDate: new Date()
+    });
+    $("#Date_Paiement").flatpickr({
+      dateFormat: "d-m-Y",
+      disableMobile: "true",
+      defaultDate: new Date()
+    });
+    $("#Date_PaiementFS").flatpickr({
+      dateFormat: "d-m-Y",
+      disableMobile: "true",
+      defaultDate: new Date()
+    });
+    $('#Nb_Mois').val('1');
+    togglevisibilityInfo("true");
+    changecolor();
+    var Nb = 0;
+    var Money = document.querySelectorAll('#Money');
+    for (var index = 0; index < Money.length; index++) {
+      T = parseFloat(Money[index].innerHTML);
+      Nb = Nb + T;
+    }
+    $('#MoneyTotal').text("" + separateComma(Nb.toFixed(2)));
+  });
+  function separateComma(val) {
+    // remove sign if negative
+    var sign = 1;
+    if (val < 0) {
+      sign = -1;
+      val = -val;
+    }
+    // trim the number decimal point if it exists
+    let num = val.toString().includes('.') ? val.toString().split('.')[0] : val.toString();
+    let len = num.toString().length;
+    let result = '';
+    let count = 1;
+
+    for (let i = len - 1; i >= 0; i--) {
+      result = num.toString()[i] + result;
+      if (count % 3 === 0 && count !== 0 && i !== 0) {
+        // eto no Reglena hoe virgule ve ny séparateur sa espace
+        result = ' ' + result;
+      }
+      count++;
+    }
+
+    // add number after decimal point
+    if (val.toString().includes('.')) {
+      result = result + '.' + val.toString().split('.')[1];
+    }
+    // return result with - sign if negative
+    return sign < 0 ? '-' + result : result;
+  }
+  function changecolor() {
+    var I = document.querySelectorAll('#INSCRIPTION');
+    var A = document.querySelectorAll('#AutreFrais');
+    var E = document.querySelectorAll('#ECOLAGE');
+    var O = document.querySelectorAll('#Online');
+    var D = document.querySelectorAll('#Direct');
+    for (var index = 0; index < I.length; index++) {
+      I[index].setAttribute("class", "badge badge rounded-pill d-block p-2 badge-soft-primary");
+    }
+    for (var index = 0; index < A.length; index++) {
+      A[index].setAttribute("class", "badge badge rounded-pill d-block p-2 badge-soft-success");
+    }
+    for (var index = 0; index < E.length; index++) {
+      E[index].setAttribute("class", "badge badge rounded-pill d-block p-2 badge-soft-dark");
+    }
+    for (var index = 0; index < O.length; index++) {
+      O[index].setAttribute("class", "badge badge rounded-pill d-block p-2 badge-soft-warning");
+    }
+    for (var index = 0; index < D.length; index++) {
+      D[index].setAttribute("class", "badge badge rounded-pill d-block p-2 badge-soft-secondary");
+    }
+  }
+  function RadioNouveauChanged(t) {
+    togglevisibilityInfo($(t).attr('value'));
+    $.ajax({
+      url: 'getLastMATR', success: function (res) {
+        if (res.length != 0) {
+          $('#Matr').val(res);
+        }
+      }
+    });
+    CleanContent();
+    CalculateSum();
+  }
+  function RadioAncienChanged(t) {
+    togglevisibilityInfo($(t).attr('value'));
+    $('#Matr').val('');
+    CalculateSum();
+  }
+  function togglevisibilityInfo(bool) {
+    var Info = document.querySelectorAll('.inf');
+    if (bool != "true") {
+      for (var index = 0; index < Info.length; index++) {
+        Info[index].style.display = 'block';
+      }
+      disableEleveInfo(false);
+      ToggleCheck("pere");
+      ToggleCheck("mere");
+      ToggleCheck("tuteur");
+    } else {
+      for (var index = 0; index < Info.length; index++) {
+        Info[index].style.display = 'none';
+      }
+      disableEleveInfo(true);
+    }
+  }
+  function disableEleveInfo(bool) {
+    var Info = document.querySelectorAll('.inf-eleve');
+    for (var index = 0; index < Info.length; index++) {
+      Info[index].disabled = bool;
+    }
+  }
+  function Show(t) {
+    var attr = $(t).attr('id');
+    var P = document.getElementById(attr);
+    var Info = document.querySelectorAll('.inf-' + attr);
+    if (P.checked == true) {
+      for (var index = 0; index < Info.length; index++) {
+        Info[index].style.display = 'block';
+      }
+    } else {
+      for (var index = 0; index < Info.length; index++) {
+        Info[index].style.display = 'none';
+      }
+    }
+  }
+  function ToggleCheck(t) {
+    $('#' + t).prop('checked', false);
+    var Info = document.querySelectorAll('.inf-' + t);
+    for (var index = 0; index < Info.length; index++) {
+      Info[index].style.display = 'none';
+    }
+  }
+  function MakeAvance(t) {
+    var av = document.getElementById('avance');
+    var nb = document.querySelector('#Nb_Eco');
+    if (av.checked == true) {
+      $('#Nb_Eco').val('0');
+      nb.disabled = true;
+    } else {
+      $('#Nb_Eco').val('1');
+      nb.disabled = false;
+    }
+    CalculateSum();
+  }
+  function LoadNivInsc() {
+    // any @main.hbs no misy ny APPEL                      
+    $.ajax({
+      url: 'getNiveau', success: function (res) {
+        $('#ID_Niv').html('');
+        var options = '';
+        //options += '<option value="0">Choisr un Niveau</option>'; 
+        for (var i = 0; i < res.length; i++) {
+          options += '<option value="' + res[i].ID_Niv + '">' + res[i].Label_Niv + '</option>';
+        }
+        $('#ID_Niv').append(options);
+        $('#ID_NivECO').append(options);
+      }
+    });
+  }
+  function LoadOBSInsc() {
+    // any @main.hbs no misy ny APPEL                      
+    $.ajax({
+      url: 'getOBS', success: function (res) {
+        $('#ID_Obs').html('');
+        var options = '';
+        options += '<option value="0">Choisr un</option>';
+        for (var i = 0; i < res.length; i++) {
+          options += '<option value="' + res[i].ID_Obs + '">' + res[i].Label_Obs + '</option>';
+        }
+        $('#ID_Obs').append(options);
+        $('#ID_ObsECO').append(options);
+      }
+    });
+  }
+  if (true) {
+    LoadNivInsc();
+    LoadOBSInsc();
+  }
+  function CheckMatricule(val) {
+    CleanContent();
+    $.ajax({
+      url: 'getMATR/' + val, success: function (res) {
+        if (res.length != 0) {
+          $('#Nom').val(res[0].Nom);
+          $('#Prenom').val(res[0].Prenom);
+          $('#Adresse').val(res[0].Adresse);
+          $('#ID_Obs').val(res[0].ID_Obs);
+          CalculateSum();
+        }
+      }
+    });
+  }
+  function CheckMatriculeInfo(val) {
+    CleanContentInfo();
+    $.ajax({
+      url: 'getMATRInfo/' + val, success: function (res) {
+        if (res.length != 0) {
+          $('#NomECO').val(res[0].Nom + " " + res[0].Prenom);
+          $('#AdresseECO').val(res[0].Adresse);
+          $('#ID_ObsECO').val(res[0].ID_Obs);
+          $('#ID_NivECO').val(res[0].ID_Niv);
+          CalculateSumECO();
+}
+      }
+    });
+  }
+  function CleanContent() {
+    $('#Nom').val('');
+    $('#Prenom').val('');
+    $('#Adresse').val('');
+    $('#ID_Obs').val(0);
+  }
+  function CleanContentInfo() {
+    $('#NomECO').val('');
+    $('#AdresseECO').val('');
+    $('#ID_ObsECO').val(0);
+    $('#ID_NivECO').val(0);
+  }
+  function CalculateSum() {
+    var RA = document.getElementById('RadioAncien');
+    var RN = document.getElementById('RadioNouveau');
+    var ID_Niv = $("#ID_Niv").val();
+    var ID_Obs = $("#ID_Obs").val();
+    var Nb = $("#Nb_Eco").val();
+    var type = '';
+    var Total;
+    Total = 0;
+    if (RA.checked) { type = RA.value; }
+    if (RN.checked) { type = RN.value; }
+    $.ajax({
+      url: 'getFraisPrix',
+      type: "POST",
+      data: {
+        ID_Niv: ID_Niv,
+        type: type,
+      },
+      dataType: 'json',
+      success: function (res) {
+        console.log(res[0]);
+        if (res.length != 0) {
+          let montant = parseInt(res[0].montant);
+          let Frais_Sco = parseInt(res[0].Frais_Sco);
+          if (ID_Obs == '1') {
+            Total = montant + (Nb * Frais_Sco);
+          } else if (ID_Obs == '2') {
+            Total = montant + (Nb * (Frais_Sco / 2));
+          } else if (ID_Obs == '3') {
+            Total = montant;
+          }
+        }
+        $("#Argent").val(Total);
+      }
+    });
+    $("#Argent").val(Total);
+  }
+  function CalculateSumECO() {
+    var ID_Niv = $("#ID_NivECO").val();
+    var ID_Obs = $("#ID_ObsECO").val();
+    var Nb = $("#Nb_Mois").val();
+    var Total;
+    Total = 0;
+    $.ajax({
+      url: 'getFraisSco',
+      type: "POST",
+      data: {
+        ID_Niv: ID_Niv,
+      },
+      dataType: 'json',
+      success: function (res) {
+        if (res.length != 0) {
+          let Frais_Sco = parseInt(res[0].Frais_Sco);
+          if (ID_Obs == '1') {
+            Total = (Nb * Frais_Sco);
+          } else if (ID_Obs == '2') {
+            Total = (Nb * (Frais_Sco / 2));
+          } else if (ID_Obs == '3') {
+            Total = 0;
+          }
+        }
+        $("#ArgentEco").val(Total);
+      }
+    });
+    $("#ArgentEco").val(Total);
+  }
+  function CalculateSumFS() {
+    let Id = [];
+    var Total = 0;
+    $.ajax({
+      url: 'getAutreFS', success: function (res) {
+        for (var i = 0; i < res.length; i++) {
+          Id.push("FS" + [res[i].ID_autre]);
+        }
+        Id.forEach((item, index, array) => {
+          if (document.getElementById(item).checked == true && document.getElementById(item).disabled == false) {
+            Total += parseFloat(res[index].cout);
+          }
+        });
+        $("#ArgentFS").val(Total);
+      }
+    });
+  }
+  function CheckMatriculeStatus(val) {
+    CleanContentFS();
+    $.ajax({
+      url: 'getMATR_FS/' + val, success: function (res) {
+        if (res.length != 0) {
+          $('#NomFS').val(res[0].Nom + " " + res[0].Prenom);
+          $('#AdresseFS').val(res[0].Adresse);
+          for (var i = 0; i < res.length; i++) {
+            $('#FS' + res[i].ID_autre).prop('checked', true);
+            document.querySelector('#FS' + res[i].ID_autre).disabled = true;
+          }
+        }
+      }
+    });
+  }
+  function CleanContentFS() {
+    $('#NomFS').val('');
+    $('#AdresseFS').val('');
+    $.ajax({
+      url: 'getAutreFS', success: function (res) {
+        for (var i = 0; i < res.length; i++) {
+          $('#FS' + res[i].ID_autre).prop('checked', false);
+          document.querySelector('#FS' + res[i].ID_autre).disabled = false;
+        }
+      }
+    });
+  }
+  function GetJournalierBydate(date) {
+    const form = document.getElementById('dateform');
+    form.submit();
+  }
+</script>

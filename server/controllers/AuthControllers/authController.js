@@ -25,11 +25,11 @@ exports.loginSubmit = async (req, res) => {
     con.query('SELECT * FROM login WHERE email = ? ', [data.email],
       async function (error, results, fields) {
         if (error) {
-          return res.render('Auth/login', { error: error, data});
+          return res.render('Auth/login', { error: error, data });
         }
         if (results.length > 0) {
           if (!await bcrypt.compare(data.password, results[0].password)) {
-            return res.render('Auth/login', { error: 'Mot de passe incorrect', data});
+            return res.render('Auth/login', { error: 'Mot de passe incorrect', data });
           }
           req.session.loggedin = true;
           req.session.lockScreen = false;

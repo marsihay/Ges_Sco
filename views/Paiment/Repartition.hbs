@@ -1,0 +1,259 @@
+<div class="card mb-3">
+  <div class="bg-holder d-none d-lg-block bg-card"
+    style="background-image:url(http://localhost:3000/assets/img/icons/spot-illustrations/corner-4.png);">
+  </div>
+  <!--/.bg-holder-->
+
+  <div class="card-body position-relative">
+    <div class="row">
+      <div class="col-lg-11">
+        <h3>Repartition des élèves</h3>
+        <p class="mb-0">On Classe ici les élèves inscrit par Classe.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card-body bg-light">
+  <form action="/ClasseRepartition" id="FormRepart" method="POST" class="row g-3">
+    <div class="col-lg-12 me-5">
+      <select id="DropdownClasse" name="ID_C" onchange="loadNum()" class="form-select form-select-lg "
+        aria-label=".form-select-sm example">
+
+      </select>
+    </div>
+    <div class="col-lg-1">
+      <label class="form-label" for="Num1">N°</label>
+      <input class="form-control bg-soft-dark" id="Num1" name="Num1" type="number" autocomplete="off" />
+    </div>
+    <div class="col-lg-2">
+      <label class="form-label" for="Matr1">Matricule</label>
+      <input class="form-control" id="Matr1" name="Matr1" type="text" autocomplete="off" />
+    </div>
+    <div class="col-lg-1">
+      <label class="form-label" for="Num2">N°</label>
+      <input class="form-control bg-soft-dark" id="Num2" name="Num2" type="text" />
+    </div>
+    <div class="col-lg-2">
+      <label class="form-label" for="Matr2">Matricule</label>
+      <input class="form-control" id="Matr2" name="Matr2" type="text" />
+    </div>
+    <div class="col-lg-1">
+      <label class="form-label" for="Num3">N°</label>
+      <input class="form-control bg-soft-dark" id="Num3" name="Num3" type="text" />
+    </div>
+    <div class="col-lg-2">
+      <label class="form-label" for="Matr3">Matricule</label>
+      <input class="form-control" id="Matr3" name="Matr3" type="text" />
+    </div>
+    <div class="col-lg-1">
+      <label class="form-label" for="Num4">N°</label>
+      <input class="form-control bg-soft-dark" id="Num4" name="Num4" type="text" />
+    </div>
+    <div class="col-lg-2">
+      <label class="form-label" for="Matr4">Matricule</label>
+      <input class="form-control" id="Matr4" name="Matr4" type="text" />
+    </div>
+    <hr class="mb-0 navbar-vertical-divider" />
+    <div class="col-lg-1">
+      <label class="form-label" for="Num5">N°</label>
+      <input class="form-control bg-soft-dark" id="Num5" name="Num5" type="number" autocomplete="off" />
+    </div>
+    <div class="col-lg-2">
+      <label class="form-label" for="Matr5">Matricule</label>
+      <input class="form-control" id="Matr5" name="Matr5" type="text" autocomplete="off" />
+    </div>
+    <div class="col-lg-1">
+      <label class="form-label" for="Num6">N°</label>
+      <input class="form-control bg-soft-dark" id="Num6" name="Num6" type="text" />
+    </div>
+    <div class="col-lg-2">
+      <label class="form-label" for="Matr6">Matricule</label>
+      <input class="form-control" id="Matr6" name="Matr6" type="text" />
+    </div>
+    <div class="col-lg-1">
+      <label class="form-label" for="Num7">N°</label>
+      <input class="form-control bg-soft-dark" id="Num7" name="Num7" type="text" />
+    </div>
+    <div class="col-lg-2">
+      <label class="form-label" for="Matr7">Matricule</label>
+      <input class="form-control" id="Matr7" name="Matr7" type="text" />
+    </div>
+    <div class="col-lg-1">
+      <label class="form-label" for="Num8">N°</label>
+      <input class="form-control bg-soft-dark" id="Num8" name="Num8" type="text" />
+    </div>
+    <div class="col-lg-2">
+      <label class="form-label" for="Matr8">Matricule</label>
+      <input class="form-control" id="Matr8" name="Matr8" type="text" />
+    </div>
+    <hr class="mb-0 navbar-vertical-divider" />
+    <div class="col-lg-1">
+      <label class="form-label" for="Num9">N°</label>
+      <input class="form-control bg-soft-dark" id="Num9" name="Num9" type="number" autocomplete="off" />
+    </div>
+    <div class="col-lg-2">
+      <label class="form-label" for="Matr9">Matricule</label>
+      <input class="form-control" id="Matr9" name="Matr9" type="text" autocomplete="off" />
+    </div>
+    <div class="col-lg-1">
+      <label class="form-label" for="Num10">N°</label>
+      <input class="form-control bg-soft-dark" id="Num10" name="Num10" type="text" />
+    </div>
+    <div class="col-lg-2">
+      <label class="form-label" for="Matr10">Matricule</label>
+      <input class="form-control" id="Matr10" name="Matr10" type="text" />
+    </div>
+    <div class="col-lg-1">
+      <label class="form-label" for="Num11">N°</label>
+      <input class="form-control bg-soft-dark" id="Num11" name="Num11" type="text" />
+    </div>
+    <div class="col-lg-2">
+      <label class="form-label" for="Matr11">Matricule</label>
+      <input class="form-control" id="Matr11" name="Matr11" type="text" />
+    </div>
+    <div class="col-lg-1">
+      <label class="form-label" for="Num12">N°</label>
+      <input class="form-control bg-soft-dark" id="Num12" name="Num12" type="text" />
+    </div>
+    <div class="col-lg-2">
+      <label class="form-label" for="Matr12">Matricule</label>
+      <input class="form-control" id="Matr12" name="Matr12" type="text" />
+    </div>
+    <hr class="mb-0 navbar-vertical-divider" />
+    <div class="col-lg-1">
+      <label class="form-label" for="Num13">N°</label>
+      <input class="form-control bg-soft-dark" id="Num13" name="Num13" type="number" autocomplete="off" />
+    </div>
+    <div class="col-lg-2">
+      <label class="form-label" for="Matr13">Matricule</label>
+      <input class="form-control" id="Matr13" name="Matr13" type="text" autocomplete="off" />
+    </div>
+    <div class="col-lg-1">
+      <label class="form-label" for="Num14">N°</label>
+      <input class="form-control bg-soft-dark" id="Num14" name="Num14" type="text" />
+    </div>
+    <div class="col-lg-2">
+      <label class="form-label" for="Matr14">Matricule</label>
+      <input class="form-control" id="Matr14" name="Matr14" type="text" />
+    </div>
+    <div class="col-lg-1">
+      <label class="form-label" for="Num15">N°</label>
+      <input class="form-control bg-soft-dark" id="Num15" name="Num15" type="text" />
+    </div>
+    <div class="col-lg-2">
+      <label class="form-label" for="Matr15">Matricule</label>
+      <input class="form-control" id="Matr15" name="Matr15" type="text" />
+    </div>
+    <div class="col-lg-1">
+      <label class="form-label" for="Num16">N°</label>
+      <input class="form-control bg-soft-dark" id="Num16" name="Num16" type="text" />
+    </div>
+    <div class="col-lg-2">
+      <label class="form-label" for="Matr16">Matricule</label>
+      <input class="form-control" id="Matr16" name="Matr16" type="text" />
+    </div>
+    <hr class="mb-0 navbar-vertical-divider" />
+    <div class="col-12 d-flex justify-content-end">
+
+      <button class="btn btn-primary" type="button" onclick="CheckContent()">Enregistrer</button>
+    </div>
+  </form>
+</div>
+
+<button class="btn btn-primary" id="liveToastBtn" type="button">Show live toast</button>
+<div class="position-fixed bottom-0 left-0 p-3" style="z-index: 5">
+  <div class="toast fade" id="liveToast" role="alert" data-bs-autohide="true" aria-live="assertive" aria-atomic="true">
+    <div class="toast-header bg-primary text-white"><strong class="me-auto">Notification</strong><small>now</small>
+      <button class="btn-close btn-close-white" type="button" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+    <div class="toast-body bg-soft-light" id="textbody">Hello, world! This is a toast message.</div>
+  </div>
+</div>
+
+<script>
+  if (true) {
+    LoadNivInsc();
+    loadNum();
+  }
+  function LoadNivInsc() {
+    $.ajax({
+      url: 'getClasse', success: function (res) {
+        $('#DropdownClasse').html('');
+        var options = '';
+        options += '<option value="0">Choisir une Classe</option>';
+        for (var i = 0; i < res.length; i++) {
+          options += '<option value="' + res[i].ID_C + '">' + res[i].Label_C + '</option>';
+        }
+        $('#DropdownClasse').append(options);
+      }
+    });
+  }
+  function loadNum() {
+    var Id_c = $("#DropdownClasse").val();
+    if (Number(Id_c) == 0) {
+      for (var i = 1; i < 17; i++) {
+        $('#Num' + i).val(i);
+      }
+    } else {
+      console.log(Id_c + " ");
+      $.ajax({
+        url: 'getLastNum',
+        type: "POST",
+        data: {
+          ID_C: Id_c,
+        }, success: function (res) {
+          var last = Number(res);
+          console.log('last ' + last);
+          for (var i = 1; i < 17; i++) {
+            $('#Num' + i).val(last + i);
+          }
+        }
+      });
+    }
+  }
+  function clearNum() {
+    for (var i = 1; i < 17; i++) {
+      $('#Num' + i).val('');
+    }
+  }
+  function CheckContent() {
+    var Id_c = $("#DropdownClasse").val();
+    if (Number(Id_c) == 0) {
+      //Show Toats
+      console.log("show toast: selectionner une classe")
+    } else {
+      for (var i = 1; i < 17; i++) {
+        var N = $('#Num' + i).val();
+        var NM = $('#Matr' + i).val();
+        if (NM != '') {
+          $.ajax({
+            url: 'ChekNumMatr',
+            type: "POST",
+            data: {
+              Num: N,
+              Matr: NM,
+              ID_C: Id_c,
+            }, success: function (res) {
+              let text = "" + res;
+              let Num; let Matr;
+              Num = text.slice(0, text.indexOf(" "));//Get the first part before espace
+              Matr = text.slice(text.indexOf(" "));//Get the first part after espace
+              let pos = 0;
+              let occur = 0;
+              while (true) {//Count the occurence of true
+                let foundPos = text.indexOf('true', pos);
+                if (foundPos == -1) break;
+                occur++;
+                pos = foundPos + 1; // continue the search from the next position
+              }
+              if (occur != 2) {
+                console.log("vérifier " + parseInt(Num) + " " + parseInt(Matr));
+              }
+            }
+          });
+        }
+      }
+    }
+  }
+</script>

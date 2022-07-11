@@ -56,6 +56,45 @@ const PaimentController = require('../controllers/PaimentController');
 
 router.get('/cahierJr', PaimentController.view);
 router.post('/Inscription', PaimentController.Inscrire);
+router.get('/getOBS', PaimentController.GetOBS);
+router.get('/getMATR/:MATR', PaimentController.GetMatriculeInfo);
+router.get('/getMATRInfo/:MATR', PaimentController.GetMatriculeInfoPaiment);
+router.get('/getLastMATR', PaimentController.GetLastMatricule);
+router.post('/getFraisPrix', PaimentController.GetFraisPrix);
+router.post('/getJournalier', PaimentController.GetJournalierView);
+router.post('/getFraisSco', PaimentController.GetFraisScoPrix);
+router.get('/getAutreFS', PaimentController.GetAutrePrix);
+router.get('/getMATR_FS/:MATR', PaimentController.GetMatriculeInfoPaiment);
+router.post('/Ecolage', PaimentController.PayerEcolage);
+router.post('/FraisSco', PaimentController.PayerFraisSco);
+
+// Pour la liste des élèves Inscrits
+
+const EleveInsController = require('../controllers/EleveInscriController');
+
+router.get('/eleveInscris', EleveInsController.view);
+router.post('/FiltreList', EleveInsController.GetListFiltre);
+
+// Pour la liste des élèves Ont fait de l'avance
+
+const DroitIncompletController = require('../controllers/DroitIncompletController');
+
+router.get('/DroitIncommplet', DroitIncompletController.view);
+router.post('/DroitFiltreList', DroitIncompletController.GetListFiltre);
+router.post('/PayerResteDroit', DroitIncompletController.PayerResteDroit);
+//Controller les Frais de Scoalrité
+router.get('/controlerECO', DroitIncompletController.viewECO);
+router.get('/ControlerFRAIS', DroitIncompletController.viewFraisSco);
+
+//Repartition des élèves
+
+const repartitionController = require('../controllers/RepartitionController');
+router.get('/RepartirEleve', repartitionController.view);
+router.get('/getClasse', repartitionController.GetClassList);
+router.post('/getLastNum', repartitionController.GetLastNumClass);
+router.post('/ChekNumMatr', repartitionController.CheckNumClass);
+router.get('/ListeParClasse', repartitionController.viewLIST);
+
 
   
 module.exports = router;

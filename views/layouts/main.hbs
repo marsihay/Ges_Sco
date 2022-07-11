@@ -32,7 +32,6 @@
     <!-- ===============================================-->
     <link href="http://localhost:3000/vendors/flatpickr/flatpickr.min.css" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,500,600,700%7cPoppins:300,400,500,600,700,800,900&amp;display=swap" rel="stylesheet">
     <link href="http://localhost:3000/vendors/overlayscrollbars/OverlayScrollbars.min.css" rel="stylesheet">
     <link href="http://localhost:3000/assets/css/theme-rtl.min.css" rel="stylesheet" id="style-rtl">
     <link href="http://localhost:3000/assets/css/theme.min.css" rel="stylesheet" id="style-default">
@@ -231,7 +230,7 @@
 	$document = $(document);
 
 	$(function() {
-		$.idleTimer( 10*60*1000 ); // ms
+		$.idleTimer( 5*60*1000 ); // ms
     var email="{{user.email}}";
     if(email!= ''){
 		$document.on( 'idle.idleTimer', function() {

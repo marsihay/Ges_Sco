@@ -27,7 +27,7 @@ exports.AddDroit = async (req, res) => {
       let id = await GetLastID("droit", "id");
       let ID_Droit = await GetLastIDwith_AS("droit", "ID_Droit");
       let str = "INSERT INTO `droit`(`id`, `ID_Droit`, `type`, `Label_D`, `montant`, `Id_AS`, `ID_Niv`) VALUES ( "+(++id)+", "+(++ID_Droit)+", 'false', '"+data.Label_NivD+" VAOVAO', "+data.montant0+", "+A_S+", "+data.ID_Niv+");";
-      str += "INSERT INTO `droit`(`id`, `ID_Droit`, `type`, `Label_D`, `montant`, `Id_AS`, `ID_Niv`) VALUES ( "+(++id)+", "+(++ID_Droit)+", 'false', '"+data.Label_NivD+" TRANAINY', "+data.montant+", "+A_S+", "+data.ID_Niv+");";
+      str += "INSERT INTO `droit`(`id`, `ID_Droit`, `type`, `Label_D`, `montant`, `Id_AS`, `ID_Niv`) VALUES ( "+(++id)+", "+(++ID_Droit)+", 'true', '"+data.Label_NivD+" TRANAINY', "+data.montant+", "+A_S+", "+data.ID_Niv+");";
       con.query(str, async (err, rows) => {
                   if (err) {
                         let user = req.session.user;
