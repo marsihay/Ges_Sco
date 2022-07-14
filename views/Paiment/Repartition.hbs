@@ -228,13 +228,25 @@
         var e2 = document.getElementById("Matr" + i);
         var N = $('#Num' + i).val();
         var NM = $('#Matr' + i).val();
-        if (NM != '') {
+        console.log(Number.isInteger(parseInt(N))+" et "+Number.isInteger(parseInt(NM)));
+        if(!Number.isInteger(parseInt(N))){
+                e1.style.borderColor = "red";  
+                var txt = "Le numéro n'est pas un nombre.";
+                ShowaToast(txt, "Danger");   
+        }else if (NM != '') {
+        if(!Number.isInteger(parseInt(NM))){
+                e2.style.borderColor = "red";  
+                var txt = "La matricule n'est pas un nombre.";
+                ShowaToast(txt, "Danger");      
+        }else {
+                e1.style.borderColor = "";
+                e2.style.borderColor = "";
           $.ajax({
             url: 'ChekNumMatr',
             type: "POST",
             data: {
-              Num: N,
-              Matr: NM,
+              Num: parseInt(N),
+              Matr: parseInt(NM),
               ID_C: Id_c,
             },
             async: false, success: function (res) {
@@ -282,23 +294,13 @@
               alert(request.responseText);
             }
           });
+          }
         } else {
           e1.style.borderColor = "";
           e2.style.borderColor = "";
         }
       }
-      {
-        {
-          !-- if (valid == "true") {
-            for (var i = 1; i < 17; i++) {
-              var N = $('#Num' + i).val();
-              var NM = $('#Matr' + i).val();
-              if (NM != '') {
-
-              }
-            }
-          } --}
-      }
+      
     }
   }
 

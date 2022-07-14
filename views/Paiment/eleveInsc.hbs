@@ -30,27 +30,11 @@
                 </select>
               </form>
             </div>
-            <div class="d-none ms-3" id="bulk-select-actions">
-              <div class="d-flex">
-                <select class="form-select form-select-sm" aria-label="Bulk actions">
-                  <option value="selected">Bulk actions</option>
-                  <option value="Delete">Delete</option>
-                  <option value="Archive">Archive</option>
-                </select>
-                <button class="btn btn-falcon-danger btn-sm ms-2" type="button">Apply</button>
-              </div>
-            </div>
           </div>
           <div class="table-responsive scrollbar">
             <table id="dataTables" class="table mb-0">
               <thead class="text-black bg-200">
                 <tr>
-                  <th class="align-middle white-space-nowrap">
-                    <div class="form-check mb-0">
-                      <input class="form-check-input" type="checkbox"
-                        data-bulk-select='{"body":"bulk-select-body","actions":"bulk-select-actions","replacedElement":"bulk-select-replace-element"}' />
-                    </div>
-                  </th>
                   <th class="align-middle ">Nom et Prénoms</th>
                   <th class="align-middle">OBS </th>
                   <th class="align-middle">Adresse</th>
@@ -60,14 +44,8 @@
               <tbody id="bulk-select-body">
                 {{#each list}}
                 <tr id="rw">
-                  <td class="align-middle white-space-nowrap">
-                    <div class="form-check mb-0">
-                      <input class="form-check-input" type="checkbox" id="checkbox-1"
-                        data-bulk-select-row="data-bulk-select-row" value="{{Matr}}" />
-                    </div>
-                  </td>
-                  <th class="align-middle"><span class="d-inline-block text-truncate text-dark"
-                      style="max-width: 500px;">{{Nom}} {{Prenom}}</span></th>
+                  <td class="align-middle"><span class="d-inline-block text-truncate text-dark"
+                      style="max-width: 500px;">{{Nom}} {{Prenom}}</span></td>
                   <td class="align-middle">{{Label_Obs}}</td>
                   <td class="align-middle">{{Adresse}}</td>
                   <td class="align-middle white-space-nowrap text-end pe-3">{{Date_insc}}</td>
