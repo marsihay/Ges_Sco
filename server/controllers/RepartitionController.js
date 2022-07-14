@@ -29,6 +29,20 @@ exports.CheckNumClass = async (req, res) => {
       let result = await CheckThisNum(Num,Matr,ID_C);
       return res.send("" + result);
 }
+exports.SaveNumClass = async (req, res) => {
+      const { Num,Matr,ID_C } = req.body;
+      let A_S = await GetActiveAS();
+      con.query('INSERT INTO `appartenir`(`Matr`, `Id_AS`, `ID_C`, `Num`) VALUES ( ?, ?, ?, ?)',
+            [Matr, A_S,ID_C, Num], async (err, rows) => {
+                  if (err) {
+                        console.log(err);
+                       return res.status(400).send(error);
+                  } else {
+                       return res.status(200).send(rows);
+                  }
+            });
+      
+}
 exports.viewLIST = async (req, res) => {
       if (!req.session.loggedin && !req.session.lockScreen) {
             return res.redirect('/auth/login');
@@ -148,17 +162,31 @@ async function GetLastIDwith_AS(table, champ, ID_C) {
 async function CheckThisNum(Num,Matr,ID_C) {
       let res="";
       let A_S = await GetActiveAS();
+      let str0 = "SELECT * FROM `appartenir` WHERE Matr=" + Matr + " and Id_AS=" + A_S + " ;";
       let str = "SELECT * FROM `appartenir` WHERE Num=" + Num + " and Id_AS=" + A_S + " and Id_C=" + ID_C + ";";
       let str1 = "SELECT * FROM `inscrire` WHERE Matr=" + Matr + " and Id_AS=" + A_S + ";";
+      let nb=0;
       let promise = new Promise((resolve, reject) => {
             con.query(str, function (error, results, fields) {
                         if (error) {
                               console.log(error)
                         }
                         if (results.length > 0) {
-                              //Raha ohatra ka efa misy ilay Num dia return FALSE
-                              res += Num+"false ";
-                        } else res += Num+"true ";
+                              //Raha ohatra ka misy valiny dia efa ao zan ilay Num
+                              nb--;
+                        } else nb++;
+                  });
+                  con.query(str0, function (error, results, fields) {
+                        if (error) {
+                              console.log(error)
+                        }
+                        if (results.length > 0) {
+                              //Raha ohatra ka misy valiny dia efa ao zan ilay Matr
+                              nb--;
+                        } else nb++;
+                        if(nb == 2){
+                              res += Num+"true ";
+                        }else res += Num+"false ";
                   });
                   con.query(str1, function (error, results, fields) {
                               if (error) {

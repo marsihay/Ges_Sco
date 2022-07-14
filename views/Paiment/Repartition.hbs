@@ -160,17 +160,15 @@
     </div>
   </form>
 </div>
-
-<button class="btn btn-primary" id="liveToastBtn" type="button">Show live toast</button>
-<div class="position-fixed bottom-0 left-0 p-3" style="z-index: 5">
+{{!-- Here Code HTML for TOAST --}}
+<div class="position-fixed bottom-0 end-0 p-3" style="z-index: 5">
   <div class="toast fade" id="liveToast" role="alert" data-bs-autohide="true" aria-live="assertive" aria-atomic="true">
-    <div class="toast-header bg-primary text-white"><strong class="me-auto">Notification</strong><small>now</small>
+    <div id="ToastHeader" class=""><strong class="me-auto">Notification</strong><small>now</small>
       <button class="btn-close btn-close-white" type="button" data-bs-dismiss="toast" aria-label="Close"></button>
     </div>
     <div class="toast-body bg-soft-light" id="textbody">Hello, world! This is a toast message.</div>
   </div>
 </div>
-
 <script>
   if (true) {
     LoadNivInsc();
@@ -196,7 +194,6 @@
         $('#Num' + i).val(i);
       }
     } else {
-      console.log(Id_c + " ");
       $.ajax({
         url: 'getLastNum',
         type: "POST",
@@ -204,9 +201,13 @@
           ID_C: Id_c,
         }, success: function (res) {
           var last = Number(res);
-          console.log('last ' + last);
           for (var i = 1; i < 17; i++) {
             $('#Num' + i).val(last + i);
+            $('#Matr' + i).val('');
+            var e1 = document.getElementById("Num" + i);
+            var e2 = document.getElementById("Matr" + i);
+            e1.style.borderColor = "";
+            e2.style.borderColor = "";
           }
         }
       });
@@ -220,10 +221,11 @@
   function CheckContent() {
     var Id_c = $("#DropdownClasse").val();
     if (Number(Id_c) == 0) {
-      //Show Toats
-      console.log("show toast: selectionner une classe")
+      ShowaToast("Séléctionner une classe, s'il vous plait!", "Warning");
     } else {
       for (var i = 1; i < 17; i++) {
+        var e1 = document.getElementById("Num" + i);
+        var e2 = document.getElementById("Matr" + i);
         var N = $('#Num' + i).val();
         var NM = $('#Matr' + i).val();
         if (NM != '') {
@@ -234,7 +236,8 @@
               Num: N,
               Matr: NM,
               ID_C: Id_c,
-            }, success: function (res) {
+            },
+            async: false, success: function (res) {
               let text = "" + res;
               let Num; let Matr;
               Num = text.slice(0, text.indexOf(" "));//Get the first part before espace
@@ -248,12 +251,78 @@
                 pos = foundPos + 1; // continue the search from the next position
               }
               if (occur != 2) {
-                console.log("vérifier " + parseInt(Num) + " " + parseInt(Matr));
+                e1.style.borderColor = "red";
+                e2.style.borderColor = "red";
+                var txt = "Vérifiez bien le numéro et la Matricule coloré en rouge. <br> Peut-être que le numéro est déjà Classé ou la matricule que vous avez inséré ne fait pas une inscription.";
+                ShowaToast(txt, "Danger");
+              } else {
+                e1.style.borderColor = "";
+                e2.style.borderColor = "";
+                // Enregistrena any @Base de Données
+                $.ajax({
+                  url: 'EnregistrerNumEleve',
+                  type: "POST", async: false,
+                  data: {
+                    Num: parseInt(Num),
+                    Matr: parseInt(Matr),
+                    ID_C: Id_c,
+                  }, success: function (res) {
+                    e1.style.borderColor = "green";
+                    e2.style.borderColor = "green";
+                    $('#Matr' + i).val('');
+                    //txt = "Insertion réussi pour ceux qui sont coloré en vert."
+                    //ShowaToast(txt, "Success");
+                  }, error: function (request, status, error) {
+                    e1.style.borderColor = "red";
+                    e2.style.borderColor = "red";
+                  }
+                });
               }
+            }, error: function (request, status, error) {
+              alert(request.responseText);
             }
           });
+        } else {
+          e1.style.borderColor = "";
+          e2.style.borderColor = "";
         }
+      }
+      {
+        {
+          !-- if (valid == "true") {
+            for (var i = 1; i < 17; i++) {
+              var N = $('#Num' + i).val();
+              var NM = $('#Matr' + i).val();
+              if (NM != '') {
+
+              }
+            }
+          } --}
       }
     }
   }
+
+  function ShowaToast(msg, type) {
+    var element = document.getElementById("liveToast");
+    var header = document.getElementById("ToastHeader");
+    var myToast = new bootstrap.Toast(element);
+    if (type == "Danger") {
+      header.setAttribute("class", "toast-header bg-danger text-white");
+    } else if (type == "Warning") {
+      header.setAttribute("class", "toast-header bg-warning text-white");
+    } else if (type == "Success") {
+      header.setAttribute("class", "toast-header bg-success text-white");
+    } else {
+      header.setAttribute("class", "toast-header bg-primary text-white");
+    }
+    $("#textbody").html(msg);
+    myToast.show();
+  }
+
 </script>
+
+
+{{!-- REVOIR le document concernant cet PATTERN
+<input type="text" id="country_code" name="country_code" pattern="[A-Za-z]{3}" title="Three letter country code">
+
+}--}}

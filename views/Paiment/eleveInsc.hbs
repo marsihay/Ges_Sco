@@ -12,7 +12,7 @@
       </div>
       <div class="col-lg-1 text-center">
         <h1 class="mt-3" id="NB">0</h1>
-        </div>
+      </div>
     </div>
   </div>
 </div>
@@ -24,10 +24,11 @@
           <div class="d-flex align-items-center justify-content-end my-3">
             <div id="bulk-select-replace-element">
               <form id="Filtre" action="/FiltreList" method="POST">
-                   <select id="DropdownNiv" onchange="FiltreList()" name="ID_Niv" class="form-select form-select-sm" aria-label=".form-select-sm example">
-                    
-                  </select>
-                  </form>
+                <select id="DropdownNiv" onchange="FiltreList()" name="ID_Niv" class="form-select form-select-sm"
+                  aria-label=".form-select-sm example">
+
+                </select>
+              </form>
             </div>
             <div class="d-none ms-3" id="bulk-select-actions">
               <div class="d-flex">
@@ -57,23 +58,24 @@
                 </tr>
               </thead>
               <tbody id="bulk-select-body">
-              {{#each list}}
+                {{#each list}}
                 <tr id="rw">
                   <td class="align-middle white-space-nowrap">
                     <div class="form-check mb-0">
                       <input class="form-check-input" type="checkbox" id="checkbox-1"
-                        data-bulk-select-row="data-bulk-select-row" value="{{Matr}}"/>
+                        data-bulk-select-row="data-bulk-select-row" value="{{Matr}}" />
                     </div>
                   </td>
-                  <th class="align-middle"><span class="d-inline-block text-truncate text-dark" style="max-width: 500px;">{{Nom}} {{Prenom}}</span></th>
+                  <th class="align-middle"><span class="d-inline-block text-truncate text-dark"
+                      style="max-width: 500px;">{{Nom}} {{Prenom}}</span></th>
                   <td class="align-middle">{{Label_Obs}}</td>
                   <td class="align-middle">{{Adresse}}</td>
                   <td class="align-middle white-space-nowrap text-end pe-3">{{Date_insc}}</td>
                 </tr>
-              {{/each}}
+                {{/each}}
               </tbody>
             </table>
-  </div>
+          </div>
         </div>
       </div>
     </div>
@@ -81,20 +83,20 @@
 </div>
 
 <script>
-  if(true){
-      LoadNivInsc();
-      }
+  if (true) {
+    LoadNivInsc();
+  }
   $(function () {
     var rowtable = document.querySelectorAll('#rw');
     $('#NB').html(rowtable.length);
     $('#DropdownNiv').val(Number('{{ID_Niv}}'));
-    });
-    function LoadNivInsc() {                  
+  });
+  function LoadNivInsc() {
     $.ajax({
       url: 'getNiveau', success: function (res) {
         $('#DropdownNiv').html('');
         var options = '';
-        options += '<option value="0">Tous</option>'; 
+        options += '<option value="0">Tous</option>';
         for (var i = 0; i < res.length; i++) {
           options += '<option value="' + res[i].ID_Niv + '">' + res[i].Label_Niv + '</option>';
         }
@@ -102,23 +104,42 @@
       }
     });
   }
-  function FiltreList(){
+  function FiltreList() {
     const form = document.getElementById('Filtre');
     form.submit();
-    }
+  }
 </script>
 
-    <script type="text/javascript" src="http://localhost:3000/vendors/datatable/JS/jquery.dataTables.js"></script>
-    <link rel="stylesheet" type="text/css" href="http://localhost:3000/vendors/datatable/CSS/jquery.dataTables.css">
-          <script type="text/javascript">var i=1;</script>
-      <script type="text/javascript">
-    $(document).ready(function(){
-      $('#dataTables').DataTable({
+<script type="text/javascript" src="http://localhost:3000/vendors/datatable/JS/jquery.dataTables.js"></script>
+<link rel="stylesheet" type="text/css" href="http://localhost:3000/vendors/datatable/CSS/jquery.dataTables.css">
+<script type="text/javascript">var i = 1;</script>
+<script type="text/javascript">
+  $(document).ready(function () {
+    $('#dataTables').DataTable({
+        "language": {
+          "sProcessing": "Traitement en cours ...",
+          "sLengthMenu": "Afficher _MENU_ lignes",
+          "sZeroRecords": "Aucun résultat trouvé",
+          "sEmptyTable": "Aucune donnée disponible",
+          "sInfo": "Lignes _START_ à _END_ sur _TOTAL_",
+          "sInfoEmpty": "Aucune ligne affichée",
+          "sInfoFiltered": "(Filtrer un maximum de_MAX_)",
+          "sInfoPostFix": "",
+          "sSearch": "Chercher:",
+          "sUrl": "",
+          "sInfoThousands": ",",
+          "sLoadingRecords": "Chargement...",
+          "oPaginate": {
+            "sFirst": "Premier", "sLast": "Dernier", "sNext": "Suivant", "sPrevious": "Précédent"
+          },
+          "oAria": {
+            "sSortAscending": ": Trier par ordre croissant", "sSortDescending": ": Trier par ordre décroissant"
+          }
+        },
         buttons: [
-        'copy'
+          'copy'
         ]
       });
     });
-  
-  </script>
 
+</script>

@@ -93,6 +93,7 @@ router.get('/RepartirEleve', repartitionController.view);
 router.get('/getClasse', repartitionController.GetClassList);
 router.post('/getLastNum', repartitionController.GetLastNumClass);
 router.post('/ChekNumMatr', repartitionController.CheckNumClass);
+router.post('/EnregistrerNumEleve', repartitionController.SaveNumClass);
 router.get('/ListeParClasse', repartitionController.viewLIST);
 
 

@@ -8,11 +8,12 @@
     <div class="row">
       <div class="col-lg-11">
         <h3>Les droits Incomplet</h3>
-        <p class="mb-0">On trouve ici la liste des élèves qui ont des droits Incomplet par niveau dans une année scolaire.</p>
+        <p class="mb-0">On trouve ici la liste des élèves qui ont des droits Incomplet par niveau dans une année
+          scolaire.</p>
       </div>
       <div class="col-lg-1 text-center">
         <h1 class="mt-3" id="NB">0</h1>
-        </div>
+      </div>
     </div>
   </div>
 </div>
@@ -21,13 +22,14 @@
     <div class="card-body">
       <div class="card shadow-none">
         <div class="card-body p-0 pb-3">
-            <div class="d-flex align-items-center justify-content-end my-3">
+          <div class="d-flex align-items-center justify-content-end my-3">
             <div>
               <form id="Filtre" action="/DroitFiltreList" method="POST">
-                   <select id="DropdownNiv" onchange="FiltreList()" name="ID_Niv" class="form-select form-select-sm" aria-label=".form-select-sm example">
-                    
-                  </select>
-                  </form>
+                <select id="DropdownNiv" onchange="FiltreList()" name="ID_Niv" class="form-select form-select-sm"
+                  aria-label=".form-select-sm example">
+
+                </select>
+              </form>
             </div>
           </div>
 
@@ -46,9 +48,10 @@
                 </tr>
               </thead>
               <tbody class="droit">
-              {{#each list}}
+                {{#each list}}
                 <tr id="rw">
-                  <td class="align-middle"><span class="d-inline-block text-truncate text-dark" style="max-width: 500px;">{{Nom}} {{Prenom}}</span></td>
+                  <td class="align-middle"><span class="d-inline-block text-truncate text-dark"
+                      style="max-width: 500px;">{{Nom}} {{Prenom}}</span></td>
                   <td class="align-middle" hidden>{{Matr}}</td>
                   <td class="align-middle">{{Label_Obs}}</td>
                   <td class="align-middle text-dark">MGA {{Decimal avance}}</td>
@@ -56,15 +59,16 @@
                   <td hidden>{{ID_Niv}}</td>
                   <td hidden>{{avance}}</td>
                   <td class="align-middle white-space-nowrap text-end pe-3">
-                    <button class="btn btn-falcon-default rounded-pill me-1 mb-1" type="button" data-bs-toggle="modal" data-bs-target="#avance-modal">
-                    <span class="fas fa-donate me-1" data-fa-transform="shrink-3"></span>Payer le reste
+                    <button class="btn btn-falcon-default rounded-pill me-1 mb-1" type="button" data-bs-toggle="modal"
+                      data-bs-target="#avance-modal">
+                      <span class="fas fa-donate me-1" data-fa-transform="shrink-3"></span>Payer le reste
                     </button>
                   </td>
                 </tr>
-              {{/each}}
+                {{/each}}
               </tbody>
             </table>
-  </div>
+          </div>
         </div>
       </div>
     </div>
@@ -72,9 +76,9 @@
 </div>
 
 <script>
-  if(true){
-      LoadNivInsc();
-      }
+  if (true) {
+    LoadNivInsc();
+  }
   $(function () {
     var rowtable = document.querySelectorAll('#rw');
     $('#NB').html(rowtable.length);
@@ -88,13 +92,13 @@
     for (var index = 0; index < rowtable.length; index++) {
       CheckThis(rowtable[index]);
     }
-    });
-    function LoadNivInsc() {                  
+  });
+  function LoadNivInsc() {
     $.ajax({
       url: 'getNiveau', success: function (res) {
         $('#DropdownNiv').html('');
         var options = '';
-        options += '<option value="0">Tous</option>'; 
+        options += '<option value="0">Tous</option>';
         for (var i = 0; i < res.length; i++) {
           options += '<option value="' + res[i].ID_Niv + '">' + res[i].Label_Niv + '</option>';
         }
@@ -102,140 +106,159 @@
       }
     });
   }
-  function FiltreList(){
+  function FiltreList() {
     const form = document.getElementById('Filtre');
     form.submit();
-    }
-    
-              $('tbody.droit tr').click(
-                function () {
-                  const AV = document.getElementById('av_Droit');
-                  var Matr = $(this).find("td:nth-child(2)").html();
-                  var ancien = $(this).find("td:nth-child(5)").html();
-                  var ID_Niv = $(this).find("td:nth-child(6)").html();
-                  var avance = parseFloat($(this).find("td:nth-child(7)").html()).toFixed(2);
-                    console.log(ID_Niv+" clicked "+ancien);
-                  $('#Matr').val(Matr);
-                  $('#DP_Droit').val(avance);
-                  $.ajax({
-                    url: 'getFraisPrix',
-                    type: "POST",
-                    data: {
-                        ID_Niv: ID_Niv,
-                        type: ancien,
-                    },
-                    dataType: 'json',
-                    success: function (res) {
-                        console.log(res[0]);
-                        if (res.length != 0) {
-                        let montant = parseFloat(res[0].montant).toFixed(2);
-                        $('#T_Droit').val(montant);
-                        $('#RP_Droit').val((montant-avance).toFixed(2));
-                        AV.setAttribute('max',(montant-avance));
-                        }
-                    }
-                    });
-                });
-                function CheckThis(t){
-                  var Matr = $(t).find("td:nth-child(2)").html();
-                  var ancien = $(t).find("td:nth-child(5)").html();
-                  var ID_Niv = $(t).find("td:nth-child(6)").html();
-                  var avance = parseFloat($(t).find("td:nth-child(7)").html()).toFixed(2);
-                  $.ajax({
-                    url: 'getFraisPrix',
-                    type: "POST",
-                    data: {
-                        ID_Niv: ID_Niv,
-                        type: ancien,
-                    },
-                    dataType: 'json',
-                    success: function (res) {
-                        if (res.length != 0) {
-                        let montant = parseFloat(res[0].montant).toFixed(2);
-                          $(t).find("button").show();
-                        if((montant-avance) == 0.00){
-                          t.setAttribute("class", "badge-soft-success");
-                          t.querySelector('button').disabled=true;
-                        }
-                        }
-                    }
-                    });
-                }
-</script>
-    <!-- Modal pour le MOIS -->
-      <div class="modal fade" id="avance-modal" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 500px">
-          <div class="modal-content position-relative">
-            <div class="position-absolute top-0 end-0 mt-2 me-2 z-index-1">
-              <button class="btn-close btn btn-sm btn-circle d-flex flex-center transition-base" data-bs-dismiss="modal"
-                aria-label="Close"></button>
-            </div>
-            <form action="/PayerResteDroit" id="payeReste_Form" method="POST">
-              <div class="modal-body p-0">
+  }
 
-                <div class="rounded-top-lg py-3 ps-4 pe-6 bg-light">
-                  <h4 class="mb-1" id="modalLabel">Payer le reste du droit</h4>
-                </div>
-                <div class="p-4 pb-0">
-                  <div class="mb-0">
-                    <input class="form-control" id="ID_Niv" name="ID_Niv" type="text" hidden/>
-                    <input class="form-control" id="Matr" name="Matr" type="text" hidden/>
-                  </div>
-                  <div class="mb-0">
-                    <label class="col-form-label" for="Label_Eco">Droit Total:</label>
-                    <input class="form-control" id="T_Droit" autocomplete="off" maxlength="9" name="T_Droit"
-                      type="text" disabled/>
-                  </div>
-                  <div class="mb-0">
-                    <label class="col-form-label" for="Label_Eco">Montant déjà payé:</label>
-                    <input class="form-control" id="DP_Droit" autocomplete="off" maxlength="9" name="DP_Droit"
-                      type="text" disabled/>
-                  </div>
-                  <div class="mb-3">
-                    <label class="col-form-label" for="Label_Eco">Montant reste payé:</label>
-                    <input class="form-control" id="RP_Droit" autocomplete="off" maxlength="9" name="RP_Droit"
-                      type="text" disabled/>
-                  </div>
-                  <div class="row g-3 mb-3">
-                  <div class="col-md-4">
-                    <label class="col-form-label" for="date">Date paiement:</label>
-                    <input class="form-control datetimepicker text-center bg-soft-light" id="DatePay" name="date" type="text"
-            placeholder="dd-mm-yyyy" />
-                  </div>
-                  <div class="col-md-8">
-                    <label class="col-form-label" for="Label_Eco">Montant reçu:</label>
-                    <input class="form-control" id="av_Droit" autocomplete="off" maxlength="9" name="av_Droit"
-                     max="" min="1" type="number" />
-                  </div>
-                  </div>
-                </div>
-              </div>
-              <div class="modal-footer">
-                <button class="btn btn-falcon-default me-2 mb-1 " type="button" data-bs-dismiss="modal">
-                  <span class="fas fa-times-circle" data-fa-transform="shrink-3"></span>
-                  Annuler
-                </button>
-                <button class="btn btn-falcon-primary me-3 mb-1" id="btnSub" type="submit">
-                    <span class="fas fa-donate" data-fa-transform="shrink-3"></span>
-                  payer
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
-
-    <script type="text/javascript" src="http://localhost:3000/vendors/datatable/JS/jquery.dataTables.js"></script>
-    <link rel="stylesheet" type="text/css" href="http://localhost:3000/vendors/datatable/CSS/jquery.dataTables.css">
-          <script type="text/javascript">var i=1;</script>
-      <script type="text/javascript">
-    $(document).ready(function(){
-      $('#dataTables').DataTable({
-        buttons: [
-        'copy'
-        ]
+  $('tbody.droit tr').click(
+    function () {
+      const AV = document.getElementById('av_Droit');
+      var Matr = $(this).find("td:nth-child(2)").html();
+      var ancien = $(this).find("td:nth-child(5)").html();
+      var ID_Niv = $(this).find("td:nth-child(6)").html();
+      var avance = parseFloat($(this).find("td:nth-child(7)").html()).toFixed(2);
+      console.log(ID_Niv + " clicked " + ancien);
+      $('#Matr').val(Matr);
+      $('#DP_Droit').val(avance);
+      $.ajax({
+        url: 'getFraisPrix',
+        type: "POST",
+        data: {
+          ID_Niv: ID_Niv,
+          type: ancien,
+        },
+        dataType: 'json',
+        success: function (res) {
+          console.log(res[0]);
+          if (res.length != 0) {
+            let montant = parseFloat(res[0].montant).toFixed(2);
+            $('#T_Droit').val(montant);
+            $('#RP_Droit').val((montant - avance).toFixed(2));
+            AV.setAttribute('max', (montant - avance));
+          }
+        }
       });
     });
-  
-  </script>
+  function CheckThis(t) {
+    var Matr = $(t).find("td:nth-child(2)").html();
+    var ancien = $(t).find("td:nth-child(5)").html();
+    var ID_Niv = $(t).find("td:nth-child(6)").html();
+    var avance = parseFloat($(t).find("td:nth-child(7)").html()).toFixed(2);
+    $.ajax({
+      url: 'getFraisPrix',
+      type: "POST",
+      data: {
+        ID_Niv: ID_Niv,
+        type: ancien,
+      },
+      dataType: 'json',
+      success: function (res) {
+        if (res.length != 0) {
+          let montant = parseFloat(res[0].montant).toFixed(2);
+          $(t).find("button").show();
+          if ((montant - avance) == 0.00) {
+            t.setAttribute("class", "badge-soft-success");
+            t.querySelector('button').disabled = true;
+          }
+        }
+      }
+    });
+  }
+</script>
+<!-- Modal pour le MOIS -->
+<div class="modal fade" id="avance-modal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 500px">
+    <div class="modal-content position-relative">
+      <div class="position-absolute top-0 end-0 mt-2 me-2 z-index-1">
+        <button class="btn-close btn btn-sm btn-circle d-flex flex-center transition-base" data-bs-dismiss="modal"
+          aria-label="Close"></button>
+      </div>
+      <form action="/PayerResteDroit" id="payeReste_Form" method="POST">
+        <div class="modal-body p-0">
 
+          <div class="rounded-top-lg py-3 ps-4 pe-6 bg-light">
+            <h4 class="mb-1" id="modalLabel">Payer le reste du droit</h4>
+          </div>
+          <div class="p-4 pb-0">
+            <div class="mb-0">
+              <input class="form-control" id="ID_Niv" name="ID_Niv" type="text" hidden />
+              <input class="form-control" id="Matr" name="Matr" type="text" hidden />
+            </div>
+            <div class="mb-0">
+              <label class="col-form-label" for="Label_Eco">Droit Total:</label>
+              <input class="form-control" id="T_Droit" autocomplete="off" maxlength="9" name="T_Droit" type="text"
+                disabled />
+            </div>
+            <div class="mb-0">
+              <label class="col-form-label" for="Label_Eco">Montant déjà payé:</label>
+              <input class="form-control" id="DP_Droit" autocomplete="off" maxlength="9" name="DP_Droit" type="text"
+                disabled />
+            </div>
+            <div class="mb-3">
+              <label class="col-form-label" for="Label_Eco">Montant reste payé:</label>
+              <input class="form-control" id="RP_Droit" autocomplete="off" maxlength="9" name="RP_Droit" type="text"
+                disabled />
+            </div>
+            <div class="row g-3 mb-3">
+              <div class="col-md-4">
+                <label class="col-form-label" for="date">Date paiement:</label>
+                <input class="form-control datetimepicker text-center bg-soft-light" id="DatePay" name="date"
+                  type="text" placeholder="dd-mm-yyyy" />
+              </div>
+              <div class="col-md-8">
+                <label class="col-form-label" for="Label_Eco">Montant reçu:</label>
+                <input class="form-control" id="av_Droit" autocomplete="off" maxlength="9" name="av_Droit" max=""
+                  min="1" type="number" />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-falcon-default me-2 mb-1 " type="button" data-bs-dismiss="modal">
+            <span class="fas fa-times-circle" data-fa-transform="shrink-3"></span>
+            Annuler
+          </button>
+          <button class="btn btn-falcon-primary me-3 mb-1" id="btnSub" type="submit">
+            <span class="fas fa-donate" data-fa-transform="shrink-3"></span>
+            payer
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript" src="http://localhost:3000/vendors/datatable/JS/jquery.dataTables.js"></script>
+<link rel="stylesheet" type="text/css" href="http://localhost:3000/vendors/datatable/CSS/jquery.dataTables.css">
+<script type="text/javascript">var i = 1;</script>
+<script type="text/javascript">
+  $(document).ready(function () {
+    $('#dataTables').DataTable({
+      "language": {
+        "sProcessing": "Traitement en cours ...",
+        "sLengthMenu": "Afficher _MENU_ lignes",
+        "sZeroRecords": "Aucun résultat trouvé",
+        "sEmptyTable": "Aucune donnée disponible",
+        "sInfo": "Lignes _START_ à _END_ sur _TOTAL_",
+        "sInfoEmpty": "Aucune ligne affichée",
+        "sInfoFiltered": "(Filtrer un maximum de_MAX_)",
+        "sInfoPostFix": "",
+        "sSearch": "Chercher:",
+        "sUrl": "",
+        "sInfoThousands": ",",
+        "sLoadingRecords": "Chargement...",
+        "oPaginate": {
+          "sFirst": "Premier", "sLast": "Dernier", "sNext": "Suivant", "sPrevious": "Précédent"
+        },
+        "oAria": {
+          "sSortAscending": ": Trier par ordre croissant", "sSortDescending": ": Trier par ordre décroissant"
+        }
+      },
+      buttons: [
+        'copy'
+      ]
+    });
+  });
+
+</script>
