@@ -324,13 +324,19 @@
     $.ajax({
       url: 'getMATR_FS/' + val, success: function (res) {
         if (res.length != 0) {
-          $('#NomFS').val(res[0].Nom + " " + res[0].Prenom);
-          $('#AdresseFS').val(res[0].Adresse);
           for (var i = 0; i < res.length; i++) {
             $('#FS' + res[i].ID_autre).prop('checked', true);
             document.querySelector('#FS' + res[i].ID_autre).disabled = true;
           }
         }
+      }
+    });
+     $.ajax({
+      url: 'getMATRInfo/' + val, success: function (res) {
+        if (res.length != 0) {
+          $('#NomFS').val(res[0].Nom + " " + res[0].Prenom);
+          $('#AdresseFS').val(res[0].Adresse);
+}
       }
     });
   }

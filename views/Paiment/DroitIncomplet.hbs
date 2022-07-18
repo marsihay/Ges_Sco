@@ -37,8 +37,8 @@
             <table id="dataTables" class="table mb-0 table-hover ">
               <thead class="text-black bg-200">
                 <tr>
+                  <th class="align-middle">Matricule</th>
                   <th class="align-middle ">Nom et Prénoms</th>
-                  <th hidden>Matricule</th>
                   <th class="align-middle">OBS </th>
                   <th class="align-middle">Avance Reçu</th>
                   <th hidden>Ancien</th>
@@ -50,9 +50,9 @@
               <tbody class="droit">
                 {{#each list}}
                 <tr id="rw">
+                  <td class="align-middle white-space-nowrap text-end pe-3" >{{Matr}}</td>
                   <td class="align-middle"><span class="d-inline-block text-truncate text-dark"
                       style="max-width: 500px;">{{Nom}} {{Prenom}}</span></td>
-                  <td class="align-middle" hidden>{{Matr}}</td>
                   <td class="align-middle">{{Label_Obs}}</td>
                   <td class="align-middle text-dark">MGA {{Decimal avance}}</td>
                   <td hidden>{{Ancien}}</td>
@@ -114,11 +114,11 @@
   $('tbody.droit tr').click(
     function () {
       const AV = document.getElementById('av_Droit');
-      var Matr = $(this).find("td:nth-child(2)").html();
+      var Matr = $(this).find("td:nth-child(1)").html();
       var ancien = $(this).find("td:nth-child(5)").html();
       var ID_Niv = $(this).find("td:nth-child(6)").html();
       var avance = parseFloat($(this).find("td:nth-child(7)").html()).toFixed(2);
-      console.log(ID_Niv + " clicked " + ancien);
+      console.log(Matr + " clicked " + ancien);
       $('#Matr').val(Matr);
       $('#DP_Droit').val(avance);
       $.ajax({

@@ -58,13 +58,13 @@ router.get('/cahierJr', PaimentController.view);
 router.post('/Inscription', PaimentController.Inscrire);
 router.get('/getOBS', PaimentController.GetOBS);
 router.get('/getMATR/:MATR', PaimentController.GetMatriculeInfo);
-router.get('/getMATRInfo/:MATR', PaimentController.GetMatriculeInfoPaiment);
+router.get('/getMATRInfo/:MATR', PaimentController.GetMatriculeInfoPaimentECO);
 router.get('/getLastMATR', PaimentController.GetLastMatricule);
 router.post('/getFraisPrix', PaimentController.GetFraisPrix);
 router.post('/getJournalier', PaimentController.GetJournalierView);
 router.post('/getFraisSco', PaimentController.GetFraisScoPrix);
 router.get('/getAutreFS', PaimentController.GetAutrePrix);
-router.get('/getMATR_FS/:MATR', PaimentController.GetMatriculeInfoPaiment);
+router.get('/getMATR_FS/:MATR', PaimentController.GetMatriculeInfoPaimentFS);
 router.post('/Ecolage', PaimentController.PayerEcolage);
 router.post('/FraisSco', PaimentController.PayerFraisSco);
 
@@ -85,6 +85,10 @@ router.post('/PayerResteDroit', DroitIncompletController.PayerResteDroit);
 //Controller les Frais de Scoalrité
 router.get('/controlerECO', DroitIncompletController.viewECO);
 router.get('/ControlerFRAIS', DroitIncompletController.viewFraisSco);
+router.get('/getMois', DroitIncompletController.GetMoisList);
+router.post('/EcoFiltreList', DroitIncompletController.GetListECOFiltre);
+router.get('/getLabelAutre', DroitIncompletController.GetFSList);
+router.post('/FSFiltreList', DroitIncompletController.GetListFSFiltre);
 
 //Repartition des élèves
 
@@ -96,6 +100,7 @@ router.post('/ChekNumMatr', repartitionController.CheckNumClass);
 router.post('/EnregistrerNumEleve', repartitionController.SaveNumClass);
 router.get('/ListeParClasse', repartitionController.viewLIST);
 router.post('/FiltreListParClasse', repartitionController.GetListFiltre);
+
 
 
   

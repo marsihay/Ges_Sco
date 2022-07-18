@@ -70,11 +70,26 @@ exports.PayerResteDroit = async (req, res) => {
             let user = await actualizeUser(req.session);
             let A_S = await GetAS();
             let AS = await GetActiveAS();
-            let list=await GetListeECO(AS,1,1);
-            let ID_Niv=1;
-            return res.render('Paiment/ControllerEcolage', { user, A_S, list,ID_Niv});
+            let ID_C=1;
+            let ID_Eco=1;
+            let list=await GetListeECO(AS,ID_C,ID_Eco);
+            return res.render('Paiment/ControllerEcolage', { user, A_S, list,ID_C,ID_Eco});
       }
 }
+exports.GetListECOFiltre = async (req, res) => {
+      if (!req.session.loggedin && !req.session.lockScreen) {
+            return res.redirect('/auth/login');
+      } if (req.session.loggedin && req.session.lockScreen) {
+            return res.redirect('/auth/lock_screen');
+      } else {
+            const { ID_C, ID_Eco } = req.body;
+            let user = await actualizeUser(req.session);
+            let A_S = await GetAS();
+              let AS = await GetActiveAS();
+              let list=await GetListeECO(AS,ID_C,ID_Eco);
+              return res.render('Paiment/ControllerEcolage', { user, A_S, list,ID_C,ID_Eco});
+      }
+  }
 
   // Pour les Autres Frais Scolarité
 
@@ -90,10 +105,33 @@ exports.PayerResteDroit = async (req, res) => {
             let user = await actualizeUser(req.session);
             let A_S = await GetAS();
             let AS = await GetActiveAS();
-            let list=await GetListeECO(AS,1,1);
-            let ID_Niv=1;
-            return res.render('Paiment/ControllerAutreFrais', { user, A_S, list,ID_Niv});
+            let ID_C=1;
+            let ID_autre=1;
+            let list=await GetListeFS(AS,ID_C,ID_autre);
+            return res.render('Paiment/ControllerAutreFrais', { user, A_S, list,ID_C,ID_autre});
       }
+}
+exports.GetListFSFiltre = async (req, res) => {
+      if (!req.session.loggedin && !req.session.lockScreen) {
+            return res.redirect('/auth/login');
+      } if (req.session.loggedin && req.session.lockScreen) {
+            return res.redirect('/auth/lock_screen');
+      } else {
+            const { ID_C, ID_autre } = req.body;
+            let user = await actualizeUser(req.session);
+            let A_S = await GetAS();
+              let AS = await GetActiveAS();
+              let list=await GetListeFS(AS,ID_C,ID_autre);
+              return res.render('Paiment/ControllerAutreFrais', { user, A_S, list,ID_C,ID_autre});
+      }
+  }
+exports.GetMoisList = async (req, res) => {
+      let list = await GetMois();
+      return res.send(list);
+}
+exports.GetFSList = async (req, res) => {
+      let list = await GetFS();
+      return res.send(list);
 }
 async function actualizeUser(session) {
     let promise = new Promise((resolve, reject) => {
@@ -181,10 +219,57 @@ let promise = new Promise((resolve, reject) => {
     });
     return await promise;
 }
-async function GetListeECO(A_S,ID_Niv,ID_Classe) {
+async function GetListeECO(A_S,ID_C,ID_Eco) {
       let str ;
-      str = "SELECT etudiant.ID_Et,etudiant.Matr,etudiant.Nom,etudiant.Prenom,etudiant.Adresse,etudiant.ImgPath,observation.Label_Obs,inscrire.ID_Niv,inscrire.Ancien,SUM(journal_p.Argent) as avance FROM `etudiant`,`inscrire`,`observation`,`journal_p` WHERE (etudiant.Matr=inscrire.Matr) AND (observation.ID_Obs=etudiant.ID_Obs) AND (etudiant.Matr=journal_p.Matr) AND inscrire.Id_AS=" + A_S + " AND inscrire.ID_Niv=" + ID_Niv + " AND journal_p.av_Droit='true' AND journal_p.Droit_Sco='true' GROUP BY etudiant.Matr ORDER BY etudiant.Nom;";
+      str = "SELECT DISTINCT etudiant.ID_Et,etudiant.Matr,etudiant.Nom,etudiant.Prenom,etudiant.Adresse,etudiant.ImgPath,observation.Label_Obs,inscrire.ID_Niv,inscrire.Ancien,appartenir.Num FROM `etudiant`,`inscrire`,`appartenir`,`observation`,`classe` WHERE (etudiant.Matr=inscrire.Matr) AND (etudiant.Matr=appartenir.Matr) AND (appartenir.ID_C=classe.ID_C) AND  (observation.ID_Obs=etudiant.ID_Obs) AND inscrire.Id_AS=" + A_S + " AND appartenir.Id_AS=" + A_S + " AND appartenir.ID_C=" + ID_C + " AND etudiant.Matr Not In (SELECT DISTINCT etudiant.Matr from etudiant,payer_eco,mois_ecolage where etudiant.Matr=payer_eco.Matr and mois_ecolage.ID_Eco=payer_eco.ID_Eco and mois_ecolage.ID_Eco=" + ID_Eco + " AND payer_eco.Id_AS=" + A_S + ") ORDER BY appartenir.Num;";
       
+  let promise = new Promise((resolve, reject) => {
+            con.query(str,
+                  function (error, results, fields) {
+                        if (error) {
+                              console.log(error)
+                        }
+                        if (results.length > 0) {
+                              resolve(results);
+                        } else resolve(null);
+                  });
+      });
+      return await promise;
+  }
+  async function GetMois() {
+      let AS = await GetActiveAS();
+      let promise = new Promise((resolve, reject) => {
+            con.query('SELECT * FROM `mois_ecolage` WHERE Id_AS = ? ORDER BY ID_Eco; ',
+                  [AS], function (error, results, fields) {
+                        if (error) {
+                              console.log(error)
+                        }
+                        if (results.length > 0) {
+                              resolve(results);
+                        } else resolve(null);
+                  });
+      });
+      return await promise;
+}
+async function GetFS() {
+      let AS = await GetActiveAS();
+      let promise = new Promise((resolve, reject) => {
+            con.query('SELECT * FROM `autres_fs` WHERE Id_AS = ? ORDER by ID_autre; ',
+                  [AS], function (error, results, fields) {
+                        if (error) {
+                              console.log(error)
+                        }
+                        if (results.length > 0) {
+                              resolve(results);
+                        } else resolve(null);
+                  });
+      });
+      return await promise;
+}
+async function GetListeFS(A_S,ID_C,ID_autre) {
+      let str ;
+      str = "SELECT DISTINCT etudiant.ID_Et,etudiant.Matr,etudiant.Nom,etudiant.Prenom,etudiant.Adresse,etudiant.ImgPath,observation.Label_Obs,inscrire.ID_Niv,inscrire.Ancien,appartenir.Num FROM `etudiant`,`inscrire`,`appartenir`,`observation`,`classe` WHERE (etudiant.Matr=inscrire.Matr) AND (etudiant.Matr=appartenir.Matr) AND (appartenir.ID_C=classe.ID_C) AND  (observation.ID_Obs=etudiant.ID_Obs) AND inscrire.Id_AS="+A_S+" AND appartenir.Id_AS="+A_S+" AND appartenir.ID_C="+ID_C+" and etudiant.Matr Not In (SELECT DISTINCT etudiant.Matr from etudiant,payer_autre,autres_fs where etudiant.Matr=payer_autre.Matr and autres_fs.ID_autre=payer_autre.id_Autre and autres_fs.ID_autre="+ID_autre+" AND payer_autre.Id_AS="+A_S+") ORDER BY appartenir.Num;";
+
   let promise = new Promise((resolve, reject) => {
             con.query(str,
                   function (error, results, fields) {

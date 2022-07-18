@@ -107,9 +107,14 @@ exports.GetMatriculeInfo = async (req, res) => {
       let info = await GetMatrInfo(matr);
       return res.send(info);
 }
-exports.GetMatriculeInfoPaiment = async (req, res) => {
+exports.GetMatriculeInfoPaimentECO = async (req, res) => {
       let matr = req.params.MATR;
-      let info = await GetMatrInfoPaiement(matr);
+      let info = await GetMatrInfoPaiementECO(matr);
+      return res.send(info);
+}
+exports.GetMatriculeInfoPaimentFS = async (req, res) => {
+      let matr = req.params.MATR;
+      let info = await GetMatrInfoPaiementFS(matr);
       return res.send(info);
 }
 exports.GetLastMatricule = async (req, res) => {
@@ -237,7 +242,22 @@ async function GetMatrInfo(matr) {
       });
       return await promise;
 }
-async function GetMatrInfoPaiement(matr) {
+async function GetMatrInfoPaiementECO(matr) {
+      let A_S = await GetActiveAS();
+      let promise = new Promise((resolve, reject) => {
+            con.query('SELECT etudiant.ID_Et,etudiant.Nom,etudiant.Prenom,etudiant.Adresse,etudiant.ImgPath,etudiant.ID_Obs,inscrire.ID_Niv FROM `etudiant`,`inscrire` WHERE (etudiant.Matr=inscrire.Matr) AND etudiant.Matr=? AND inscrire.Id_AS=?; ',
+                  [matr, A_S], function (error, results, fields) {
+                        if (error) {
+                              console.log(error)
+                        }
+                        if (results.length > 0) {
+                              resolve(results);
+                        } else resolve(null);
+                  });
+      });
+      return await promise;
+}
+async function GetMatrInfoPaiementFS(matr) {
       let A_S = await GetActiveAS();
       let promise = new Promise((resolve, reject) => {
             con.query('SELECT etudiant.ID_Et,etudiant.Nom,etudiant.Prenom,etudiant.Adresse,etudiant.ImgPath,etudiant.ID_Obs,inscrire.ID_Niv,payer_autre.ID_autre FROM `etudiant`,`inscrire`,`payer_autre` WHERE (etudiant.Matr=inscrire.Matr) AND (etudiant.Matr=payer_autre.Matr) AND etudiant.Matr=? AND inscrire.Id_AS=?; ',
