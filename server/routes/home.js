@@ -102,6 +102,18 @@ router.get('/ListeParClasse', repartitionController.viewLIST);
 router.post('/FiltreListParClasse', repartitionController.GetListFiltre);
 
 
+// Pour le Renseignement
+
+const InfoController = require('../controllers/RenseignementController');
+router.get('/renseignement', InfoController.view);
+router.get('/parentListe', InfoController.viewParent);
+router.post('/FiltreListParent', InfoController.GetListParent);
+
+// Pour L'exportation en PDF
+
+const ExportController = require('../controllers/ExportController');
+router.get('/exporterPDF', ExportController.view);
+
 
   
 module.exports = router;

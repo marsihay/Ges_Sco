@@ -1,0 +1,130 @@
+<div class="card mb-3">
+  <div class="bg-holder d-none d-lg-block bg-card"
+    style="background-image:url(http://localhost:3000/assets/img/icons/spot-illustrations/corner-4.png);">
+  </div>
+  <!--/.bg-holder-->
+
+  <div class="card-body position-relative">
+    <div class="row">
+      <div class="col-lg-11">
+        <h3>Parent</h3>
+        <p class="mb-0">On trouve ici la liste des parents des élèves.</p>
+      </div>
+      <div class="col-lg-1 text-center">
+        <h1 class="mt-3" id="NB">0</h1>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="col-sm-12 col-lg-12 mb-12 mb-2">
+  <div class="card border h-100 border-light">
+    <div class="card-body">
+      <div class="d-flex align-items-center justify-content-end my-3">
+        <div>
+          <form id="Filtre" action="/FiltreListParent" method="POST">
+            <select id="DropdownParent" onchange="FiltreList()" name="role" class="form-select form-select-sm"
+              aria-label=".form-select-sm example">
+              <option value="">Tous</option>
+              <option value="Pere">Père</option>
+              <option value="Mere">Mère</option>
+              <option value="Tuteur">Tuteur</option>
+            </select>
+          </form>
+        </div>
+      </div>
+      <div class="table-responsive scrollbar">
+        <table id="dataTables" class="table table-hover table-striped overflow-hidden">
+          <thead>
+            <tr>
+              <th scope="col">Name</th>
+              <th scope="col">Email</th>
+              <th scope="col">Phone 1</th>
+              <th scope="col">Phone 2</th>
+              <th scope="col">Phone 3</th>
+              <th class="col">Son élève</th>
+              <th class="text-end" scope="col">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {{#each list}}
+            <tr id="rw" class="align-middle">
+              <td class="text-nowrap">
+                <div class="d-flex align-items-center">
+                  <div class="avatar avatar-xl">
+                    <img class="rounded-circle"
+                      src="http://localhost:3000/assets/img/icons/spot-illustrations/Marsihay.png" alt="" />
+                  </div>
+                  <div class="ms-2">{{Nom_P}} {{Prenom_P}}</div>
+                </div>
+              </td>
+              <td class="text-nowrap">{{email}}</td>
+              <td class="text-nowrap">{{Tel_1}}</td>
+              <td class="text-nowrap">{{Tel_2}}</td>
+              <td class="text-nowrap">{{Tel_3}}</td>
+              <td>
+                <span class="badge badge rounded-pill d-block p-2 badge-soft-success">{{Matr}}</span>
+              </td>
+              <td class="text-end">
+                <button class="btn px-2" type="button" onclick="ModClasse(this.parentNode.parentNode)" title="Edit">
+                  <span class="text-500 fas fa-edit"></span>
+                </button>
+                <button class="btn px-2" type="button" onclick="SupClasse(this.parentNode.parentNode)"
+                  title="Supprimer">
+                  <span class="text-500 fas fa-trash-alt"></span>
+                </button>
+              </td>
+            </tr>
+            {{/each}}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script>
+  $(function () {
+    var rowtable = document.querySelectorAll('#rw');
+    $('#NB').html(rowtable.length);
+    $('#DropdownParent').val('{{role}}');
+  });
+  function FiltreList() {
+    const form = document.getElementById('Filtre');
+    form.submit();
+  }
+</script>
+<script type="text/javascript" src="http://localhost:3000/vendors/datatable/JS/jquery.dataTables.js"></script>
+<link rel="stylesheet" type="text/css" href="http://localhost:3000/vendors/datatable/CSS/jquery.dataTables.css">
+<script type="text/javascript">var i = 1;</script>
+<script type="text/javascript">
+  $(document).ready(function () {
+    $('#dataTables').DataTable({
+      "language": {
+        "sProcessing": "Traitement en cours ...",
+        "sLengthMenu": "Afficher _MENU_ lignes",
+        "sZeroRecords": "Aucun résultat trouvé",
+        "sEmptyTable": "Aucune donnée disponible",
+        "sInfo": "Lignes _START_ à _END_ sur _TOTAL_",
+        "sInfoEmpty": "Aucune ligne affichée",
+        "sInfoFiltered": "(Filtrer un maximum de_MAX_)",
+        "sInfoPostFix": "",
+        "sSearch": "Chercher:",
+        "sUrl": "",
+        "sInfoThousands": ",",
+        "sLoadingRecords": "Chargement...",
+        "oPaginate": {
+          "sFirst": "Premier", "sLast": "Dernier", "sNext": "Suivant", "sPrevious": "Précédent"
+        },
+        "oAria": {
+          "sSortAscending": ": Trier par ordre croissant", "sSortDescending": ": Trier par ordre décroissant"
+        }
+      },
+      buttons: [
+        'copy'
+      ]
+    });
+  });
+
+</script>
