@@ -14,6 +14,10 @@ const storage = multer.diskStorage({
     })
 const upload = multer({ storage: storage })
 
+//Pour les BAR de Rechercher
+router.get('/getAllStudentsActive', homeController.GetAllActif);
+router.get('/getAllStudentsAncien', homeController.GestAllInactif);
+
 // Routes pour HOME
 router.get('/', homeController.HomeRedirect);
 router.get('/home', homeController.view);

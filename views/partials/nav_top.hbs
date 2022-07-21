@@ -23,7 +23,7 @@
           <div class="btn-close-falcon" aria-label="Close"></div>
         </div>
         <div class="dropdown-menu border font-base start-0 mt-2 py-0 overflow-hidden w-100">
-          <div class="scrollbar list py-3" style="max-height: 24rem;">
+          <div id="AllStudents" class="scrollbar list py-3" style="max-height: 24rem;">
             
             <h6 class="dropdown-header fw-medium text-uppercase px-card fs--2 pt-0 pb-2">élèves</h6>
             <a class="dropdown-item px-card py-2" href="Renseignement/Matricule476">
@@ -238,3 +238,53 @@
     </li>
   </ul>
 </nav>
+
+  {{!-- Script pour le Bar de Recherche --}}
+  <script>
+    if(true) {
+      LoadElevesMatr();
+    }
+    function LoadElevesMatr() {
+    $.ajax({
+      url: 'getAllStudentsActive', success: function (res) {
+        $('#AllStudents').html('');
+        var options = '';
+        options += '<h6 class="dropdown-header fw-medium text-uppercase px-card fs--2 pt-0 pb-2">élèves Inscrit</h6>';
+        for (var i = 0; i < res.length; i++) {
+          options += '<a class="dropdown-item px-card py-2" href="Renseignement/'+res[i].Matr+'">'
+             +' <div class="d-flex align-items-center">'
+             +' <div class="avatar avatar-l status-online me-2">';
+          options += (res[i].ImgPath == '') ? ' <img class="rounded-circle" src="http://localhost:3000/assets/img/icons/spot-illustrations/Marsihay.png" alt="" />' : ' <img class="rounded-circle" src="http://localhost:3000/'+res[i].ImgPath+'" alt="" />';
+          options +=  '</div>'
+             +   '<div class="flex-1">'
+             +    '<h6 class="mb-0 title">'+res[i].Matr +' - '+res[i].Nom +' '+res[i].Prenom+'</h6>';
+          options += (res[i].Date_naissance == null) ? '<p class="fs--2 mb-0 d-flex">'+res[i].Label_Obs +'</p>' : '<p class="fs--2 mb-0 d-flex">'+res[i].Label_Obs +' ('+res[i].Date_naissance+')'+'</p>';
+          options += '</div>'
+             + '</div>'
+            +'</a>';
+        }
+        $('#AllStudents').append(options);
+      }
+    });
+    $.ajax({      
+      url: 'getAllStudentsAncien', success: function (res) {  
+        var options = '';
+        options += '<h6 class="dropdown-header fw-medium text-uppercase px-card fs--2 pt-0 pb-2">ancien élèves</h6>';
+        for (var i = 0; i < res.length; i++) {
+          options += '<a class="dropdown-item px-card py-2" href="Renseignement/'+res[i].Matr+'">'
+             +' <div class="d-flex align-items-center">'
+             +' <div class="avatar avatar-l status-online me-2">';
+          options += (res[i].ImgPath == '') ? ' <img class="rounded-circle" src="http://localhost:3000/assets/img/icons/spot-illustrations/Marsihay.png" alt="" />' : ' <img class="rounded-circle" src="http://localhost:3000/'+res[i].ImgPath+'" alt="" />';
+          options +=  '</div>'
+             +   '<div class="flex-1">'
+             +    '<h6 class="mb-0 title">'+res[i].Matr +' - '+res[i].Nom +' '+res[i].Prenom+'</h6>';
+          options += (res[i].Date_naissance == null) ? '<p class="fs--2 mb-0 d-flex">'+res[i].Label_Obs +'</p>' : '<p class="fs--2 mb-0 d-flex">'+res[i].Label_Obs +' ('+res[i].Date_naissance+')'+'</p>';
+          options += '</div>'
+             + '</div>'
+            +'</a>';
+        }
+        $('#AllStudents').append(options);
+      }
+    });
+  }
+  </script>
