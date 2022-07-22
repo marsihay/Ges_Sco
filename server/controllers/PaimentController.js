@@ -227,7 +227,7 @@ async function GetOBS() {
       });
       return await promise;
 }
-async function GetMatrInfo(matr) {
+var getmatr=async function GetMatrInfo(matr) {
       let A_S = await GetActiveAS();
       let promise = new Promise((resolve, reject) => {
             con.query('SELECT * FROM `etudiant` WHERE Matr=?; ',
@@ -242,7 +242,10 @@ async function GetMatrInfo(matr) {
       });
       return await promise;
 }
+module.exports.GetMatrInfo=getmatr;
+
 async function GetMatrInfoPaiementECO(matr) {
+      console.log("MATR 0"+matr);
       let A_S = await GetActiveAS();
       let promise = new Promise((resolve, reject) => {
             con.query('SELECT etudiant.ID_Et,etudiant.Nom,etudiant.Prenom,etudiant.Adresse,etudiant.ImgPath,etudiant.ID_Obs,inscrire.ID_Niv FROM `etudiant`,`inscrire` WHERE (etudiant.Matr=inscrire.Matr) AND etudiant.Matr=? AND inscrire.Id_AS=?; ',
@@ -257,6 +260,7 @@ async function GetMatrInfoPaiementECO(matr) {
       });
       return await promise;
 }
+
 async function GetMatrInfoPaiementFS(matr) {
       let A_S = await GetActiveAS();
       let promise = new Promise((resolve, reject) => {

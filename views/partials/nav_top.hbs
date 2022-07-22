@@ -246,12 +246,12 @@
     }
     function LoadElevesMatr() {
     $.ajax({
-      url: 'getAllStudentsActive', success: function (res) {
+      url: '/getAllStudentsActive', success: function (res) {
         $('#AllStudents').html('');
         var options = '';
         options += '<h6 class="dropdown-header fw-medium text-uppercase px-card fs--2 pt-0 pb-2">élèves Inscrit</h6>';
         for (var i = 0; i < res.length; i++) {
-          options += '<a class="dropdown-item px-card py-2" href="Renseignement/'+res[i].Matr+'">'
+          options += '<a class="dropdown-item px-card py-2" href="/Renseignement/'+res[i].Matr+'">'
              +' <div class="d-flex align-items-center">'
              +' <div class="avatar avatar-l status-online me-2">';
           options += (res[i].ImgPath == '') ? ' <img class="rounded-circle" src="http://localhost:3000/assets/img/icons/spot-illustrations/Marsihay.png" alt="" />' : ' <img class="rounded-circle" src="http://localhost:3000/'+res[i].ImgPath+'" alt="" />';
@@ -267,11 +267,11 @@
       }
     });
     $.ajax({      
-      url: 'getAllStudentsAncien', success: function (res) {  
+      url: '/getAllStudentsAncien', success: function (res) {  
         var options = '';
         options += '<h6 class="dropdown-header fw-medium text-uppercase px-card fs--2 pt-0 pb-2">ancien élèves</h6>';
         for (var i = 0; i < res.length; i++) {
-          options += '<a class="dropdown-item px-card py-2" href="Renseignement/'+res[i].Matr+'">'
+          options += '<a class="dropdown-item px-card py-2" href="/Renseignement/'+res[i].Matr+'">'
              +' <div class="d-flex align-items-center">'
              +' <div class="avatar avatar-l status-offline me-2">';
           options += (res[i].ImgPath == '') ? ' <img class="rounded-circle" src="http://localhost:3000/assets/img/icons/spot-illustrations/Marsihay.png" alt="" />' : ' <img class="rounded-circle" src="http://localhost:3000/'+res[i].ImgPath+'" alt="" />';

@@ -1,4 +1,5 @@
 const con = require('./db');
+const {actualizeUser} = require('./Shared/Handyfunction');
 exports.view = async (req, res) => {
       if (!req.session.loggedin && !req.session.lockScreen) {
             return res.redirect('/auth/login');
@@ -8,10 +9,14 @@ exports.view = async (req, res) => {
             req.session.lockScreen = false;
             req.session.loggedin = true;
             req.session.current_url = req.url;
+            let Matr= req.params.Matr;
             let user = await actualizeUser(req.session);
             let A_S = await GetAS();
             let AS = await GetActiveAS();
-            return res.render('Setting/ProfileEleve', { user, A_S });
+            let result= await GetMatrInfoSearch(Matr);
+            let etudiant=result[0];
+            let journal = await GetMatrJournal(Matr,AS);
+            return res.render('Setting/ProfileEleve', { user, A_S , etudiant,journal});
       }
 }
 exports.viewParent = async (req, res) => {
@@ -45,22 +50,6 @@ exports.GetListParent = async (req, res) => {
             return res.render('Setting/Parent', { user, A_S,list,role });
       }
   }
-async function actualizeUser(session) {
-    let promise = new Promise((resolve, reject) => {
-          con.query('SELECT * FROM login WHERE id = ? ', [session.user.id],
-                function (error, results, fields) {
-                      if (error) {
-                            console.log(error)
-                      }
-                      if (results.length > 0) {
-                            const { password, ...user } = results[0];
-                            session.user = user;
-                            resolve(user);
-                      }
-                });
-    });
-    return await promise;
-}
 
 var GetAS = async function GetAS() {
     let promise = new Promise((resolve, reject) => {
@@ -135,3 +124,31 @@ async function GetListe(A_S,role) {
       });
       return await promise;
   }
+  async function GetMatrInfoSearch(matr) {
+      let promise = new Promise((resolve, reject) => {
+            con.query('SELECT DISTINCT etudiant.Matr,etudiant.Nom,etudiant.Prenom,etudiant.Date_naissance,etudiant.Lieu_naissance,etudiant.Adresse,etudiant.ImgPath,observation.Label_Obs FROM etudiant,observation WHERE etudiant.ID_Obs=observation.ID_Obs AND etudiant.Matr=?; ',
+                  [matr], function (error, results, fields) {
+                        if (error) {
+                              console.log(error)
+                        }
+                        if (results.length > 0) {
+                              resolve(results);
+                        } else resolve(null);
+                  });
+      });
+      return await promise;
+}
+async function GetMatrJournal(matr,A_S) {
+      let promise = new Promise((resolve, reject) => {
+            con.query('SELECT * FROM `journal_p` where journal_p.Matr=? AND journal_p.Id_AS=? ORDER BY ID_Journal; ',
+                  [matr,A_S], function (error, results, fields) {
+                        if (error) {
+                              console.log(error)
+                        }
+                        if (results.length > 0) {
+                              resolve(results);
+                        } else resolve(null);
+                  });
+      });
+      return await promise;
+}

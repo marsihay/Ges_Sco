@@ -109,7 +109,7 @@ router.post('/FiltreListParClasse', repartitionController.GetListFiltre);
 // Pour le Renseignement
 
 const InfoController = require('../controllers/RenseignementController');
-router.get('/renseignement', InfoController.view);
+router.get('/Renseignement/:Matr', InfoController.view);
 router.get('/parentListe', InfoController.viewParent);
 router.post('/FiltreListParent', InfoController.GetListParent);
 
