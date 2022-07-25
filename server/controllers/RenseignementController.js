@@ -52,6 +52,40 @@ exports.GetListParent = async (req, res) => {
             return res.render('Setting/Parent', { user, A_S,list,role });
       }
   }
+  exports.updateParent = (req, res) => {
+      console.log(req.body);
+      const { ID_P,Nom_P, Prenom_P,email,Tel_1,Tel_2,Tel_3 } = req.body;
+      // User the connection
+      con.query('UPDATE `parent` SET Nom_P=?,Prenom_P=?,email=?,Tel_1=?,Tel_2=?,Tel_3=? WHERE ID_P=?;',
+            [Nom_P,Prenom_P,email,Tel_1,Tel_2,Tel_3,ID_P], async (err, rows) => {
+                  if (err) {
+                        console.log(err);
+                        let user = req.session.user;
+                        let A_S = await GetAS();
+                        return res.render('Setting/Parent', { user, A_S, error: "Modification échoué" });
+                  } else {
+                        return res.redirect('/parentListe');
+                  }
+            });
+}
+
+exports.delParent = async (req, res) => {
+      const { ID_P } = req.body;
+      let str='';
+      str+="DELETE FROM `parent` WHERE ID_P=" +ID_P+ ";";
+      str+="DELETE FROM `parenté` WHERE ID_P=" +ID_P+ ";";
+      // User the connection
+      con.query(str, async (err, rows) => {
+                  if (err) {
+                        let user = req.session.user;
+                        console.log(err);
+                        let A_S = await GetAS();
+                        return res.render('Setting/Parent', { user, A_S, error: "Suppression échoué" });
+                  } else {
+                        return res.redirect('/parentListe');
+                  }
+            });
+}
 
 var GetAS = async function GetAS() {
     let promise = new Promise((resolve, reject) => {

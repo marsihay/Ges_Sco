@@ -38,6 +38,9 @@
           <thead>
             <tr>
               <th scope="col">Name</th>
+              <th hidden>ID_P</th>
+              <th hidden>NOM_P</th>
+              <th hidden>Prenom_P</th>
               <th scope="col">Email</th>
               <th scope="col">Phone 1</th>
               <th scope="col">Phone 2</th>
@@ -50,14 +53,11 @@
             {{#each list}}
             <tr id="rw" class="align-middle">
               <td class="text-nowrap">
-                <div class="d-flex align-items-center">
-                  <div class="avatar avatar-xl">
-                    <img class="rounded-circle"
-                      src="http://localhost:3000/assets/img/icons/spot-illustrations/Marsihay.png" alt="" />
-                  </div>
-                  <div class="ms-2">{{Nom_P}} {{Prenom_P}}</div>
-                </div>
+                {{Nom_P}} {{Prenom_P}}
               </td>
+              <td class="text-nowrap" hidden>{{ID_P}}</td>
+              <td class="text-nowrap" hidden>{{Nom_P}}</td>
+              <td class="text-nowrap" hidden>{{Prenom_P}}</td>
               <td class="text-nowrap">{{email}}</td>
               <td class="text-nowrap">{{Tel_1}}</td>
               <td class="text-nowrap">{{Tel_2}}</td>
@@ -84,6 +84,64 @@
 </div>
 
 
+    <!-- MODAL POUR PARENT-->
+    <div class="modal fade" id="Parent-modal" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 500px">
+        <div class="modal-content position-relative">
+          <div class="position-absolute top-0 end-0 mt-2 me-2 z-index-1">
+            <button class="btn-close btn btn-sm btn-circle d-flex flex-center transition-base" data-bs-dismiss="modal"
+              aria-label="Close"></button>
+          </div>
+          <form action="" id="ParentForm" method="POST">
+            <div class="modal-body p-0">
+
+              <div class="rounded-top-lg py-3 ps-4 pe-6 bg-light">
+                <h4 class="mb-1" id="modalLabel"></h4>
+              </div>
+              <div class="px-4 pb-0 ">
+                <h5 class="text-danger text-center" id="askTEXT">Voulez-vous le supprimer vraiment?</h5>
+                <div class="col-md-12 mt-0 bg-light">
+                  <label class="form-label" for="Nom_P">Nom</label>
+                  <input class="form-control" id="ID_P" name="ID_P" type="number" hidden/>
+                  <input class="form-control" id="Nom_P" name="Nom_P" type="text" />
+                </div>
+                <div class="col-md-12 mt-0 bg-light">
+                  <label class="form-label" for="Prenom_P">Prénoms</label>
+                  <input class="form-control" id="Prenom_P" name="Prenom_P" type="text" />
+                </div>
+                <div class="col-12 mt-0 bg-light">
+                  <label class="form-label" for="email">Email</label>
+                  <input class="form-control" id="email" name="email" type="email"
+                    placeholder="" />
+                </div>
+                <div class="col-md-12 mt-0 bg-light">
+                  <label class="form-label" for="Tel_1">Téléphone 1</label>
+                  <input class="form-control" id="Tel_1" name="Tel_1" type="text" />
+                </div>
+                <div class="col-md-12 mt-0 bg-light">
+                  <label class="form-label" for="Tel_2">Téléphone 2</label>
+                  <input class="form-control" id="Tel_2" name="Tel_2" type="text" />
+                </div>
+                <div class="col-md-12 mt-0 bg-light mb-2">
+                  <label class="form-label" for="Tel_3">Téléphone 3</label>
+                  <input class="form-control" id="Tel_3" name="Tel_3" type="text" />
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button class="btn btn-falcon-default me-2 mb-1 " type="button" data-bs-dismiss="modal">
+                Annuler
+              </button>
+              <button class="btn btn-falcon-primary me-3 mb-1" type="submit" id="btnSubClasse">
+                Update
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+
 <script>
   $(function () {
     var rowtable = document.querySelectorAll('#rw');
@@ -94,6 +152,53 @@
     const form = document.getElementById('Filtre');
     form.submit();
   }
+                var c = document.getElementById("ParentForm");
+  function ModClasse(ligne) {
+                  c.setAttribute("action", "/ModParent");
+                  $("#modalLabel").html("Modification");
+                  $("#btnSubClasse").html("Enregistrer");
+                  setValueC(ligne); disableC(false);
+                  $("#Parent-modal").modal('toggle');
+                }
+                function SupClasse(ligne) {
+                  c.setAttribute("action", "/DelParent");
+                  $("#modalLabel").html("Suppression");
+                  $("#btnSubClasse").html("Supprimer");
+                  setValueC(ligne);
+                  disableC(true);
+                  $("#Parent-modal").modal('toggle');
+                }
+                function setValueC(ligne) {
+                  var id = ligne.cells[1].innerText;
+                  var nom = ligne.cells[2].innerText;
+                  var prenom = ligne.cells[3].innerText;
+                  var email = ligne.cells[4].innerText;
+                  var tel1 = ligne.cells[5].innerText;
+                  var tel2 = ligne.cells[6].innerText;
+                  var tel3 = ligne.cells[7].innerText;
+                  $('#ID_P').val(id);
+                  $('#Nom_P').val(nom);
+                  $("#Prenom_P").val(prenom);
+                  $('#email').val(email);
+                  $('#Tel_1').val(tel1);
+                  $("#Tel_2").val(tel2);
+                  $("#Tel_3").val(tel3);
+                }
+                function disableC(bool) {
+                  if (bool) {
+                    //document.getElementById('askTEXT').style.visibility = 'visible';
+                    document.getElementById('askTEXT').style.display = 'block';
+                  } else {
+                    //document.getElementById('askTEXT').style.visibility = 'hidden';
+                    document.getElementById('askTEXT').style.display = 'none';
+                    }
+                  document.querySelector('#Nom_P').disabled = bool;
+                  document.querySelector('#Prenom_P').disabled = bool;
+                  document.querySelector('#email').disabled = bool;
+                  document.querySelector('#Tel_1').disabled = bool;
+                  document.querySelector('#Tel_2').disabled = bool;
+                  document.querySelector('#Tel_3').disabled = bool;
+                }
 </script>
 <script type="text/javascript" src="http://localhost:3000/vendors/datatable/JS/jquery.dataTables.js"></script>
 <link rel="stylesheet" type="text/css" href="http://localhost:3000/vendors/datatable/CSS/jquery.dataTables.css">

@@ -112,6 +112,8 @@ const InfoController = require('../controllers/RenseignementController');
 router.get('/Renseignement/:Matr', InfoController.view);
 router.get('/parentListe', InfoController.viewParent);
 router.post('/FiltreListParent', InfoController.GetListParent);
+router.post('/ModParent', InfoController.updateParent);
+router.post('/DelParent', InfoController.delParent);
 
 // Pour L'exportation en PDF
 
