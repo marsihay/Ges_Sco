@@ -108,4 +108,12 @@ function separateComma(val) {
   // return result with - sign if negative
   return sign < 0 ? '-' + result : result;
 }
+Handlebars.registerHelper('loud', function (aString) {
+  return aString.toUpperCase()
+});
+Handlebars.registerHelper('isCammaradeCL', function (value,Matr) {
+  // Pour n'est pas retourner le matricule d'elèves en cours
+  if(value.Matr == Matr){return false;
+  }else  return true;
+});
 app.listen(port, () => console.log(`Listening on port ${port}`));

@@ -13,10 +13,12 @@ exports.view = async (req, res) => {
             let user = await actualizeUser(req.session);
             let A_S = await GetAS();
             let AS = await GetActiveAS();
-            let result= await GetMatrInfoSearch(Matr);
+            let result= await GetMatrInfoSearch(Matr,AS);
             let etudiant=result[0];
             let journal = await GetMatrJournal(Matr,AS);
-            return res.render('Setting/ProfileEleve', { user, A_S , etudiant,journal});
+            let parent= await GetET_Parent(Matr);
+            let CammaradeCL= await GetET_Camarade(Matr,AS);
+            return res.render('Setting/ProfileEleve', { user, A_S , etudiant,journal,parent,CammaradeCL});
       }
 }
 exports.viewParent = async (req, res) => {
@@ -124,10 +126,10 @@ async function GetListe(A_S,role) {
       });
       return await promise;
   }
-  async function GetMatrInfoSearch(matr) {
+  async function GetMatrInfoSearch(matr,A_S) {
       let promise = new Promise((resolve, reject) => {
-            con.query('SELECT DISTINCT etudiant.Matr,etudiant.Nom,etudiant.Prenom,etudiant.Date_naissance,etudiant.Lieu_naissance,etudiant.Adresse,etudiant.ImgPath,observation.Label_Obs FROM etudiant,observation WHERE etudiant.ID_Obs=observation.ID_Obs AND etudiant.Matr=?; ',
-                  [matr], function (error, results, fields) {
+            con.query('SELECT DISTINCT etudiant.Matr,etudiant.Nom,etudiant.Prenom,etudiant.Date_naissance,etudiant.Lieu_naissance,etudiant.Adresse,etudiant.ImgPath,observation.Label_Obs,classe.Label_C FROM etudiant,observation,classe,appartenir WHERE (etudiant.ID_Obs=observation.ID_Obs) AND (appartenir.ID_C=classe.ID_C) AND etudiant.Matr=? AND appartenir.ID_C IN (SELECT ID_C FROM appartenir WHERE Matr=? AND Id_AS=?); ',
+                  [matr,matr,A_S], function (error, results, fields) {
                         if (error) {
                               console.log(error)
                         }
@@ -141,6 +143,34 @@ async function GetListe(A_S,role) {
 async function GetMatrJournal(matr,A_S) {
       let promise = new Promise((resolve, reject) => {
             con.query('SELECT * FROM `journal_p` where journal_p.Matr=? AND journal_p.Id_AS=? ORDER BY ID_Journal; ',
+                  [matr,A_S], function (error, results, fields) {
+                        if (error) {
+                              console.log(error)
+                        }
+                        if (results.length > 0) {
+                              resolve(results);
+                        } else resolve(null);
+                  });
+      });
+      return await promise;
+}
+async function GetET_Parent(matr) {
+      let promise = new Promise((resolve, reject) => {
+            con.query('SELECT * FROM parenté,parent WHERE (parenté.ID_P=parent.ID_P) AND parenté.Matr=?; ',
+                  [matr], function (error, results, fields) {
+                        if (error) {
+                              console.log(error)
+                        }
+                        if (results.length > 0) {
+                              resolve(results);
+                        } else resolve(null);
+                  });
+      });
+      return await promise;
+}
+async function GetET_Camarade(matr,A_S) {
+      let promise = new Promise((resolve, reject) => {
+            con.query('SELECT * FROM appartenir, etudiant, observation, classe WHERE (appartenir.Matr=etudiant.Matr) AND (etudiant.ID_Obs=observation.ID_Obs) AND (classe.ID_C=appartenir.ID_C) AND appartenir.ID_C IN (SELECT ID_C FROM appartenir WHERE Matr=? AND Id_AS=?) ORDER BY appartenir.Num; ',
                   [matr,A_S], function (error, results, fields) {
                         if (error) {
                               console.log(error)
