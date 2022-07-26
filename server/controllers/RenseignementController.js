@@ -1,5 +1,6 @@
 const con = require('./db');
 const {actualizeUser} = require('./Shared/Handyfunction');
+const {GetMatrInfo} = require('./PaimentController.js');
 exports.view = async (req, res) => {
       if (!req.session.loggedin && !req.session.lockScreen) {
             return res.redirect('/auth/login');
@@ -14,12 +15,82 @@ exports.view = async (req, res) => {
             let A_S = await GetAS();
             let AS = await GetActiveAS();
             let result= await GetMatrInfoSearch(Matr,AS);
-            let etudiant=result[0];
+            let etudiant;
+            if(result== null){
+                  console.log("NULL");
+                  info= await GetMatrInfo(Matr);
+                  etudiant=info[0];
+            }else etudiant=result[0];
+            let Checked= await CheckActif(Matr);
             let journal = await GetMatrJournal(Matr,AS);
             let parent= await GetET_Parent(Matr);
             let CammaradeCL= await GetET_Camarade(Matr,AS);
-            return res.render('Setting/ProfileEleve', { user, A_S , etudiant,journal,parent,CammaradeCL});
+            return res.render('Setting/ProfileEleve', { user, A_S , etudiant,journal,parent,CammaradeCL,Checked});
       }
+}
+exports.EditProfileEleve = async (req, res) => {
+      if (!req.session.loggedin && !req.session.lockScreen) {
+            return res.redirect('/auth/login');
+      } if (req.session.loggedin && req.session.lockScreen) {
+            return res.redirect('/auth/lock_screen');
+      } else {
+            req.session.lockScreen = false;
+            req.session.loggedin = true;
+            req.session.current_url = req.url;
+            let Matr= req.params.Matr;
+            let user = await actualizeUser(req.session);
+            let A_S = await GetAS();
+            let AS = await GetActiveAS();
+            let result= await GetMatrInfoSearch(Matr,AS);
+            let etudiant;
+            if(result== null){
+                  console.log("NULL");
+                  info= await GetMatrInfo(Matr);
+                  etudiant=info[0];
+            }else etudiant=result[0];
+            let journal = await GetMatrJournal(Matr,AS);
+            let parent= await GetET_Parent(Matr);
+            let CammaradeCL= await GetET_Camarade(Matr,AS);
+            return res.render('Setting/EditProfileEleve', { user, A_S , etudiant,journal,parent,CammaradeCL});
+      }
+}
+exports.SaveEditProfile = async (req, res) => {
+      const {ID_Et,Matr} = req.body;
+      const files = req.files;
+      //console.log(files);
+      if (!files) {
+            console.log("NO files");
+      }
+
+      if (files.profile) {
+            Pth = "uploads/" + files.profile[0].filename;
+            con.query('UPDATE etudiant SET ImgPath=? WHERE ID_Et=? and Matr=?',
+                  [Pth, ID_Et,Matr],
+                  function (error, results) {
+                        if (error) { return res.status(400).send(error); }
+                        else {
+                              console.log("vita Profile");
+                        }
+                  });
+      }
+
+      return res.redirect("/Renseignement/"+Matr);
+}
+exports.updateEleveInfo = (req, res) => {
+    console.log(req.body);
+    const { ID_Et,Matr,Nom,Prenom,Date_naissance,Lieu_naissance,Adresse,ID_Obs } = req.body;
+    // User the connection
+    con.query('UPDATE `etudiant` SET `Matr`=?,`Nom`=?,`Prenom`=?,`Date_naissance`=?,`Lieu_naissance`=?,`Adresse`=?,`ID_Obs`=? WHERE `ID_Et`=?;',
+          [Matr,Nom,Prenom,Date_naissance,Lieu_naissance,Adresse,ID_Obs,ID_Et], async (err, rows) => {
+                if (err) {
+                      console.log(err);
+                      let user = req.session.user;
+                      let A_S = await GetAS();
+                      return res.render('Setting/EditProfileEleve', { user, A_S, error: "Modification échoué" });
+                } else {
+                      return res.redirect("/Renseignement/"+Matr);
+                }
+          });
 }
 exports.viewParent = async (req, res) => {
     if (!req.session.loggedin && !req.session.lockScreen) {
@@ -160,9 +231,10 @@ async function GetListe(A_S,role) {
       });
       return await promise;
   }
-  async function GetMatrInfoSearch(matr,A_S) {
+ 
+async function GetMatrInfoSearch(matr,A_S) {
       let promise = new Promise((resolve, reject) => {
-            con.query('SELECT DISTINCT etudiant.Matr,etudiant.Nom,etudiant.Prenom,etudiant.Date_naissance,etudiant.Lieu_naissance,etudiant.Adresse,etudiant.ImgPath,observation.Label_Obs,classe.Label_C FROM etudiant,observation,classe,appartenir WHERE (etudiant.ID_Obs=observation.ID_Obs) AND (appartenir.ID_C=classe.ID_C) AND etudiant.Matr=? AND appartenir.ID_C IN (SELECT ID_C FROM appartenir WHERE Matr=? AND Id_AS=?); ',
+            con.query('SELECT DISTINCT etudiant.ID_Et,etudiant.Matr,etudiant.Nom,etudiant.Prenom,etudiant.Date_naissance,etudiant.Lieu_naissance,etudiant.Adresse,etudiant.ImgPath,etudiant.ID_Obs,observation.Label_Obs,classe.Label_C FROM etudiant,observation,classe,appartenir WHERE (etudiant.ID_Obs=observation.ID_Obs) AND (appartenir.ID_C=classe.ID_C) AND etudiant.Matr=? AND appartenir.ID_C IN (SELECT ID_C FROM appartenir WHERE Matr=? AND Id_AS=?); ',
                   [matr,matr,A_S], function (error, results, fields) {
                         if (error) {
                               console.log(error)
@@ -206,6 +278,21 @@ async function GetET_Camarade(matr,A_S) {
       let promise = new Promise((resolve, reject) => {
             con.query('SELECT * FROM appartenir, etudiant, observation, classe WHERE (appartenir.Matr=etudiant.Matr) AND (etudiant.ID_Obs=observation.ID_Obs) AND (classe.ID_C=appartenir.ID_C) AND appartenir.ID_C IN (SELECT ID_C FROM appartenir WHERE Matr=? AND Id_AS=?) ORDER BY appartenir.Num; ',
                   [matr,A_S], function (error, results, fields) {
+                        if (error) {
+                              console.log(error);
+                        }
+                        if (results.length > 0) {
+                              resolve(results);
+                        } else resolve(null);
+                  });
+      });
+      return await promise;
+}
+async function CheckActif(Matr) {
+      let A_S = await GetActiveAS();
+      let promise = new Promise((resolve, reject) => {
+            con.query('SELECT DISTINCT etudiant.Matr,etudiant.Nom,etudiant.Prenom,etudiant.Date_naissance,etudiant.Lieu_naissance,etudiant.Adresse,etudiant.ImgPath,observation.Label_Obs FROM etudiant,observation,inscrire WHERE etudiant.Matr=inscrire.Matr AND etudiant.ID_Obs=observation.ID_Obs AND etudiant.Matr IN (SELECT  etudiant.Matr FROM `etudiant`,`inscrire`,`observation` WHERE (etudiant.Matr=inscrire.Matr) AND (observation.ID_Obs=etudiant.ID_Obs) AND inscrire.Id_AS=? AND etudiant.Matr=?) ;',
+                  [A_S,Matr], function (error, results, fields) {
                         if (error) {
                               console.log(error)
                         }

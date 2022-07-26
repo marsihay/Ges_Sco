@@ -19,11 +19,16 @@
   <div class="card-body">
     <div class="row">
       <div class="col-lg-8">
-        <h4 class="mb-1">{{etudiant.Nom}} {{etudiant.Prenom}} <span data-bs-toggle="tooltip" data-bs-placement="right"
-            title="Verified"><small class="fa fa-check-circle text-primary"
-              data-fa-transform="shrink-4 down-2"></small></span><span data-bs-toggle="tooltip"
-            data-bs-placement="right" title="Ancien"><small class="fa fa-check-circle text-secondary"
+        <h4 class="mb-1">{{etudiant.Nom}} {{etudiant.Prenom}} 
+          {{#if Checked}}
+          <span data-bs-toggle="tooltip" data-bs-placement="right" title="En Cours">
+            <small class="fa fa-check-circle text-primary"
               data-fa-transform="shrink-4 down-2"></small></span>
+            {{else}}
+              <span data-bs-toggle="tooltip"  data-bs-placement="right" title="Ancien">
+            <small class="fa fa-check-circle text-secondary"
+              data-fa-transform="shrink-4 down-2"></small></span>
+              {{/if}}
         </h4>
         {{#if etudiant.Date_naissance}}
         <h5 class="fs-0 fw-normal">Né(e) le {{etudiant.Date_naissance}} à {{etudiant.Lieu_naissance}}</h5>

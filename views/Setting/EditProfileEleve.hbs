@@ -1,36 +1,34 @@
         <div class="row">
             <div class="col-12">
               <div class="card mb-3 btn-reveal-trigger">
-                <form action="/profileEdit" method="POST" encType="multipart/form-data">
+                <form action="/profileEleveEdit" method="POST" encType="multipart/form-data">
                 <div class="card-header position-relative min-vh-25 mb-8 ">
                   <div class="cover-image">
                     
-                    {{#if user.CoverPhoto}}
+                    {{#if etudiant.CoverImgPath}}
                     <div class="bg-holder rounded-3 rounded-bottom-0" id="upload-cover-images" style="background-image:url(http://localhost:3000/{{user.CoverPhoto}});">
                     </div>
                     {{else}}
                     <div class="bg-holder rounded-3 rounded-bottom-0" id="upload-cover-images" style="background-image:url(http://localhost:3000/assets/img/generic/4.jpg);">
                     </div>
                     {{/if}}
-                    <!--/.bg-holder-->
-
-                    <input class="d-none" onchange="loadCover(event)" id="upload-cover-image" name="uploadcover" type="file" />
-                    <label class="cover-image-file-input" for="upload-cover-image"><span class="fas fa-camera me-2"></span><span>Change cover photo</span></label>
+<!--/.bg-holder-->
                   </div>
                   <div class="avatar avatar-5xl avatar-profile shadow-sm img-thumbnail rounded-circle">
                     <div class="h-100 w-100 rounded-circle overflow-hidden position-relative"> 
-                      {{#if user.Path}}
-                        <img id="profile-images" src="http://localhost:3000/{{user.Path}}" width="200" alt="" data-dz-thumbnail="data-dz-thumbnail" />
+                      {{#if etudiant.ImgPath}}
+                        <img id="profile-images" src="http://localhost:3000/{{etudiant.ImgPath}}" width="200" alt="" data-dz-thumbnail="data-dz-thumbnail" />
                       {{else}}
                         <img id="profile-images" src="http://localhost:3000/assets/img/icons/spot-illustrations/Marsihay.png" width="200" alt="" data-dz-thumbnail="data-dz-thumbnail" />
                       {{/if}}
-                      
+                      <input name="ID_Et" type="text" value="{{etudiant.ID_Et}}" hidden/>
+                      <input name="Matr" type="text" value="{{etudiant.Matr}}" hidden/>
                       <input class="d-none" onchange="loadProfile(event)" id="profile-image" name="profile" type="file" />
                       <label class="mb-0 overlay-icon d-flex flex-center" for="profile-image"><span class="bg-holder overlay overlay-0"></span><span class="z-index-1 text-white dark__text-white text-center fs--1"><span class="fas fa-camera"></span><span class="d-block">Update</span></span></label>
                     </div>
                   </div>
                 </div>
-                <div class="col-12 d-flex justify-content-end">
+                <div class="col-12 d-flex ms-6 mb-2">
                     <button class="btn btn-primary" id="Btn" type="submit">Update </button>
                 </div>
                 </form>
@@ -38,13 +36,13 @@
             </div>
           </div>
           <div class="row g-0 ">
-            <div class="col-lg-6 pe-lg-2">
+            <div class="col-lg-8 pe-lg-2">
               <div class="card mb-3">
                 <div class="card-header">
-                  <h5 class="mb-0">Profile Settings</h5>
+                  <h5 class="mb-0">Information</h5>
                 </div>
                 <div class="card-body bg-light">
-                  <form action="profileEditInfo" id="ProfileSetting" method="POST" class="row g-3 needs-validation" novalidate="">
+                  <form action="/profileEleveEditInfo" id="ProfileEleve" method="POST" class="row g-3 needs-validation" novalidate="">
                     {{#if error}}
                       <div class="alert alert-danger border-2 d-flex align-items-center" role="alert">
                         <div class="bg-danger me-3 icon-item"><span class="fas fa-times-circle text-white fs-3"></span></div>
@@ -53,25 +51,52 @@
                       </div>
                       {{/if}}
                     <div class="col-0">
-                        <input class="form-control" type="hidden" value="{{user.id}}" name="id" />
+                        <input class="form-control" type="hidden" value="{{etudiant.ID_Et}}" name="ID_Et" />
                     </div>
-                    <div class="col-lg-6">
-                      <label class="form-label" for="username">Username</label>
-                      <input class="form-control" id="username" name="username" type="text" value="{{user.username}}" maxlength="30" required/>
-                      <div class="invalid-feedback" for="username"></div>
+                    <div class="col-lg-2">
+                      <label class="form-label" for="Matr">Matricule</label>
+                      <input class="form-control" id="Matr" name="Matr" type="text" value="{{etudiant.Matr}}" maxlength="30" required/>
+                      <div class="invalid-feedback" for="Nom"></div>
+                      <div class="valid-feedback" for="username"></div>
+                    </div>
+                    <div class="col-lg-4">
+                      <label class="form-label" for="username">Nom</label>
+                      <input class="form-control" id="username" name="Nom" type="text" value="{{etudiant.Nom}}" maxlength="30" required/>
+                      <div class="invalid-feedback" for="Nom"></div>
                       <div class="valid-feedback" for="username"></div>
                     </div>
                     <div class="col-lg-6">
-                      <label class="form-label" for="fonction">Fonction</label>
-                      <input class="form-control" id="fonction" name="fonction" type="text" value="{{user.fonction}}" maxlength="30"/>
-                      <div class="invalid-feedback" for="fonction"></div>
-                      <div class="valid-feedback" for="fonction"></div>
+                      <label class="form-label" for="fonction">Prénom</label>
+                      <input class="form-control" id="Prenom" name="Prenom" type="text" value="{{etudiant.Prenom}}" maxlength="30" required/>
+                      <div class="invalid-feedback" for="Prenom"></div>
+                      <div class="valid-feedback" for="Prenom"></div>
                     </div>
-                    <div class="col-lg-12">
-                      <label class="form-label" for="email">Email</label>
-                      <input class="form-control" id="email" name="email" type="text" value="{{user.email}}" email="true" required/>
-                      <div class="invalid-feedback" for="email"></div>
-                      <div class="valid-feedback" for="email"></div>
+                    <div class="col-lg-4">
+                      <label class="form-label" for="Date_naissance">Date de Naissance</label>
+                      <input class="form-control datetimepicker text-center" id="DateNaissance" name="Date_naissance" type="text" placeholder="DD-MM-YYYY" />
+            <div class="invalid-feedback" for="Date_naissance"></div>
+                      <div class="valid-feedback" for="Date_naissance"></div>
+                    </div>
+                    <div class="col-lg-8">
+                      <label class="form-label" for="Lieu_naissance">Lieu de Naissance</label>
+                      <input class="form-control" id="Lieu_naissance" name="Lieu_naissance" type="text" value="{{etudiant.Lieu_naissance}}" maxlength="30" required/>
+                      <div class="invalid-feedback" for="Lieu_naissance"></div>
+                      <div class="valid-feedback" for="Lieu_naissance"></div>
+                    </div>
+                    <div class="col-lg-8">
+                      <label class="form-label" for="Adresse">Adresse</label>
+                      <input class="form-control" id="Adresse" name="Adresse" type="text" value="{{etudiant.Adresse}}"/>
+                      <div class="invalid-feedback" for="Adresse"></div>
+                      <div class="valid-feedback" for="Adresse"></div>
+                    </div>
+                    <div class="col-lg-4">
+                      <label class="form-label" for="ID_Obs">Obsevation</label>
+                      <select class="form-select " id="ID_Obs" name="ID_Obs"
+                      aria-label="Floating label select example">
+
+                    </select>
+                      <div class="invalid-feedback" for="ID_Obs"></div>
+                      <div class="valid-feedback" for="ID_Obs"></div>
                     </div>
                     <div class="col-12 d-flex justify-content-end">
                       <button class="btn btn-primary" type="submit">Update </button>
@@ -80,7 +105,7 @@
                 </div>
               </div>
               </div>
-              <div class="col-lg-6 ps-lg-2">
+              <div class="col-lg-4 ps-lg-2">
               <div class="sticky-sidebar">                  
                 <div class="card mb-3">
                   <div class="card-header">
@@ -131,6 +156,31 @@
             </div>
             </div>
 <script>
+function LoadOBSInsc() {
+    $.ajax({
+      url: '/getOBS', success: function (res) {
+        $('#ID_Obs').html('');
+        var options = '';
+        for (var i = 0; i < res.length; i++) {
+          options += '<option value="' + res[i].ID_Obs + '">' + res[i].Label_Obs + '</option>';
+        }
+        $('#ID_Obs').append(options);
+        $('#ID_ObsECO').append(options);
+      }
+    });
+  }
+  if (true) {
+    LoadOBSInsc();
+  }
+  $(function () {
+    console.log('{{etudiant.ID_Obs}}');
+    $('#ID_Obs').val('{{etudiant.ID_Obs}}');
+    $("#DateNaissance").flatpickr({
+      dateFormat: "d-m-Y",
+      disableMobile: "true",
+      defaultDate: "{{etudiant.Date_naissance}}"
+    });
+  });
   var x = document.getElementById("Btn");
   x.style.display = "none";
   var loadProfile = function(event) {

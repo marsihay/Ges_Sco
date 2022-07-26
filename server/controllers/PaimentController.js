@@ -233,7 +233,7 @@ var getmatr=async function GetMatrInfo(matr) {
             con.query('SELECT * FROM `etudiant` WHERE Matr=?; ',
                   [matr], function (error, results, fields) {
                         if (error) {
-                              console.log(error)
+                              console.log(error);
                         }
                         if (results.length > 0) {
                               resolve(results);

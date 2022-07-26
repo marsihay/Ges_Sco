@@ -114,6 +114,9 @@ router.get('/parentListe', InfoController.viewParent);
 router.post('/FiltreListParent', InfoController.GetListParent);
 router.post('/ModParent', InfoController.updateParent);
 router.post('/DelParent', InfoController.delParent);
+router.get('/InfoEdit/:Matr', InfoController.EditProfileEleve);
+router.post('/profileEleveEdit', upload.fields([{name: "profile"}]), InfoController.SaveEditProfile);
+router.post('/profileEleveEditInfo', InfoController.updateEleveInfo);
 
 // Pour L'exportation en PDF
 
