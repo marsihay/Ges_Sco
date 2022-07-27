@@ -1,162 +1,315 @@
-        <div class="row">
-            <div class="col-12">
-              <div class="card mb-3 btn-reveal-trigger">
-                <form action="/profileEleveEdit" method="POST" encType="multipart/form-data">
-                <div class="card-header position-relative min-vh-25 mb-8 ">
-                  <div class="cover-image">
-                    
-                    {{#if etudiant.CoverImgPath}}
-                    <div class="bg-holder rounded-3 rounded-bottom-0" id="upload-cover-images" style="background-image:url(http://localhost:3000/{{user.CoverPhoto}});">
-                    </div>
-                    {{else}}
-                    <div class="bg-holder rounded-3 rounded-bottom-0" id="upload-cover-images" style="background-image:url(http://localhost:3000/assets/img/generic/4.jpg);">
-                    </div>
-                    {{/if}}
-<!--/.bg-holder-->
-                  </div>
-                  <div class="avatar avatar-5xl avatar-profile shadow-sm img-thumbnail rounded-circle">
-                    <div class="h-100 w-100 rounded-circle overflow-hidden position-relative"> 
-                      {{#if etudiant.ImgPath}}
-                        <img id="profile-images" src="http://localhost:3000/{{etudiant.ImgPath}}" width="200" alt="" data-dz-thumbnail="data-dz-thumbnail" />
-                      {{else}}
-                        <img id="profile-images" src="http://localhost:3000/assets/img/icons/spot-illustrations/Marsihay.png" width="200" alt="" data-dz-thumbnail="data-dz-thumbnail" />
-                      {{/if}}
-                      <input name="ID_Et" type="text" value="{{etudiant.ID_Et}}" hidden/>
-                      <input name="Matr" type="text" value="{{etudiant.Matr}}" hidden/>
-                      <input class="d-none" onchange="loadProfile(event)" id="profile-image" name="profile" type="file" />
-                      <label class="mb-0 overlay-icon d-flex flex-center" for="profile-image"><span class="bg-holder overlay overlay-0"></span><span class="z-index-1 text-white dark__text-white text-center fs--1"><span class="fas fa-camera"></span><span class="d-block">Update</span></span></label>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-12 d-flex ms-6 mb-2">
-                    <button class="btn btn-primary" id="Btn" type="submit">Update </button>
-                </div>
-                </form>
-              </div>              
+<div class="row">
+  <div class="col-12">
+    <div class="card mb-3 btn-reveal-trigger">
+      <form action="/profileEleveEdit" method="POST" encType="multipart/form-data">
+        <div class="card-header position-relative min-vh-25 mb-8 ">
+          <div class="cover-image">
+
+            {{#if etudiant.CoverImgPath}}
+            <div class="bg-holder rounded-3 rounded-bottom-0" id="upload-cover-images"
+              style="background-image:url(http://localhost:3000/{{user.CoverPhoto}});">
+            </div>
+            {{else}}
+            <div class="bg-holder rounded-3 rounded-bottom-0" id="upload-cover-images"
+              style="background-image:url(http://localhost:3000/assets/img/generic/4.jpg);">
+            </div>
+            {{/if}}
+            <!--/.bg-holder-->
+          </div>
+          <div class="avatar avatar-5xl avatar-profile shadow-sm img-thumbnail rounded-circle">
+            <div class="h-100 w-100 rounded-circle overflow-hidden position-relative">
+              {{#if etudiant.ImgPath}}
+              <img id="profile-images" src="http://localhost:3000/{{etudiant.ImgPath}}" width="200" alt=""
+                data-dz-thumbnail="data-dz-thumbnail" />
+              {{else}}
+              <img id="profile-images" src="http://localhost:3000/assets/img/icons/spot-illustrations/Marsihay.png"
+                width="200" alt="" data-dz-thumbnail="data-dz-thumbnail" />
+              {{/if}}
+              <input name="ID_Et" type="text" value="{{etudiant.ID_Et}}" hidden />
+              <input name="Matr" type="text" value="{{etudiant.Matr}}" hidden />
+              <input class="d-none" onchange="loadProfile(event)" id="profile-image" name="profile" type="file" />
+              <label class="mb-0 overlay-icon d-flex flex-center" for="profile-image"><span
+                  class="bg-holder overlay overlay-0"></span><span
+                  class="z-index-1 text-white dark__text-white text-center fs--1"><span
+                    class="fas fa-camera"></span><span class="d-block">Update</span></span></label>
             </div>
           </div>
-          <div class="row g-0 ">
-            <div class="col-lg-8 pe-lg-2">
-              <div class="card mb-3">
-                <div class="card-header">
-                  <h5 class="mb-0">Information</h5>
-                </div>
-                <div class="card-body bg-light">
-                  <form action="/profileEleveEditInfo" id="ProfileEleve" method="POST" class="row g-3 needs-validation" novalidate="">
-                    {{#if error}}
-                      <div class="alert alert-danger border-2 d-flex align-items-center" role="alert">
-                        <div class="bg-danger me-3 icon-item"><span class="fas fa-times-circle text-white fs-3"></span></div>
-                        <p class="mb-0 flex-1">{{error}} !</p>
-                        <button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close"></button>
-                      </div>
-                      {{/if}}
-                    <div class="col-0">
-                        <input class="form-control" type="hidden" value="{{etudiant.ID_Et}}" name="ID_Et" />
-                    </div>
-                    <div class="col-lg-2">
-                      <label class="form-label" for="Matr">Matricule</label>
-                      <input class="form-control" id="Matr" name="Matr" type="text" value="{{etudiant.Matr}}" maxlength="30" required/>
-                      <div class="invalid-feedback" for="Nom"></div>
-                      <div class="valid-feedback" for="username"></div>
-                    </div>
-                    <div class="col-lg-4">
-                      <label class="form-label" for="username">Nom</label>
-                      <input class="form-control" id="username" name="Nom" type="text" value="{{etudiant.Nom}}" maxlength="30" required/>
-                      <div class="invalid-feedback" for="Nom"></div>
-                      <div class="valid-feedback" for="username"></div>
-                    </div>
-                    <div class="col-lg-6">
-                      <label class="form-label" for="fonction">Prénom</label>
-                      <input class="form-control" id="Prenom" name="Prenom" type="text" value="{{etudiant.Prenom}}" maxlength="30" required/>
-                      <div class="invalid-feedback" for="Prenom"></div>
-                      <div class="valid-feedback" for="Prenom"></div>
-                    </div>
-                    <div class="col-lg-4">
-                      <label class="form-label" for="Date_naissance">Date de Naissance</label>
-                      <input class="form-control datetimepicker text-center" id="DateNaissance" name="Date_naissance" type="text" placeholder="DD-MM-YYYY" />
+        </div>
+        <div class="col-12 d-flex ms-6 mb-2">
+          <button class="btn btn-primary" id="Btn" type="submit">Update </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<div class="row g-0 ">
+  <div class="col-lg-8 pe-lg-2">
+    <div class="card mb-3">
+      <div class="card-header">
+        <h5 class="mb-0">Information</h5>
+      </div>
+      <div class="card-body bg-light">
+        <form action="/profileEleveEditInfo" id="ProfileEleve" method="POST" class="row g-3 needs-validation"
+          novalidate="">
+          {{#if error}}
+          <div class="alert alert-danger border-2 d-flex align-items-center" role="alert">
+            <div class="bg-danger me-3 icon-item"><span class="fas fa-times-circle text-white fs-3"></span></div>
+            <p class="mb-0 flex-1">{{error}} !</p>
+            <button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+          {{/if}}
+          <div class="col-0">
+            <input class="form-control" type="hidden" value="{{etudiant.ID_Et}}" name="ID_Et" />
+          </div>
+          <div class="col-lg-2">
+            <label class="form-label" for="Matr">Matricule</label>
+            <input class="form-control" id="Matr" name="Matr" type="text" value="{{etudiant.Matr}}" maxlength="30"
+              required />
+            <div class="invalid-feedback" for="Nom"></div>
+            <div class="valid-feedback" for="username"></div>
+          </div>
+          <div class="col-lg-4">
+            <label class="form-label" for="username">Nom</label>
+            <input class="form-control" id="username" name="Nom" type="text" value="{{etudiant.Nom}}" maxlength="30"
+              required />
+            <div class="invalid-feedback" for="Nom"></div>
+            <div class="valid-feedback" for="username"></div>
+          </div>
+          <div class="col-lg-6">
+            <label class="form-label" for="fonction">Prénom</label>
+            <input class="form-control" id="Prenom" name="Prenom" type="text" value="{{etudiant.Prenom}}" maxlength="30"
+              required />
+            <div class="invalid-feedback" for="Prenom"></div>
+            <div class="valid-feedback" for="Prenom"></div>
+          </div>
+          <div class="col-lg-4">
+            <label class="form-label" for="Date_naissance">Date de Naissance</label>
+            <input class="form-control datetimepicker text-center" id="DateNaissance" name="Date_naissance" type="text"
+              placeholder="DD-MM-YYYY" />
             <div class="invalid-feedback" for="Date_naissance"></div>
-                      <div class="valid-feedback" for="Date_naissance"></div>
-                    </div>
-                    <div class="col-lg-8">
-                      <label class="form-label" for="Lieu_naissance">Lieu de Naissance</label>
-                      <input class="form-control" id="Lieu_naissance" name="Lieu_naissance" type="text" value="{{etudiant.Lieu_naissance}}" maxlength="30" required/>
-                      <div class="invalid-feedback" for="Lieu_naissance"></div>
-                      <div class="valid-feedback" for="Lieu_naissance"></div>
-                    </div>
-                    <div class="col-lg-8">
-                      <label class="form-label" for="Adresse">Adresse</label>
-                      <input class="form-control" id="Adresse" name="Adresse" type="text" value="{{etudiant.Adresse}}"/>
-                      <div class="invalid-feedback" for="Adresse"></div>
-                      <div class="valid-feedback" for="Adresse"></div>
-                    </div>
-                    <div class="col-lg-4">
-                      <label class="form-label" for="ID_Obs">Obsevation</label>
-                      <select class="form-select " id="ID_Obs" name="ID_Obs"
-                      aria-label="Floating label select example">
+            <div class="valid-feedback" for="Date_naissance"></div>
+          </div>
+          <div class="col-lg-8">
+            <label class="form-label" for="Lieu_naissance">Lieu de Naissance</label>
+            <input class="form-control" id="Lieu_naissance" name="Lieu_naissance" type="text"
+              value="{{etudiant.Lieu_naissance}}" maxlength="30" required />
+            <div class="invalid-feedback" for="Lieu_naissance"></div>
+            <div class="valid-feedback" for="Lieu_naissance"></div>
+          </div>
+          <div class="col-lg-8">
+            <label class="form-label" for="Adresse">Adresse</label>
+            <input class="form-control" id="Adresse" name="Adresse" type="text" value="{{etudiant.Adresse}}" />
+            <div class="invalid-feedback" for="Adresse"></div>
+            <div class="valid-feedback" for="Adresse"></div>
+          </div>
+          <div class="col-lg-4">
+            <label class="form-label" for="ID_Obs">Obsevation</label>
+            <select class="form-select " id="ID_Obs" name="ID_Obs" aria-label="Floating label select example">
 
-                    </select>
-                      <div class="invalid-feedback" for="ID_Obs"></div>
-                      <div class="valid-feedback" for="ID_Obs"></div>
-                    </div>
-                    <div class="col-12 d-flex justify-content-end">
-                      <button class="btn btn-primary" type="submit">Update </button>
-                    </div>
-                  </form>
-                </div>
-              </div>
-              </div>
-              <div class="col-lg-4 ps-lg-2">
-              <div class="sticky-sidebar">                  
-                <div class="card mb-3">
-                  <div class="card-header">
-                    <h5 class="mb-0">Change Password</h5>
-                  </div>
-                  <div class="card-body bg-light">
-                    <form action="profileEditPassW" id="changePwForm" method="POST" class="row g-3 needs-validation" novalidate="">
-                      {{#if errorPW}}
-                      <div class="alert alert-danger border-2 d-flex align-items-center" role="alert">
-                        <div class="bg-danger me-3 icon-item"><span class="fas fa-times-circle text-white fs-3"></span></div>
-                        <p class="mb-0 flex-1">{{errorPW}} !</p>
-                        <button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close"></button>
-                      </div>
-                      {{/if}}
-                      {{#if SuccessPW}}
-                      <div class="alert alert-success border-2 d-flex align-items-center" role="alert">
-                        <div class="bg-success me-3 icon-item"><span class="fas fa-check-circle text-white fs-3"></span></div>
-                        <p class="mb-0 flex-1">{{SuccessPW}} !</p>
-                        <button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close"></button>
-                      </div>
-                      {{/if}}
-                      <div class="col-0">
-                        <input class="form-control" type="hidden" value="{{user.id}}" name="id" />
-                    </div>
-                      <div class="col-lg-12">
-                        <label class="form-label" for="oldpassword">Old Password</label>
-                        <input class="form-control" id="oldpassword" value="{{OldPW}}" name="oldpassword" type="password" maxlength="12" required minlength="5" />
-                        <div class="invalid-feedback" for="oldpassword"></div>
-                      </div>
-                      <div class="col-lg-6">
-                        <label class="form-label" for="newpassword">New Password</label>
-                        <input class="form-control" id="newpassword" name="newpassword" type="password" maxlength="12" required minlength="5"/>
-                        <div class="invalid-feedback" for="newpassword"></div>
-                      </div>
-                      <div class="col-lg-6">
-                        <label class="form-label" for="confirmpassword">Confirm Password</label>
-                        <input class="form-control" id="confirmpassword" name="confirmpassword" type="password" equalTo="#newpassword" maxlength="12" required minlength="5"/>
-                        <div class="invalid-feedback" for="confirmpassword"></div>
-                        <div class="valid-feedback" for="confirmpassword"></div>
-                      </div>
-                      <div class="col-12 d-flex justify-content-end">
-                        <button class="btn btn-primary" type="submit">Update Password</button>
-                      </div>
-                    </form>
-                  </div>
-                </div>
-              </div> 
+            </select>
+            <div class="invalid-feedback" for="ID_Obs"></div>
+            <div class="valid-feedback" for="ID_Obs"></div>
+          </div>
+          <div class="col-12 d-flex justify-content-end">
+            <button class="btn btn-primary" type="submit">Update </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-4 ps-lg-2">
+    <div class="sticky-sidebar">
+      <div class="card mb-3">
+        <div class="card-header">
+          <h5 class="mb-0">Parents</h5>
+        </div>
+        <div class="card-body bg-light">
+          <h5 class="mb-1">Père</h5>
+          {{#if Pere}}
+          <span class="ID_PPere" hidden>{{Pere.ID_P}}</span>
+          <span class="MatrPere" hidden>{{Pere.Matr}}</span>
+          <span class="Nom_PPere" hidden>{{Pere.Nom_P}}</span>
+          <span class="Prenom_PPere" hidden>{{Pere.Prenom_P}}</span>
+          <span class="emailPere" hidden>{{Pere.email}}</span>
+          <span class="Tel_1Pere" hidden>{{Pere.Tel_1}}</span>
+          <span class="Tel_2Pere" hidden>{{Pere.Tel_2}}</span>
+          <span class="Tel_3Pere" hidden>{{Pere.Tel_3}}</span>
+          <p class="fs-0 mb-0"><strong>{{Pere.Nom_P}} {{Pere.Prenom_P}}</strong> - {{Pere.email}}</p>
+          <p class="fs-0 mb-1">{{Pere.Tel_1}}, {{Pere.Tel_2}}, {{Pere.Tel_3}}</p>
+          <a class="btn btn-falcon-danger btn-sm" onclick="SupParent(this.parentNode,'Pere')">Supprimer</a>
+          {{else}}
+          <p class="fs-0">- Néant</p>
+          <a class="btn btn-falcon-default btn-sm" onclick="AddParent('Père','{{Matr}}','Pere')">Ajouter</a>
+          {{/if}}
+        </div>
+        <div class="card-body bg-light border-top">
+          <h5 class="mb-1">Mère</h5>
+          {{#if Mere}}
+          <span class="ID_PMere" hidden>{{Mere.ID_P}}</span>
+          <span class="MatrMere" hidden>{{Mere.Matr}}</span>
+          <span class="Nom_PMere" hidden>{{Mere.Nom_P}}</span>
+          <span class="Prenom_PMere" hidden>{{Mere.Prenom_P}}</span>
+          <span class="emailMere" hidden>{{Mere.email}}</span>
+          <span class="Tel_1Mere" hidden>{{Mere.Tel_1}}</span>
+          <span class="Tel_2Mere" hidden>{{Mere.Tel_2}}</span>
+          <span class="Tel_3Mere" hidden>{{Mere.Tel_3}}</span>
+          <p class="fs-0 mb-0"><strong>{{Mere.Nom_P}} {{Mere.Prenom_P}}</strong> - {{Mere.email}}</p>
+          <p class="fs-0 mb-1">{{Mere.Tel_1}}, {{Mere.Tel_2}}, {{Mere.Tel_3}}</p>
+          <a class="btn btn-falcon-danger btn-sm" onclick="SupParent(this.parentNode,'Mere')">Supprimer</a>
+          {{else}}
+          <p class="fs-0">- Néant</p>
+          <a class="btn btn-falcon-default btn-sm" onclick="AddParent('Mère','{{Matr}}','Mere')">Ajouter</a>
+          {{/if}}
+        </div>
+        <div class="card-body bg-light border-top">
+          <h5 class="mb-1">Tuteur</h5>
+          {{#if Tuteur}}
+          <span class="ID_PTuteur" hidden>{{Tuteur.ID_P}}</span>
+          <span class="MatrTuteur" hidden>{{Tuteur.Matr}}</span>
+          <span class="Nom_PTuteur" hidden>{{Tuteur.Nom_P}}</span>
+          <span class="Prenom_PTuteur" hidden>{{Tuteur.Prenom_P}}</span>
+          <span class="emailTuteur" hidden>{{Tuteur.email}}</span>
+          <span class="Tel_1Tuteur" hidden>{{Tuteur.Tel_1}}</span>
+          <span class="Tel_2Tuteur" hidden>{{Tuteur.Tel_2}}</span>
+          <span class="Tel_3Tuteur" hidden>{{Tuteur.Tel_3}}</span>
+          <p class="fs-0 mb-0"><strong>{{Tuteur.Nom_P}} {{Tuteur.Prenom_P}}</strong> - {{Tuteur.email}}</p>
+          <p class="fs-0 mb-1">{{Tuteur.Tel_1}}, {{Tuteur.Tel_2}}, {{Tuteur.Tel_3}}</p>
+          <a class="btn btn-falcon-danger btn-sm" onclick="SupParent(this.parentNode,'Tuteur')">Supprimer</a>
+          {{else}}
+          <p class="fs-0">- Néant</p>
+          <a class="btn btn-falcon-default btn-sm" onclick="AddParent('Tuteur','{{Matr}}','Tuteur')">Ajouter</a>
+          {{/if}}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL POUR PARENT-->
+<div class="modal fade" id="Parent-modal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 500px">
+    <div class="modal-content position-relative">
+      <div class="position-absolute top-0 end-0 mt-2 me-2 z-index-1">
+        <button class="btn-close btn btn-sm btn-circle d-flex flex-center transition-base" data-bs-dismiss="modal"
+          aria-label="Close"></button>
+      </div>
+      <form action="" id="ParentForm" method="POST">
+        <div class="modal-body p-0">
+
+          <div class="rounded-top-lg py-3 ps-4 pe-6 bg-light">
+            <h4 class="mb-1" id="modalLabel"></h4>
+          </div>
+          <div class="px-4 pb-0 ">
+            <h5 class="text-danger text-center" id="askTEXT">Voulez-vous le supprimer vraiment?</h5>
+            <div class="col-md-12 mt-0 bg-light">
+              <label class="form-label" for="Nom_P">Nom</label>
+              <input class="form-control" id="ID_P" name="ID_P" type="number" hidden />
+              <input class="form-control" id="Matr1" name="Matr" type="text" hidden />
+              <input class="form-control" id="role" name="role" type="text" hidden />
+              <input class="form-control" id="Nom_P" name="Nom_P" type="text" />
             </div>
+            <div class="col-md-12 mt-0 bg-light">
+              <label class="form-label" for="Prenom_P">Prénoms</label>
+              <input class="form-control" id="Prenom_P" name="Prenom_P" type="text" />
             </div>
+            <div class="col-12 mt-0 bg-light">
+              <label class="form-label" for="email">Email</label>
+              <input class="form-control" id="email" name="email" type="email" placeholder="" />
+            </div>
+            <div class="col-md-12 mt-0 bg-light">
+              <label class="form-label" for="Tel_1">Téléphone 1</label>
+              <input class="form-control" id="Tel_1" name="Tel_1" type="text" />
+            </div>
+            <div class="col-md-12 mt-0 bg-light">
+              <label class="form-label" for="Tel_2">Téléphone 2</label>
+              <input class="form-control" id="Tel_2" name="Tel_2" type="text" />
+            </div>
+            <div class="col-md-12 mt-0 bg-light mb-2">
+              <label class="form-label" for="Tel_3">Téléphone 3</label>
+              <input class="form-control" id="Tel_3" name="Tel_3" type="text" />
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-falcon-default me-2 mb-1 " type="button" data-bs-dismiss="modal">
+            Annuler
+          </button>
+          <button class="btn btn-falcon-primary me-3 mb-1" type="submit" id="btnSubClasse">
+            Update
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+
 <script>
-function LoadOBSInsc() {
+
+  var c = document.getElementById("ParentForm");
+  function AddParent(type, Matr, role) {
+    c.setAttribute("action", "/AddParent");
+    $("#modalLabel").html("Ajout " + type);
+    $("#btnSubClasse").html("Ajouter");
+    $("#Parent-modal").modal('toggle');
+    disableC(false); initValueC();
+    console.log(Matr + " " + role);
+    $('#Matr1').val(Matr);
+    $('#role').val(role);
+  }
+  function SupParent(Data, type) {
+    c.setAttribute("action", "/DelParentByEleve");
+    $("#modalLabel").html("Suppression");
+    $("#btnSubClasse").html("Supprimer");
+    setValueC(Data, type);
+    disableC(true);
+    $("#Parent-modal").modal('toggle');
+  }
+  function initValueC() {
+    $('#ID_P').val('');
+    $('#Matr1').val('');
+    $('#Nom_P').val('');
+    $("#Prenom_P").val('');
+    $('#email').val('');
+    $('#Tel_1').val('');
+    $("#Tel_2").val('');
+    $("#Tel_3").val('');
+  }
+  function setValueC(Data, type) {
+    var id = $(Data).find('span.ID_P' + type).html();
+    var matr = $(Data).find('span.Matr' + type).html();
+    var nom = $(Data).find('span.Nom_P' + type).html();
+    var prenom = $(Data).find('span.Prenom_P' + type).html();
+    var email = $(Data).find('span.email' + type).html();
+    var tel1 = $(Data).find('span.Tel_1' + type).html();
+    var tel2 = $(Data).find('span.Tel_2' + type).html();
+    var tel3 = $(Data).find('span.Tel_3' + type).html();
+    $('#ID_P').val(id);
+    $('#Matr1').val(matr);
+    $('#Nom_P').val(nom);
+    $("#Prenom_P").val(prenom);
+    $('#email').val(email);
+    $('#Tel_1').val(tel1);
+    $("#Tel_2").val(tel2);
+    $("#Tel_3").val(tel3);
+  }
+  function disableC(bool) {
+    if (bool) {
+      //document.getElementById('askTEXT').style.visibility = 'visible';
+      document.getElementById('askTEXT').style.display = 'block';
+    } else {
+      //document.getElementById('askTEXT').style.visibility = 'hidden';
+      document.getElementById('askTEXT').style.display = 'none';
+    }
+    document.querySelector('#Nom_P').disabled = bool;
+    document.querySelector('#Prenom_P').disabled = bool;
+    document.querySelector('#email').disabled = bool;
+    document.querySelector('#Tel_1').disabled = bool;
+    document.querySelector('#Tel_2').disabled = bool;
+    document.querySelector('#Tel_3').disabled = bool;
+  }
+
+  function LoadOBSInsc() {
     $.ajax({
       url: '/getOBS', success: function (res) {
         $('#ID_Obs').html('');
@@ -183,9 +336,9 @@ function LoadOBSInsc() {
   });
   var x = document.getElementById("Btn");
   x.style.display = "none";
-  var loadProfile = function(event) {
+  var loadProfile = function (event) {
     var reader = new FileReader();
-    reader.onload = function(){
+    reader.onload = function () {
       var output = document.getElementById('profile-images');
       output.src = reader.result;
       x.style.display = "block";
@@ -193,64 +346,64 @@ function LoadOBSInsc() {
     };
     reader.readAsDataURL(event.target.files[0]);
   };
-  var loadCover = function(event) {
+  var loadCover = function (event) {
     var output = document.getElementById('upload-cover-images');
     console.log(event.target.files[0]);
     output.setAttribute("style", "background-image: url(" + URL.createObjectURL(event.target.files[0]) + ");");
     //output.src = URL.createObjectURL(event.target.files[0]);    
     x.style.display = "block";
-    output.onload = function() {
-    URL.revokeObjectURL(output.src) // free memory
+    output.onload = function () {
+      URL.revokeObjectURL(output.src) // free memory
     }
   };
 
 
-	$().ready(function() {
+  $().ready(function () {
 
-     $("#ProfileSetting").validate({
-      errorPlacement: function(error, element) {
-			// Append error within linked label
-			$( element )
-				.closest( "form" )
-					.find( "div[for='" + element.attr( "id" ) + "']" )
-						.append( error );
-		},
-		errorElement: "span",
-			messages: {
-				username: {
-					required: " (Please enter your username)"
-				},
-				fonction: {
-					required: " (Please provide a fonction)"
-				},
-				email: "Please enter a valid email address"
-			}
-		});
+    $("#ProfileSetting").validate({
+      errorPlacement: function (error, element) {
+        // Append error within linked label
+        $(element)
+          .closest("form")
+          .find("div[for='" + element.attr("id") + "']")
+          .append(error);
+      },
+      errorElement: "span",
+      messages: {
+        username: {
+          required: " (Please enter your username)"
+        },
+        fonction: {
+          required: " (Please provide a fonction)"
+        },
+        email: "Please enter a valid email address"
+      }
+    });
 
-		$("#changePwForm").validate({
-      errorPlacement: function(error, element) {
-			// Append error within linked label
-			$( element )
-				.closest( "form" )
-					.find( "div[for='" + element.attr( "id" ) + "']" )
-						.append( error );
-		},
-		errorElement: "span",
-			messages: {
-				oldpassword: {
-					required: " (Please enter your Old Password)",
-					minlength: " (old password must consist of at least 5 characters)"
-				},
-				newpassword: {
-					required: " (Please provide a password)",
-					minlength: " (Your password must be at least 5 characters long)"
-				},
-				confirmpassword: {
-					required: " (Please provide a password)",
-					minlength: " (Your password must be at least 5 characters long)",
-					equalTo: " (Please enter the same password)"
-				}
-			}
-		});
-});
+    $("#changePwForm").validate({
+      errorPlacement: function (error, element) {
+        // Append error within linked label
+        $(element)
+          .closest("form")
+          .find("div[for='" + element.attr("id") + "']")
+          .append(error);
+      },
+      errorElement: "span",
+      messages: {
+        oldpassword: {
+          required: " (Please enter your Old Password)",
+          minlength: " (old password must consist of at least 5 characters)"
+        },
+        newpassword: {
+          required: " (Please provide a password)",
+          minlength: " (Your password must be at least 5 characters long)"
+        },
+        confirmpassword: {
+          required: " (Please provide a password)",
+          minlength: " (Your password must be at least 5 characters long)",
+          equalTo: " (Please enter the same password)"
+        }
+      }
+    });
+  });
 </script>

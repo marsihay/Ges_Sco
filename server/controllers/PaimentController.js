@@ -227,7 +227,7 @@ async function GetOBS() {
       });
       return await promise;
 }
-var getmatr=async function GetMatrInfo(matr) {
+var getmatr = async function GetMatrInfo(matr) {
       let A_S = await GetActiveAS();
       let promise = new Promise((resolve, reject) => {
             con.query('SELECT * FROM `etudiant` WHERE Matr=?; ',
@@ -242,10 +242,10 @@ var getmatr=async function GetMatrInfo(matr) {
       });
       return await promise;
 }
-module.exports.GetMatrInfo=getmatr;
+module.exports.GetMatrInfo = getmatr;
 
 async function GetMatrInfoPaiementECO(matr) {
-      console.log("MATR 0"+matr);
+      console.log("MATR 0" + matr);
       let A_S = await GetActiveAS();
       let promise = new Promise((resolve, reject) => {
             con.query('SELECT etudiant.ID_Et,etudiant.Nom,etudiant.Prenom,etudiant.Adresse,etudiant.ImgPath,etudiant.ID_Obs,inscrire.ID_Niv FROM `etudiant`,`inscrire` WHERE (etudiant.Matr=inscrire.Matr) AND etudiant.Matr=? AND inscrire.Id_AS=?; ',
@@ -402,7 +402,7 @@ async function GetPrice(A_S, ID_Niv) {
       return await promise;
 }
 
-async function InsertParent(matr, role, Nom_P, Prenom_P, email, Tel_1, Tel_2, Tel_3) {
+var insertparent = async function InsertParent(matr, role, Nom_P, Prenom_P, email, Tel_1, Tel_2, Tel_3) {
       let ID = await GetLastID("parent", "ID_P");
       const salt = await bcrypt.genSalt(10);
       const hashedPassword = await bcrypt.hash("Mot2passe", salt);
@@ -422,6 +422,7 @@ async function InsertParent(matr, role, Nom_P, Prenom_P, email, Tel_1, Tel_2, Te
       });
       return await promise;
 }
+module.exports.InsertParent = insertparent;
 async function PayerAutreFrais(matr, ID_autre, A_S, Date) {
       let promise = new Promise((resolve, reject) => {
             con.query('INSERT INTO `payer_autre`(`Matr`, `Id_AS`, `ID_autre`, `Date_P`) VALUES ( ?, ?, ?, ?) ',
